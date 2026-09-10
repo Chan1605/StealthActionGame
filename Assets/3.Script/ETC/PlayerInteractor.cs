@@ -13,6 +13,14 @@ public class PlayerInteractor : MonoBehaviour
 
     private InteractableObj currentTarget;
 
+    public InteractableObj CurrentTarget
+    {
+        get
+        {
+            return currentTarget;
+        }
+    }
+
     private void Update()
     {
         DetectObject();
