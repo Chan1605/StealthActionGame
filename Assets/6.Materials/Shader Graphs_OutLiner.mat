@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Shader Graphs_OutLiner
-  m_Shader: {fileID: -6465566751694194690, guid: f087934222910084c867ea2ae626aa76, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 79f5887fd57b2d64fb6487638b3252ec, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []

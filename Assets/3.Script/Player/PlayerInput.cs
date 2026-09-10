@@ -62,9 +62,10 @@ public class PlayerInput : MonoBehaviour
 
     public bool isCrouching { get; private set; }
 
-    public event Action JumpPressed;
-    public event Action InteractPressed;
-    public event Action<bool> CrouchChanged;
+    public event Action OnJumpPressed;
+    public event Action OnInteractPressed;
+    public event Action OnThrowPressed;
+    public event Action<bool> OnCrouchChanged;
 
     private void Awake()
     {
@@ -77,6 +78,7 @@ public class PlayerInput : MonoBehaviour
 
         actions.Player.Jump.performed += HandleJump;
         actions.Player.Interact.performed += HandleInteract;
+        actions.Player.Throw.performed += HandleThrow;
         actions.Player.Crouch.performed += HandleCrouchPerformed;
         actions.Player.Crouch.canceled += HandleCrouchCanceled;
     }
@@ -90,6 +92,7 @@ public class PlayerInput : MonoBehaviour
 
         _actions.Player.Jump.performed -= HandleJump;
         _actions.Player.Interact.performed -= HandleInteract;
+        _actions.Player.Throw.performed -= HandleThrow;
         _actions.Player.Crouch.performed -= HandleCrouchPerformed;
         _actions.Player.Crouch.canceled -= HandleCrouchCanceled;
 
@@ -116,12 +119,17 @@ public class PlayerInput : MonoBehaviour
 
     private void HandleJump(InputAction.CallbackContext context)
     {
-        JumpPressed?.Invoke();
+        OnJumpPressed?.Invoke();
     }
 
     private void HandleInteract(InputAction.CallbackContext context)
     {
-        InteractPressed?.Invoke();
+        OnInteractPressed?.Invoke();
+    }
+
+    private void HandleThrow(InputAction.CallbackContext context)
+    {
+        OnThrowPressed?.Invoke();
     }
 
     private void HandleCrouchPerformed(InputAction.CallbackContext context)
@@ -154,7 +162,7 @@ public class PlayerInput : MonoBehaviour
         }
 
         isCrouching = isOn;
-        CrouchChanged?.Invoke(isOn);
+        OnCrouchChanged?.Invoke(isOn);
     }
 
     public void SetInputEnabled(bool isEnabled)

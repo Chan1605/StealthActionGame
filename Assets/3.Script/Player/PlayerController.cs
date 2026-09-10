@@ -13,6 +13,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float crouchSpeed = 1.5f;
     [SerializeField] private float acceleration = 14f;
 
+    [Header("Rotation")]
+    [SerializeField] private float turnSmoothTime = 0.1f;
+
     [Header("Jump")]
     [SerializeField] private float jumpHeight = 1.1f;
     [SerializeField] private float gravity = -22f;
@@ -21,17 +24,22 @@ public class PlayerController : MonoBehaviour
 
     [Header("Crouch")]
     [SerializeField] private float crouchHeight = 1.1f;
+    [SerializeField] private float crouchRadius = 0.5f;
     [SerializeField] private float heightLerpSpeed = 10f;
     [SerializeField] private LayerMask ceilingMask;
 
     private CharacterController _controller;
     private PlayerInput _input;
+    private PlayerCameraRig _cameraRig;
 
     private Vector3 _planarVelocity;
     private Vector2 _moveDirection;
+    private float _turnVelocity;
     private float _verticalVelocity;
     private float _standHeight;
+    private float _standRadius;
     private float _targetHeight;
+    private float _targetRadius;
     private float _capsuleBottom;
     private float _centerX;
     private float _centerZ;
@@ -80,20 +88,23 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public event Action Jumped;
-    public event Action Landed;
-    public event Action<bool> CrouchStateChanged;
+    public event Action OnJumped;
+    public event Action OnLanded;
+    public event Action<bool> OnCrouchStateChanged;
 
     private void Awake()
     {
         _controller = GetComponent<CharacterController>();
         _input = GetComponent<PlayerInput>();
+        _cameraRig = GetComponent<PlayerCameraRig>();
 
         _moveDirection = Vector2.up;
         _groundedTimer = coyoteTime;
         _isGroundedPrev = true;
         _standHeight = _controller.height;
+        _standRadius = _controller.radius;
         _targetHeight = _standHeight;
+        _targetRadius = _standRadius;
         _capsuleBottom = _controller.center.y - _standHeight * 0.5f;
         _centerX = _controller.center.x;
         _centerZ = _controller.center.z;
@@ -101,34 +112,22 @@ public class PlayerController : MonoBehaviour
 
     private void OnEnable()
     {
-        _input.JumpPressed += HandleJumpPressed;
-        _input.CrouchChanged += HandleCrouchChanged;
+        _input.OnJumpPressed += HandleJumpPressed;
+        _input.OnCrouchChanged += HandleCrouchChanged;
     }
 
     private void OnDisable()
     {
-        _input.JumpPressed -= HandleJumpPressed;
-        _input.CrouchChanged -= HandleCrouchChanged;
+        _input.OnJumpPressed -= HandleJumpPressed;
+        _input.OnCrouchChanged -= HandleCrouchChanged;
     }
 
     private void Update()
     {
-        ApplyYaw();
         ApplyGravity();
-        ApplyHeight();
+        ApplyCapsule();
         ApplyMove();
         UpdateGrounded();
-    }
-
-    private void ApplyYaw()
-    {
-        float yaw = _input.LookInput.x;
-        if (Mathf.Approximately(yaw, 0f))
-        {
-            return;
-        }
-
-        transform.Rotate(Vector3.up, yaw, Space.World);
     }
 
     private void ApplyGravity()
@@ -142,22 +141,36 @@ public class PlayerController : MonoBehaviour
         _verticalVelocity += gravity * Time.deltaTime;
     }
 
-    private void ApplyHeight()
+    private void ApplyCapsule()
     {
-        if (Mathf.Approximately(_controller.height, _targetHeight))
+        bool isHeightSettled = Mathf.Approximately(_controller.height, _targetHeight);
+        bool isRadiusSettled = Mathf.Approximately(_controller.radius, _targetRadius);
+
+        if (isHeightSettled && isRadiusSettled)
         {
             return;
         }
 
-        float height = Mathf.Lerp(_controller.height, _targetHeight, heightLerpSpeed * Time.deltaTime);
+        float k = heightLerpSpeed * Time.deltaTime;
+        float height = Mathf.Lerp(_controller.height, _targetHeight, k);
+        float radius = Mathf.Min(Mathf.Lerp(_controller.radius, _targetRadius, k), height * 0.5f);
+
         _controller.height = height;
+        _controller.radius = radius;
         _controller.center = new Vector3(_centerX, _capsuleBottom + height * 0.5f, _centerZ);
     }
 
     private void ApplyMove()
     {
         Vector2 move = _input.MoveInput;
-        Vector3 direction = transform.right * move.x + transform.forward * move.y;
+        Vector3 direction = Vector3.zero;
+
+        if (move.sqrMagnitude > 0.0001f)
+        {
+            direction = Quaternion.Euler(0f, GetCameraYaw(), 0f) * new Vector3(move.x, 0f, move.y);
+            ApplyTurn(direction);
+        }
+
         Vector3 target = direction * GetTargetSpeed();
 
         _planarVelocity = Vector3.MoveTowards(_planarVelocity, target, acceleration * Time.deltaTime);
@@ -166,6 +179,24 @@ public class PlayerController : MonoBehaviour
 
         Vector3 velocity = _planarVelocity + Vector3.up * _verticalVelocity;
         _controller.Move(velocity * Time.deltaTime);
+    }
+
+    private float GetCameraYaw()
+    {
+        if (_cameraRig != null)
+        {
+            return _cameraRig.yaw;
+        }
+
+        return transform.eulerAngles.y;
+    }
+
+    private void ApplyTurn(Vector3 direction)
+    {
+        float targetYaw = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+        float yaw = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetYaw, ref _turnVelocity, turnSmoothTime);
+
+        transform.rotation = Quaternion.Euler(0f, yaw, 0f);
     }
 
     private void UpdateMoveDirection()
@@ -211,7 +242,7 @@ public class PlayerController : MonoBehaviour
 
         if (isGroundedNow && !_isGroundedPrev)
         {
-            Landed?.Invoke();
+            OnLanded?.Invoke();
         }
 
         _isGroundedPrev = isGroundedNow;
@@ -233,7 +264,7 @@ public class PlayerController : MonoBehaviour
         _groundedTimer = 0f;
         _isGroundedPrev = false;
         _verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
-        Jumped?.Invoke();
+        OnJumped?.Invoke();
     }
 
     private void HandleCrouchChanged(bool isOn)
@@ -266,7 +297,8 @@ public class PlayerController : MonoBehaviour
 
         isCrouched = isOn;
         _targetHeight = isOn ? Mathf.Min(crouchHeight, _standHeight) : _standHeight;
-        CrouchStateChanged?.Invoke(isOn);
+        _targetRadius = isOn ? crouchRadius : _standRadius;
+        OnCrouchStateChanged?.Invoke(isOn);
     }
 
     private bool IsCeilingBlocked()
