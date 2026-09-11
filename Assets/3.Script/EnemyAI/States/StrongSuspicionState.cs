@@ -10,7 +10,11 @@ public class StrongSuspicionState : IEnemyState
         fsm.Movement.SetInvestigateSpeed(fsm.Data);
 
         Vector3 target = fsm.Perception.GetSuspectedPosition();
-        _command = new InvestigateCommand(target, fsm.Data.investigateCheckDuration);
+        float duration = fsm.Perception.IsSoundDominant
+            ? fsm.Data.soundInvestigateCheckDuration
+            : fsm.Data.investigateCheckDuration;
+
+        _command = new InvestigateCommand(target, duration);
         _command.Start(fsm, () => OnInvestigateComplete(fsm));
     }
 
