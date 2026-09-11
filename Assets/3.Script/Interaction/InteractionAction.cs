@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(InteractableObj))]
 public abstract class InteractionAction : MonoBehaviour
 {
     [Header("Animation")]
@@ -17,8 +16,9 @@ public abstract class InteractionAction : MonoBehaviour
 
     [Header("Rule")]
     [SerializeField] private bool isRepeatable = true;
+    [SerializeField] private bool isUpperBodyOnly = false;
 
-    private InteractableObj _interactable;
+    private IInteractable _interactable;
 
     public virtual string animationTriggerName
     {
@@ -60,6 +60,14 @@ public abstract class InteractionAction : MonoBehaviour
         }
     }
 
+    public bool isUpperBody
+    {
+        get
+        {
+            return isUpperBodyOnly;
+        }
+    }
+
     public bool isUsed { get; private set; }
 
     public bool IsReady(Transform user)
@@ -69,12 +77,17 @@ public abstract class InteractionAction : MonoBehaviour
             return false;
         }
 
+        if (_interactable != null && !_interactable.IsInteractable)
+        {
+            return false;
+        }
+
         return CanExecute(user);
     }
 
     public event Action<InteractionAction> OnExecuted;
 
-    protected InteractableObj interactable
+    protected IInteractable interactable
     {
         get
         {
@@ -84,7 +97,12 @@ public abstract class InteractionAction : MonoBehaviour
 
     protected virtual void Awake()
     {
-        _interactable = GetComponent<InteractableObj>();
+        _interactable = GetComponent<IInteractable>();
+
+        if (_interactable == null)
+        {
+            Debug.LogWarning($"[InteractionAction] '{name}'에 IInteractable 스크립트가 없습니다. GeneralObject 또는 TargetObject를 추가하세요.", this);
+        }
     }
 
     public void Execute(Transform user)

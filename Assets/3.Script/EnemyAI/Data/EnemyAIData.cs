@@ -17,6 +17,7 @@ public class EnemyAIData : ScriptableObject
 
     [Header("청각")]
     public float hearingRadius = 15f;
+    public float loudSoundRadius = 25f;
     public float soundMemoryLockDuration = 3f;
 
     [Header("의심 임계치")]

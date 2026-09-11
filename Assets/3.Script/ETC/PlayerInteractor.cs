@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerInteractor : MonoBehaviour
 {
@@ -11,9 +12,9 @@ public class PlayerInteractor : MonoBehaviour
     [SerializeField] private float castDistance = 5f;
     [SerializeField] private LayerMask interactable;
 
-    private InteractableObj currentTarget;
-
-    public InteractableObj CurrentTarget
+    //debug º¯°æ InteractableObj -> IInteractable
+    private IInteractable currentTarget;
+    public IInteractable CurrentTarget
     {
         get
         {
@@ -30,32 +31,37 @@ public class PlayerInteractor : MonoBehaviour
     {
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
 
-        if(Physics.SphereCast(ray, castRadius, out RaycastHit hit, castDistance,interactable))
+        if (Physics.SphereCast(ray, castRadius, out RaycastHit hit, castDistance, interactable))
         {
 
-            if (hit.collider.TryGetComponent<InteractableObj>(out InteractableObj hitObj) &&
+            if (hit.collider.TryGetComponent<IInteractable>(out IInteractable hitObj) &&
                 hitObj != currentTarget)
             {
                 if (currentTarget != null)
                 {
-                    currentTarget.isPlayerLook = false;
+                    currentTarget.IsPlayerLook = false;
                 }
 
                 currentTarget = hitObj;
-                currentTarget.OnLook?.Invoke();
-            }
 
+                if (currentTarget.IsInteractable)
+                {
+                    currentTarget.OnLook?.Invoke();
+
+                    
+                }
+            }
         }
         else
         {
             if (currentTarget != null)
             {
-                currentTarget.isPlayerLook = false;
+                currentTarget.IsPlayerLook = false;
                 currentTarget = null;
             }
         }
     }
 
-
+    
 
 }
