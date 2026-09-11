@@ -146,12 +146,28 @@ public class PlayerInteractionRunner : MonoBehaviour
             return null;
         }
 
-        InteractionAction action = interactor.CurrentTarget.GetComponent<InteractionAction>();
+        Transform target = interactor.CurrentTarget.ObjectTransform;
+        if (target == null)
+        {
+            return null;
+        }
+
+        if (!interactor.CurrentTarget.IsInteractable)
+        {
+            if (isDebugLog)
+            {
+                Debug.Log($"[Interaction] '{target.name}'은(는) 지금 상호작용이 잠겨 있습니다. (IsInteractable = false)", target);
+            }
+
+            return null;
+        }
+
+        InteractionAction action = target.GetComponent<InteractionAction>();
         if (action == null)
         {
             if (isDebugLog)
             {
-                Debug.Log($"[Interaction] '{interactor.CurrentTarget.name}'에 InteractionAction이 없습니다.", interactor.CurrentTarget);
+                Debug.Log($"[Interaction] '{target.name}'에 InteractionAction이 없습니다.", target);
             }
 
             return null;

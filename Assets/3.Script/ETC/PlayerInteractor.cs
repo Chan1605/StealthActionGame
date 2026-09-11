@@ -48,10 +48,7 @@ public class PlayerInteractor : MonoBehaviour
                 {
                     currentTarget.OnLook?.Invoke();
 
-                    if (Input.GetKeyDown(KeyCode.K))
-                    {
-                        currentTarget.OnUse?.Invoke();
-                    }
+                    
                 }
             }
         }
@@ -65,12 +62,6 @@ public class PlayerInteractor : MonoBehaviour
         }
     }
 
-    public void OnUsingObject(InputValue value)
-    {
-        if (value.isPressed && currentTarget != null && currentTarget.IsInteractable)
-        {
-            currentTarget.OnUse?.Invoke();
-        }
-    }
+    
 
 }

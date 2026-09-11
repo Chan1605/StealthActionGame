@@ -13,6 +13,9 @@ public class PlayerInput : MonoBehaviour
     [Header("Crouch")]
     [SerializeField] private bool isCrouchToggle = true;
 
+    [Header("Vision")]
+    [SerializeField] private bool isVisionToggle = false;
+
     [Header("Cursor")]
     [SerializeField] private bool isLockCursor = true;
 
@@ -65,10 +68,13 @@ public class PlayerInput : MonoBehaviour
 
     public bool isCrouching { get; private set; }
 
+    public bool isVisionOn { get; private set; }
+
     public event Action OnJumpPressed;
     public event Action OnInteractPressed;
     public event Action OnThrowPressed;
     public event Action<bool> OnCrouchChanged;
+    public event Action<bool> OnVisionChanged;
 
     private void Awake()
     {
@@ -84,6 +90,8 @@ public class PlayerInput : MonoBehaviour
         actions.Player.Throw.performed += HandleThrow;
         actions.Player.Crouch.performed += HandleCrouchPerformed;
         actions.Player.Crouch.canceled += HandleCrouchCanceled;
+        actions.Player.Vision.performed += HandleVisionPerformed;
+        actions.Player.Vision.canceled += HandleVisionCanceled;
     }
 
     private void OnDisable()
@@ -98,10 +106,13 @@ public class PlayerInput : MonoBehaviour
         _actions.Player.Throw.performed -= HandleThrow;
         _actions.Player.Crouch.performed -= HandleCrouchPerformed;
         _actions.Player.Crouch.canceled -= HandleCrouchCanceled;
+        _actions.Player.Vision.performed -= HandleVisionPerformed;
+        _actions.Player.Vision.canceled -= HandleVisionCanceled;
 
         _actions.Player.Disable();
 
         SetCrouch(false);
+        SetVision(false);
     }
 
     private void OnDestroy()
@@ -168,6 +179,39 @@ public class PlayerInput : MonoBehaviour
 
         isCrouching = isOn;
         OnCrouchChanged?.Invoke(isOn);
+    }
+
+    private void HandleVisionPerformed(InputAction.CallbackContext context)
+    {
+        if (isVisionToggle)
+        {
+            SetVision(!isVisionOn);
+        }
+        else
+        {
+            SetVision(true);
+        }
+    }
+
+    private void HandleVisionCanceled(InputAction.CallbackContext context)
+    {
+        if (isVisionToggle)
+        {
+            return;
+        }
+
+        SetVision(false);
+    }
+
+    private void SetVision(bool isOn)
+    {
+        if (isVisionOn == isOn)
+        {
+            return;
+        }
+
+        isVisionOn = isOn;
+        OnVisionChanged?.Invoke(isOn);
     }
 
     public void SetInputEnabled(bool isEnabled)
