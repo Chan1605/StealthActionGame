@@ -3,12 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InteractableObj : MonoBehaviour
+public class GeneralObject : MonoBehaviour, IInteractable
 {
-    public Action OnLook;
-    public Action OnUse;
+    public Transform ObjectTransform => transform;
 
-    public bool isPlayerLook;
+    public Action OnUse { get; set; }
+    public Action OnLook { get; set; }
+
+    public event Action OnTargetCompleted;
+
+
+    public bool IsInteractable => true;
+    public bool IsPlayerLook { get; set; }
     public bool isAct;
 
     private Object_Data Data;
@@ -17,6 +23,7 @@ public class InteractableObj : MonoBehaviour
     private UI_ObjKeyPanal keyPanal;
 
     private HUDManager hudManager;
+
 
     private void Awake()
     {
@@ -28,15 +35,13 @@ public class InteractableObj : MonoBehaviour
         hudManager = FindAnyObjectByType<HUDManager>();
         keyPanal = hudManager.GetKeyPanal();
 
-        OnLook += KeyPanal_On;
+        OnLook += Look;
         KeyPanal_Off();
     }
 
-
     private void Update()
     {
-
-        if (!isPlayerLook && isAct)
+        if (!IsPlayerLook && isAct)
         {
             KeyPanal_Off();
             isAct = false;
@@ -45,16 +50,20 @@ public class InteractableObj : MonoBehaviour
 
     private void OnDestroy()
     {
-        OnLook -= KeyPanal_On;
+        OnLook -= Look;
     }
 
+    private void Look()
+    {
+        KeyPanal_On();
+    }
 
     private void KeyPanal_On()
     {
         Debug.Log($"outline 할당 상태 : {outLine != null}");
         Debug.Log($"keyPanal 할당 상태 : {keyPanal != null}");
 
-        isPlayerLook = true;
+        IsPlayerLook = true;
         isAct = true;
         outLine.SetOutLine_On();
         keyPanal.SetPanal_On(transform);
@@ -73,7 +82,16 @@ public class InteractableObj : MonoBehaviour
 
     public void Debug_PlayerDontLook()
     {
-        isPlayerLook = false;
+        IsPlayerLook = false;
+    }
+    public void EnableInteraction()
+    {
+        Debug.Log("오브젝트의 IInteractable 스크립트가 상시 개체용입니다. 리스트를 확인해주세요.");
+    }
+
+    public void DisableInteraction()
+    {
+        Debug.Log("오브젝트의 IInteractable 스크립트가 상시 개체용입니다. 리스트를 확인해주세요.");
     }
 
 
