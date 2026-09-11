@@ -141,7 +141,15 @@ public class EnemyPerception : MonoBehaviour
             _soundLockTimer = _data.soundMemoryLockDuration;
         }
 
-        float gain = isInstant ? attenuated : attenuated * Time.deltaTime;
+        float gain;
+        if (isInstant && attenuated >= _data.weakSuspicionThreshold)
+        {
+            gain = _data.maxScore; // 뚜렷하게 들린 돌발 소리는 무조건 확인하러 가도록 만점 처리
+        }
+        else
+        {
+            gain = isInstant ? attenuated : attenuated * Time.deltaTime;
+        }
         HearingScore = Mathf.Min(_data.maxScore, HearingScore + gain);
         _soundRegisteredThisFrame = true;
      
