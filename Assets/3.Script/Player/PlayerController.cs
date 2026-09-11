@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float sprintSpeed = 6.5f;
     [SerializeField] private float crouchSpeed = 1.5f;
     [SerializeField] private float acceleration = 14f;
+    [SerializeField] private float deceleration = 40f;
 
     [Header("Rotation")]
     [SerializeField] private float turnSmoothTime = 0.1f;
@@ -33,6 +34,8 @@ public class PlayerController : MonoBehaviour
     private PlayerCameraRig _cameraRig;
 
     private Vector3 _planarVelocity;
+    private Vector3 _lastMoveDirection;
+    private float _currentSpeed;
     private Vector2 _moveDirection;
     private float _turnVelocity;
     private float _verticalVelocity;
@@ -99,6 +102,7 @@ public class PlayerController : MonoBehaviour
         _cameraRig = GetComponent<PlayerCameraRig>();
 
         _moveDirection = Vector2.up;
+        _lastMoveDirection = transform.forward;
         _groundedTimer = coyoteTime;
         _isGroundedPrev = true;
         _standHeight = _controller.height;
@@ -163,17 +167,24 @@ public class PlayerController : MonoBehaviour
     private void ApplyMove()
     {
         Vector2 move = _input.MoveInput;
-        Vector3 direction = Vector3.zero;
+        bool isMoveInput = move.sqrMagnitude > 0.0001f;
+        float targetSpeed = 0f;
 
-        if (move.sqrMagnitude > 0.0001f)
+        if (isMoveInput)
         {
-            direction = Quaternion.Euler(0f, GetCameraYaw(), 0f) * new Vector3(move.x, 0f, move.y);
+            Vector3 direction = Quaternion.Euler(0f, GetCameraYaw(), 0f) * new Vector3(move.x, 0f, move.y);
+            direction.Normalize();
+
             ApplyTurn(direction);
+
+            _lastMoveDirection = direction;
+            targetSpeed = GetTargetSpeed() * Mathf.Clamp01(move.magnitude);
         }
 
-        Vector3 target = direction * GetTargetSpeed();
+        float rate = targetSpeed > _currentSpeed ? acceleration : deceleration;
+        _currentSpeed = Mathf.MoveTowards(_currentSpeed, targetSpeed, rate * Time.deltaTime);
 
-        _planarVelocity = Vector3.MoveTowards(_planarVelocity, target, acceleration * Time.deltaTime);
+        _planarVelocity = _lastMoveDirection * _currentSpeed;
 
         UpdateMoveDirection();
 

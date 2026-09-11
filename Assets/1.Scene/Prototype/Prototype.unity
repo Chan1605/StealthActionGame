@@ -7072,6 +7072,7 @@ MonoBehaviour:
   sprintSpeed: 6
   crouchSpeed: 1.5
   acceleration: 14
+  deceleration: 40
   turnSmoothTime: 0.1
   jumpHeight: 1.2
   gravity: -22
