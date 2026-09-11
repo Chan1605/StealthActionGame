@@ -16,6 +16,9 @@ public class PlayerInput : MonoBehaviour
     [Header("Cursor")]
     [SerializeField] private bool isLockCursor = true;
 
+    public event Action<bool> OnMenuToggled;
+
+    private bool isMenuOn;
     private HitMan _actions;
 
     private HitMan actions
@@ -115,6 +118,8 @@ public class PlayerInput : MonoBehaviour
         {
             SetCursorLocked(true);
         }
+
+        isMenuOn = false;
     }
 
     private void HandleJump(InputAction.CallbackContext context)
@@ -183,5 +188,14 @@ public class PlayerInput : MonoBehaviour
     {
         Cursor.lockState = isLocked ? CursorLockMode.Locked : CursorLockMode.None;
         Cursor.visible = !isLocked;
+    }
+
+    public void ToggleMenu(InputAction.CallbackContext context)
+    {
+        if (context.phase.Equals(InputActionPhase.Performed))
+        {
+            isMenuOn = !isMenuOn;
+            OnMenuToggled?.Invoke(isMenuOn);
+        }
     }
 }
