@@ -73,6 +73,7 @@ public class PlayerInput : MonoBehaviour
     public event Action OnJumpPressed;
     public event Action OnInteractPressed;
     public event Action OnThrowPressed;
+    public event Action OnThrowReleased;
     public event Action<bool> OnCrouchChanged;
     public event Action<bool> OnVisionChanged;
 
@@ -88,6 +89,7 @@ public class PlayerInput : MonoBehaviour
         actions.Player.Jump.performed += HandleJump;
         actions.Player.Interact.performed += HandleInteract;
         actions.Player.Throw.performed += HandleThrow;
+        actions.Player.Throw.canceled += HandleThrowCanceled;
         actions.Player.Crouch.performed += HandleCrouchPerformed;
         actions.Player.Crouch.canceled += HandleCrouchCanceled;
         actions.Player.Vision.performed += HandleVisionPerformed;
@@ -104,6 +106,7 @@ public class PlayerInput : MonoBehaviour
         _actions.Player.Jump.performed -= HandleJump;
         _actions.Player.Interact.performed -= HandleInteract;
         _actions.Player.Throw.performed -= HandleThrow;
+        _actions.Player.Throw.canceled -= HandleThrowCanceled;
         _actions.Player.Crouch.performed -= HandleCrouchPerformed;
         _actions.Player.Crouch.canceled -= HandleCrouchCanceled;
         _actions.Player.Vision.performed -= HandleVisionPerformed;
@@ -146,6 +149,11 @@ public class PlayerInput : MonoBehaviour
     private void HandleThrow(InputAction.CallbackContext context)
     {
         OnThrowPressed?.Invoke();
+    }
+
+    private void HandleThrowCanceled(InputAction.CallbackContext context)
+    {
+        OnThrowReleased?.Invoke();
     }
 
     private void HandleCrouchPerformed(InputAction.CallbackContext context)

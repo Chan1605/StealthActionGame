@@ -13,24 +13,40 @@ public class PlayerThrow : MonoBehaviour
 
     [Header("Throw")]
     [SerializeField] private Camera aimCamera;
+    [SerializeField] private Transform throwOrigin;
     [SerializeField] private float throwPower = 12f;
-    [SerializeField] private float upwardBoost = 0.15f;
+    [SerializeField] private float launchAngle = 20f;
+    [SerializeField] private float cameraPitchInfluence = 0.6f;
+    [SerializeField] private Vector3 originOffset = new Vector3(0f, 0.1f, 0.35f);
+
+    [Header("Aim")]
+    [SerializeField] private ThrowTrajectory trajectory;
+    [SerializeField] private bool isAimRequired = true;
+    [SerializeField] private bool isFaceAimDirection = true;
+    [SerializeField] private float aimTurnTime = 0.08f;
 
     private PlayerInput _input;
     private PlayerHand _hand;
     private PlayerAnimator _playerAnimator;
+    private PlayerCameraRig _cameraRig;
     private PlayerInteractionRunner _runner;
     private AssassinationSystem _assassination;
 
+    private float _turnVelocity;
+
     public bool isBusy { get; private set; }
 
+    public bool isAiming { get; private set; }
+
     public event Action<HoldableItem> OnThrown;
+    public event Action<bool> OnAimChanged;
 
     private void Awake()
     {
         _input = GetComponent<PlayerInput>();
         _hand = GetComponentInChildren<PlayerHand>();
         _playerAnimator = GetComponent<PlayerAnimator>();
+        _cameraRig = GetComponent<PlayerCameraRig>();
         _runner = GetComponent<PlayerInteractionRunner>();
         _assassination = GetComponent<AssassinationSystem>();
 
@@ -38,41 +54,136 @@ public class PlayerThrow : MonoBehaviour
         {
             aimCamera = Camera.main;
         }
+
+        if (trajectory == null)
+        {
+            trajectory = GetComponentInChildren<ThrowTrajectory>(true);
+        }
     }
 
     private void OnEnable()
     {
         _input.OnThrowPressed += HandleThrowPressed;
+        _input.OnThrowReleased += HandleThrowReleased;
     }
 
     private void OnDisable()
     {
         _input.OnThrowPressed -= HandleThrowPressed;
+        _input.OnThrowReleased -= HandleThrowReleased;
+
+        SetAiming(false);
     }
 
-    private void HandleThrowPressed()
+    private void Update()
+    {
+        if (!isAiming)
+        {
+            return;
+        }
+
+        if (!CanThrow())
+        {
+            SetAiming(false);
+            return;
+        }
+
+        if (trajectory != null)
+        {
+            trajectory.Show(GetThrowOrigin(), GetAimDirection() * throwPower);
+        }
+    }
+
+    private void LateUpdate()
+    {
+        if (!isAiming || !isFaceAimDirection)
+        {
+            return;
+        }
+
+        float targetYaw = _cameraRig != null ? _cameraRig.yaw : transform.eulerAngles.y;
+        float yaw = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetYaw, ref _turnVelocity, aimTurnTime);
+
+        transform.rotation = Quaternion.Euler(0f, yaw, 0f);
+    }
+
+    private bool CanThrow()
     {
         if (isBusy)
         {
-            return;
+            return false;
         }
 
         if (_hand == null || !_hand.isHolding)
         {
-            return;
+            return false;
         }
 
         if (_runner != null && _runner.isBusy)
         {
-            return;
+            return false;
         }
 
         if (_assassination != null && _assassination.isBusy)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    private void HandleThrowPressed()
+    {
+        if (!CanThrow())
+        {
+            return;
+        }
+
+        if (!isAimRequired)
+        {
+            StartCoroutine(Throw_co());
+            return;
+        }
+
+        SetAiming(true);
+    }
+
+    private void HandleThrowReleased()
+    {
+        if (!isAiming)
+        {
+            return;
+        }
+
+        SetAiming(false);
+
+        if (!CanThrow())
         {
             return;
         }
 
         StartCoroutine(Throw_co());
+    }
+
+    private void SetAiming(bool isOn)
+    {
+        if (isAiming == isOn)
+        {
+            return;
+        }
+
+        isAiming = isOn;
+
+        if (isOn)
+        {
+            _turnVelocity = 0f;
+        }
+        else if (trajectory != null)
+        {
+            trajectory.Hide();
+        }
+
+        OnAimChanged?.Invoke(isOn);
     }
 
     private IEnumerator Throw_co()
@@ -124,7 +235,15 @@ public class PlayerThrow : MonoBehaviour
             return;
         }
 
+        Vector3 origin = GetThrowOrigin();
         Vector3 direction = GetAimDirection();
+
+        HoldableItem held = _hand.heldItem;
+        if (held != null)
+        {
+            held.transform.position = origin;
+        }
+
         HoldableItem item = _hand.Release(direction * throwPower);
 
         if (item != null)
@@ -133,10 +252,54 @@ public class PlayerThrow : MonoBehaviour
         }
     }
 
+    private Vector3 GetThrowOrigin()
+    {
+        Transform anchor = throwOrigin;
+
+        if (anchor == null && _hand != null)
+        {
+            anchor = _hand.socket;
+        }
+
+        Vector3 basePosition = anchor != null
+            ? anchor.position
+            : transform.position + Vector3.up * 1.4f;
+
+        return basePosition + transform.TransformDirection(originOffset);
+    }
+
     private Vector3 GetAimDirection()
     {
-        Vector3 forward = aimCamera != null ? aimCamera.transform.forward : transform.forward;
+        Vector3 flat = transform.forward;
+        flat.y = 0f;
 
-        return (forward + Vector3.up * upwardBoost).normalized;
+        if (flat.sqrMagnitude < 0.0001f)
+        {
+            flat = Vector3.forward;
+        }
+
+        flat.Normalize();
+
+        float elevation = Mathf.Clamp(launchAngle + GetCameraPitch() * cameraPitchInfluence, -60f, 80f);
+        Vector3 right = Vector3.Cross(Vector3.up, flat);
+
+        return Quaternion.AngleAxis(-elevation, right) * flat;
+    }
+
+    private float GetCameraPitch()
+    {
+        if (aimCamera == null)
+        {
+            return 0f;
+        }
+
+        float pitch = aimCamera.transform.eulerAngles.x;
+
+        if (pitch > 180f)
+        {
+            pitch -= 360f;
+        }
+
+        return -pitch;
     }
 }
