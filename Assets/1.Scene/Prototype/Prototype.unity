@@ -1081,7 +1081,7 @@ Transform:
   m_GameObject: {fileID: 782234575}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.249, y: 1.6, z: -2}
+  m_LocalPosition: {x: 0.42000002, y: 1.6, z: 11.58}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1605,7 +1605,7 @@ Transform:
   m_GameObject: {fileID: 1291530257}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.515, y: 0.094, z: 0}
+  m_LocalPosition: {x: 2.515, y: 0.11, z: 0}
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1684,7 +1684,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc748ba3042ad1d4a8f9676bdc9ee0c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ThrownObjectSound
-  soundIntensity: 80
+  soundIntensity: 40
   soundRadius: 25
   surfaceMask:
     serializedVersion: 2
@@ -2200,7 +2200,7 @@ Transform:
   m_GameObject: {fileID: 1449694167}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.249, y: 1.6, z: -2}
+  m_LocalPosition: {x: 0.42000002, y: 1.6, z: 11.58}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3218,12 +3218,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 543450651695532674}
+  - component: {fileID: 5866666019870314747}
   - component: {fileID: 5866666019870314744}
   - component: {fileID: 5866666019870314745}
   - component: {fileID: 5866666019870314750}
   - component: {fileID: 5866666019870314749}
   - component: {fileID: 5866666019870314748}
-  - component: {fileID: 5866666019870314747}
   - component: {fileID: 5866666019870314751}
   m_Layer: 3
   m_Name: Enemy
@@ -4879,7 +4879,7 @@ Transform:
   m_GameObject: {fileID: 4416926083488487353}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.749, y: 0, z: 0}
+  m_LocalPosition: {x: -0.08, y: 0, z: 13.58}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
