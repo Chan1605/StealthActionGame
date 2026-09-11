@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class InteractableObj : MonoBehaviour
 {
-
+    // 더이상 사용하지 않습니다. IInteractable 타입으로 바꿔주세요.
     public Action OnLook;
     public Action OnUse;
 
