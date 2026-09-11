@@ -19,6 +19,11 @@ public class PlayerThrow : MonoBehaviour
     [SerializeField] private float cameraPitchInfluence = 0.6f;
     [SerializeField] private Vector3 originOffset = new Vector3(0f, 0.1f, 0.35f);
 
+    [Header("Despawn")]
+    [SerializeField] private bool isDespawnAfterLanding = true;
+    [SerializeField] private float despawnDelay = 2f;
+    [SerializeField] private LayerMask landingMask = ~0;
+
     [Header("Aim")]
     [SerializeField] private ThrowTrajectory trajectory;
     [SerializeField] private bool isAimRequired = true;
@@ -248,8 +253,25 @@ public class PlayerThrow : MonoBehaviour
 
         if (item != null)
         {
+            if (isDespawnAfterLanding)
+            {
+                ArmDespawn(item);
+            }
+
             OnThrown?.Invoke(item);
         }
+    }
+
+    private void ArmDespawn(HoldableItem item)
+    {
+        ThrownItemDespawn despawn = item.GetComponent<ThrownItemDespawn>();
+
+        if (despawn == null)
+        {
+            despawn = item.gameObject.AddComponent<ThrownItemDespawn>();
+        }
+
+        despawn.Arm(despawnDelay, landingMask);
     }
 
     private Vector3 GetThrowOrigin()

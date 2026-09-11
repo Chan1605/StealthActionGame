@@ -17,6 +17,10 @@ public class PlayerAnimator : MonoBehaviour
     [SerializeField] private string emptyStateName = "none";
     [SerializeField] private float emptyBlendTime = 0.1f;
 
+    [Header("Hand IK")]
+    [SerializeField] private int ikLayer = 1;
+    [SerializeField] [Range(0f, 1f)] private float handRotationWeight = 0f;
+
     [Header("Upper Body Layer")]
     [SerializeField] private int upperBodyLayer = 2;
     [SerializeField] private string upperBodyEmptyStateName = "none";
@@ -25,6 +29,17 @@ public class PlayerAnimator : MonoBehaviour
 
     private PlayerController _controller;
     private Coroutine _upperFadeRoutine;
+
+    private bool _isLeftHandIkOn;
+    private bool _isRightHandIkOn;
+    private Vector3 _leftHandPosition;
+    private Vector3 _rightHandPosition;
+    private Quaternion _leftHandRotation = Quaternion.identity;
+    private Quaternion _rightHandRotation = Quaternion.identity;
+    private float _leftHandWeight;
+    private float _rightHandWeight;
+
+    public bool isIkPassActive { get; private set; }
 
     private static readonly int MoveXId = Animator.StringToHash("MoveX");
     private static readonly int MoveYId = Animator.StringToHash("MoveY");
@@ -224,6 +239,64 @@ public class PlayerAnimator : MonoBehaviour
 
             return info.length / Mathf.Max(0.01f, info.speed == 0f ? 1f : Mathf.Abs(info.speed));
         }
+    }
+
+    public void SetHandIK(bool isLeft, Vector3 position, Quaternion rotation, float weight)
+    {
+        float clamped = Mathf.Clamp01(weight);
+
+        if (isLeft)
+        {
+            _isLeftHandIkOn = clamped > 0.001f;
+            _leftHandPosition = position;
+            _leftHandRotation = rotation;
+            _leftHandWeight = clamped;
+
+            return;
+        }
+
+        _isRightHandIkOn = clamped > 0.001f;
+        _rightHandPosition = position;
+        _rightHandRotation = rotation;
+        _rightHandWeight = clamped;
+    }
+
+    public void ClearHandIK()
+    {
+        _isLeftHandIkOn = false;
+        _isRightHandIkOn = false;
+        _leftHandWeight = 0f;
+        _rightHandWeight = 0f;
+    }
+
+    private void OnAnimatorIK(int layerIndex)
+    {
+        if (animator == null || layerIndex != ikLayer)
+        {
+            return;
+        }
+
+        isIkPassActive = true;
+
+        ApplyHandIK(AvatarIKGoal.LeftHand, _isLeftHandIkOn, _leftHandPosition, _leftHandRotation, _leftHandWeight);
+        ApplyHandIK(AvatarIKGoal.RightHand, _isRightHandIkOn, _rightHandPosition, _rightHandRotation, _rightHandWeight);
+    }
+
+    private void ApplyHandIK(AvatarIKGoal goal, bool isOn, Vector3 position, Quaternion rotation, float weight)
+    {
+        if (!isOn)
+        {
+            animator.SetIKPositionWeight(goal, 0f);
+            animator.SetIKRotationWeight(goal, 0f);
+
+            return;
+        }
+
+        animator.SetIKPositionWeight(goal, weight);
+        animator.SetIKPosition(goal, position);
+
+        animator.SetIKRotationWeight(goal, weight * handRotationWeight);
+        animator.SetIKRotation(goal, rotation);
     }
 
     public bool HasTrigger(string triggerName)
