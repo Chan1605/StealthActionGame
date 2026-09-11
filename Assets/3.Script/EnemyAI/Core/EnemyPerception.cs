@@ -130,6 +130,8 @@ public class EnemyPerception : MonoBehaviour
         float effectiveRadius = radius > 0f ? radius : _data.hearingRadius;
         float distance = Vector3.Distance(eyeOrigin.position, sourcePosition);
         float attenuated = sourceIntensity * Mathf.Clamp01(1f - distance / effectiveRadius);
+
+
         if (attenuated <= 0f) return;
 
         bool lockActive = _soundLockTimer > 0f;
@@ -143,6 +145,7 @@ public class EnemyPerception : MonoBehaviour
         float gain = isInstant ? attenuated : attenuated * Time.deltaTime;
         HearingScore = Mathf.Min(_data.maxScore, HearingScore + gain);
         _soundRegisteredThisFrame = true;
+     
     }
 
 #if UNITY_EDITOR
