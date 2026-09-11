@@ -123,12 +123,15 @@ public class EnemyPerception : MonoBehaviour
         _soundLockTimer = 0f;
     }
 
-    public void RegisterSound(Vector3 sourcePosition, float sourceIntensity, bool isInstant)
+    public void RegisterSound(Vector3 sourcePosition, float sourceIntensity, bool isInstant, float radius = -1f)
     {
         if (sourceIntensity <= 0f) return;
 
+        float effectiveRadius = radius > 0f ? radius : _data.hearingRadius;
         float distance = Vector3.Distance(eyeOrigin.position, sourcePosition);
-        float attenuated = sourceIntensity * Mathf.Clamp01(1f - distance / _data.hearingRadius);
+        float attenuated = sourceIntensity * Mathf.Clamp01(1f - distance / effectiveRadius);
+
+
         if (attenuated <= 0f) return;
 
         bool lockActive = _soundLockTimer > 0f;
@@ -142,6 +145,7 @@ public class EnemyPerception : MonoBehaviour
         float gain = isInstant ? attenuated : attenuated * Time.deltaTime;
         HearingScore = Mathf.Min(_data.maxScore, HearingScore + gain);
         _soundRegisteredThisFrame = true;
+     
     }
 
 #if UNITY_EDITOR
