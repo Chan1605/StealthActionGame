@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -7,7 +7,7 @@ using DG.Tweening;
 
 public class VisionManager : MonoBehaviour
 {
-    [Header("Åõ½Ã ¼¼ÆÃ")]
+    [Header("íˆ¬ì‹œ ì„¸íŒ…")]
     [SerializeField] private Camera cam;
     [SerializeField] private Volume visionVolume;
 
@@ -15,9 +15,49 @@ public class VisionManager : MonoBehaviour
     [SerializeField] private float visionFOV = 50f;
     [SerializeField] private float transitionDuration = 1f;
 
+    private PlayerInput _input;
+
     private void Awake()
     {
-        cam = Camera.main;
+        if (cam == null)
+        {
+            cam = Camera.main;
+        }
+
+        _input = GetComponent<PlayerInput>();
+
+        if (_input == null)
+        {
+            Debug.LogWarning("[VisionManager] ê°™ì€ ì˜¤ë¸Œì íŠ¸ì— PlayerInputì´ ì—†ìŠµë‹ˆë‹¤. Playerì— ë¶™ì—¬ì£¼ì„¸ìš”.", this);
+        }
+    }
+
+    private void OnEnable()
+    {
+        if (_input != null)
+        {
+            _input.OnVisionChanged += HandleVisionChanged;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (_input != null)
+        {
+            _input.OnVisionChanged -= HandleVisionChanged;
+        }
+    }
+
+    private void HandleVisionChanged(bool isOn)
+    {
+        if (isOn)
+        {
+            StartVision();
+        }
+        else
+        {
+            StopVision();
+        }
     }
 
     private void Start()
@@ -32,13 +72,13 @@ public class VisionManager : MonoBehaviour
     public void StartVision()
     {
         ToggleVision(true);
-        Debug.Log("Åõ½Ã ½ÃÀÛ");
+        Debug.Log("íˆ¬ì‹œ ì‹œì‘");
     }
 
     public void StopVision()
     {
         ToggleVision(false);
-        Debug.Log("Åõ½Ã Á¾·á");
+        Debug.Log("íˆ¬ì‹œ ì¢…ë£Œ");
     }
 
     private void ToggleVision(bool state)
