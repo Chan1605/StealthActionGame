@@ -489,7 +489,7 @@ GameObject:
   - component: {fileID: 558682079}
   - component: {fileID: 558682078}
   - component: {fileID: 558682077}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -582,8 +582,8 @@ Transform:
   m_GameObject: {fileID: 558682076}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 1.5, z: 5}
-  m_LocalScale: {x: 0.1, y: 3, z: 7}
+  m_LocalPosition: {x: 0.5, y: 0.5, z: 5}
+  m_LocalScale: {x: 0.66, y: 1, z: 7}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -886,7 +886,7 @@ GameObject:
   - component: {fileID: 688609361}
   - component: {fileID: 688609360}
   - component: {fileID: 688609359}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -979,8 +979,8 @@ Transform:
   m_GameObject: {fileID: 688609358}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -4.02, y: 1.5, z: 8.71}
-  m_LocalScale: {x: 0.1, y: 3, z: 7}
+  m_LocalPosition: {x: -4.02, y: 2, z: 8.71}
+  m_LocalScale: {x: 0.66, y: 4, z: 7}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1024,7 +1024,7 @@ MonoBehaviour:
     Enabled: 1
     CollisionFilter:
       serializedVersion: 2
-      m_Bits: 1
+      m_Bits: 257
     IgnoreTag: 
     CameraRadius: 0.2
     DampingIntoCollision: 0
@@ -1733,7 +1733,7 @@ GameObject:
   - component: {fileID: 1329839945}
   - component: {fileID: 1329839944}
   - component: {fileID: 1329839943}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1826,8 +1826,8 @@ Transform:
   m_GameObject: {fileID: 1329839942}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.56, y: 1.5, z: 5}
-  m_LocalScale: {x: 0.1, y: 3, z: 7}
+  m_LocalPosition: {x: -7.56, y: 1, z: 5}
+  m_LocalScale: {x: 0.66, y: 2, z: 7}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -2013,7 +2013,7 @@ GameObject:
   - component: {fileID: 1408642993}
   - component: {fileID: 1408642992}
   - component: {fileID: 1408642991}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2107,7 +2107,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: -4.02, y: 1.5, z: 1.46}
-  m_LocalScale: {x: 0.1, y: 3, z: 7}
+  m_LocalScale: {x: 0.66, y: 3, z: 7}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -5371,6 +5371,7 @@ GameObject:
   - component: {fileID: 6982812147796449154}
   - component: {fileID: 6982812147796449155}
   - component: {fileID: 6982812147796449156}
+  - component: {fileID: 6982812147796449157}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -7139,6 +7140,8 @@ MonoBehaviour:
   actionLayer: 1
   emptyStateName: none
   emptyBlendTime: 0.1
+  ikLayer: 1
+  handRotationWeight: 1
   upperBodyLayer: 2
   upperBodyEmptyStateName: none
   upperBodyBlendIn: 0.12
@@ -7242,6 +7245,11 @@ MonoBehaviour:
   launchAngle: 30
   cameraPitchInfluence: 1
   originOffset: {x: 0, y: 0, z: 0.15}
+  isDespawnAfterLanding: 1
+  despawnDelay: 2
+  landingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
   trajectory: {fileID: 0}
   isAimRequired: 1
   isFaceAimDirection: 1
@@ -7282,6 +7290,120 @@ MonoBehaviour:
   normalFOV: 60
   visionFOV: 50
   transitionDuration: 1
+--- !u!114 &6982812147796449157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4416926083488487353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b157e64f475099943828665e6841f890, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerWallClimb
+  wallMask:
+    serializedVersion: 2
+    m_Bits: 256
+  checkDistance: 0.7
+  checkRadius: 0.25
+  chestHeight: 1
+  ledgeProbeForward: 0.25
+  minLedgeFlatDot: 0.7
+  minLedgeDepth: 0.05
+  reachHeight: 2.4
+  minClimbHeight: -1
+  climbTrigger: Climb
+  climbDuration: 1
+  landDepth: 0.45
+  isFaceWall: 1
+  heightCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.72
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  forwardCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.45
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  isHandIkEnabled: 1
+  handSpacing: 0.26
+  handDepth: 0.08
+  handUpOffset: 0.02
+  handIkCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.55
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.8
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  isDebugLog: 1
+  isDebugGizmo: 1
 --- !u!4 &6983258930497695648
 Transform:
   m_ObjectHideFlags: 0

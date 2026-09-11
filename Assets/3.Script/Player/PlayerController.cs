@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour
     private CharacterController _controller;
     private PlayerInput _input;
     private PlayerCameraRig _cameraRig;
+    private PlayerWallClimb _wallClimb;
 
     private Vector3 _planarVelocity;
     private Vector3 _lastMoveDirection;
@@ -58,6 +59,19 @@ public class PlayerController : MonoBehaviour
     }
 
     public bool isCrouched { get; private set; }
+
+    public float maxJumpHeight
+    {
+        get
+        {
+            return jumpHeight;
+        }
+    }
+
+    public void StopVertical()
+    {
+        _verticalVelocity = 0f;
+    }
 
     public float currentSpeed
     {
@@ -100,6 +114,7 @@ public class PlayerController : MonoBehaviour
         _controller = GetComponent<CharacterController>();
         _input = GetComponent<PlayerInput>();
         _cameraRig = GetComponent<PlayerCameraRig>();
+        _wallClimb = GetComponent<PlayerWallClimb>();
 
         _moveDirection = Vector2.up;
         _lastMoveDirection = transform.forward;
@@ -261,6 +276,11 @@ public class PlayerController : MonoBehaviour
 
     private void HandleJumpPressed()
     {
+        if (_wallClimb != null && _wallClimb.TryClimb())
+        {
+            return;
+        }
+
         if (!isGrounded)
         {
             return;
