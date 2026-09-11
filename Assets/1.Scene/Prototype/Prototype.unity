@@ -1461,6 +1461,7 @@ GameObject:
   - component: {fileID: 1291530268}
   - component: {fileID: 1291530266}
   - component: {fileID: 1291530267}
+  - component: {fileID: 1291530269}
   m_Layer: 7
   m_Name: Ball
   m_TagString: Untagged
@@ -1671,6 +1672,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GeneralObject
   isAct: 0
+--- !u!114 &1291530269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1291530257}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc748ba3042ad1d4a8f9676bdc9ee0c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ThrownObjectSound
+  soundIntensity: 70
+  soundRadius: 25
+  surfaceMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1 &1322426179
 GameObject:
   m_ObjectHideFlags: 0
