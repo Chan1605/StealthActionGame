@@ -38,6 +38,7 @@ public class EnemyAIData : ScriptableObject
     public float chaseRepathInterval = 0.2f;
     [Header("확인 행동")]
     public float investigateCheckDuration = 2.5f;
+    public float soundInvestigateCheckDuration = 7f;
 
     [Header("배치 연출")]
     public float spawnMoveSpeed = 2.5f;

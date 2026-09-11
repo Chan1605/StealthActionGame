@@ -1684,11 +1684,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc748ba3042ad1d4a8f9676bdc9ee0c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ThrownObjectSound
-  soundIntensity: 70
+  soundIntensity: 80
   soundRadius: 25
   surfaceMask:
     serializedVersion: 2
     m_Bits: 4294967295
+  armDelayAfterRelease: 0.15
 --- !u!1 &1322426179
 GameObject:
   m_ObjectHideFlags: 0

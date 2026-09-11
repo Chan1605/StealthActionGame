@@ -111,10 +111,9 @@ public class EnemyPerception : MonoBehaviour
         return true;
     }
 
-    public Vector3 GetSuspectedPosition()
-    {
-        return VisionScore >= HearingScore ? LastKnownPosition : SoundMemoryPosition;
-    }
+    public bool IsSoundDominant => HearingScore > VisionScore;
+
+    public Vector3 GetSuspectedPosition() => IsSoundDominant ? SoundMemoryPosition : LastKnownPosition;
 
     public void ReduceScoreSharply()
     {
