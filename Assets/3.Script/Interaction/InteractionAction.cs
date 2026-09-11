@@ -16,6 +16,7 @@ public abstract class InteractionAction : MonoBehaviour
 
     [Header("Rule")]
     [SerializeField] private bool isRepeatable = true;
+    [SerializeField] private bool isUpperBodyOnly = false;
 
     private IInteractable _interactable;
 
@@ -56,6 +57,14 @@ public abstract class InteractionAction : MonoBehaviour
         get
         {
             return alignTime;
+        }
+    }
+
+    public bool isUpperBody
+    {
+        get
+        {
+            return isUpperBodyOnly;
         }
     }
 

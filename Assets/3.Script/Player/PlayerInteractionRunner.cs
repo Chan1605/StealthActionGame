@@ -26,8 +26,10 @@ public class PlayerInteractionRunner : MonoBehaviour
     private PlayerAnimator _playerAnimator;
     private AssassinationSystem _assassination;
     private PlayerHand _hand;
+    private PlayerThrow _throw;
 
     private string _activeTrigger;
+    private bool _isActiveUpper;
 
     public bool isBusy { get; private set; }
 
@@ -41,6 +43,7 @@ public class PlayerInteractionRunner : MonoBehaviour
         _cameraRig = GetComponent<PlayerCameraRig>();
         _playerAnimator = GetComponent<PlayerAnimator>();
         _assassination = GetComponent<AssassinationSystem>();
+        _throw = GetComponent<PlayerThrow>();
         _hand = GetComponentInChildren<PlayerHand>();
 
         if (interactor == null)
@@ -67,6 +70,11 @@ public class PlayerInteractionRunner : MonoBehaviour
         }
 
         if (_assassination != null && _assassination.isBusy)
+        {
+            return;
+        }
+
+        if (_throw != null && _throw.isBusy)
         {
             return;
         }
@@ -193,11 +201,15 @@ public class PlayerInteractionRunner : MonoBehaviour
         try
         {
             OnInteractionStarted?.Invoke(action);
-            SetPlayerControlEnabled(false);
 
-            if (action.alignTarget != null)
+            if (!action.isUpperBody)
             {
-                yield return Align_co(action.alignTarget, action.alignDuration);
+                SetPlayerControlEnabled(false);
+
+                if (action.alignTarget != null)
+                {
+                    yield return Align_co(action.alignTarget, action.alignDuration);
+                }
             }
 
             PlayActionAnimation(action);
@@ -264,19 +276,29 @@ public class PlayerInteractionRunner : MonoBehaviour
 
     private void PlayActionAnimation(InteractionAction action)
     {
-        PlayTrigger(action.animationTriggerName);
+        PlayTrigger(action.animationTriggerName, action.isUpperBody);
     }
 
     private void PlayTrigger(string triggerName)
     {
+        PlayTrigger(triggerName, false);
+    }
+
+    private void PlayTrigger(string triggerName, bool isUpper)
+    {
         _activeTrigger = null;
+        _isActiveUpper = isUpper;
 
         if (_playerAnimator == null || string.IsNullOrEmpty(triggerName))
         {
             return;
         }
 
-        if (_playerAnimator.PlayAction(triggerName))
+        bool isPlayed = isUpper
+            ? _playerAnimator.PlayUpperAction(triggerName)
+            : _playerAnimator.PlayAction(triggerName);
+
+        if (isPlayed)
         {
             _activeTrigger = triggerName;
         }
@@ -286,10 +308,18 @@ public class PlayerInteractionRunner : MonoBehaviour
     {
         if (_playerAnimator != null && !string.IsNullOrEmpty(_activeTrigger))
         {
-            _playerAnimator.EndAction(_activeTrigger);
+            if (_isActiveUpper)
+            {
+                _playerAnimator.EndUpperAction(_activeTrigger);
+            }
+            else
+            {
+                _playerAnimator.EndAction(_activeTrigger);
+            }
         }
 
         _activeTrigger = null;
+        _isActiveUpper = false;
 
         SetPlayerControlEnabled(true);
         isBusy = false;
