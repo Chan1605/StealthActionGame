@@ -34,6 +34,10 @@ public class MinimapManager : MonoBehaviour
     [SerializeField] UI_MinimapIcon targetIcon;
     private Transform currentObjectTransform;
 
+    private void Awake()
+    {
+        targetIcon = Instantiate(targetIcon_Prefab, iconContainer).GetComponent<UI_MinimapIcon>();
+    }
     private void Start()
     {
         playerTransform =  GameObject.FindWithTag("Player").transform;
@@ -46,7 +50,7 @@ public class MinimapManager : MonoBehaviour
         mapImageComponent = map.GetComponent<Image>();
 
         playerIcon = transform.GetChild(3).GetComponent<RectTransform>();
-        targetIcon = Instantiate(targetIcon_Prefab, iconContainer).GetComponent<UI_MinimapIcon>();
+        targetIcon.gameObject.SetActive(false);
 
         UpdateFloor();
     }
@@ -129,8 +133,19 @@ public class MinimapManager : MonoBehaviour
             return;
         }
 
-        for (int i = 0; i < enemyTransformList.Count; i++)
+        for (int i = enemyTransformList.Count -1; i >= 0; i--)
         {
+            if (enemyTransformList[i] == null)
+            {
+                if (enemyIcons[i] != null)
+                {
+                    Destroy(enemyIcons[i].gameObject);
+                }
+                enemyIcons.RemoveAt(i);
+                enemyTransformList.RemoveAt(i);
+                continue;
+            }
+
             Vector2 mapPos = GetClampedUIPosition(enemyTransformList[i].position);
             enemyIcons[i].UpdateIcon(mapPos, playerTransform.position.y, enemyTransformList[i].position.y);
         }
@@ -189,5 +204,21 @@ public class MinimapManager : MonoBehaviour
 
         Vector2 mapPos = GetClampedUIPosition(currentObjectTransform.position);
         targetIcon.UpdateIcon(mapPos, playerTransform.position.y, currentObjectTransform.position.y);
+    }
+
+    public void UnregisterEnemy(Transform enemyTransform)
+    {
+        int index = enemyTransformList.IndexOf(enemyTransform);
+
+        if (index != -1)
+        {
+            if(enemyIcons[index] != null)
+            {
+                Destroy(enemyIcons[index].gameObject);
+            }
+
+            enemyIcons.RemoveAt(index);
+            enemyTransformList.RemoveAt(index);
+        }
     }
 }
