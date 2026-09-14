@@ -30,6 +30,10 @@ public class EnemyAI : MonoBehaviour
         _perception.Initialize(data, targetObject as IDetectable);
 
         _fsm = new EnemyStateMachine(this, _movement, _perception, data, waypoints);
+        _fsm.DamageTarget = targetObject != null ? targetObject.GetComponent<IDamageable>() : null;
+
+        if (_fsm.DamageTarget == null)
+            Debug.LogWarning($"{name}: targetObject에서 IDamageable을 찾지 못했습니다. 발견 상태 공격이 비활성화됩니다.");
     }
 
     private void Start()

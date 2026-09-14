@@ -11,6 +11,7 @@ public class EnemyStateMachine
     public int CurrentWaypointIndex { get; set; }
 
     private IEnemyState _current;
+    public IDamageable DamageTarget { get; set; }
 
     public EnemyStateMachine(EnemyAI owner, EnemyMovement movement, EnemyPerception perception, EnemyAIData data, WaypointGroup waypoints)
     {

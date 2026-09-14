@@ -28,6 +28,7 @@ public class EnemyMovement : MonoBehaviour
     public void SetPatrolSpeed(EnemyAIData data) => _agent.speed = data.patrolSpeed;
     public void SetInvestigateSpeed(EnemyAIData data) => _agent.speed = data.investigateSpeed;
     public void SetChaseSpeed(EnemyAIData data) => _agent.speed = data.chaseSpeed;
+    public void SetStoppingDistance(float distance) => _agent.stoppingDistance = distance;
     public void SetAutoRotation(bool enabled) => _agent.updateRotation = enabled;
 
     public void MoveTo(Vector3 destination)
@@ -54,7 +55,6 @@ public class EnemyMovement : MonoBehaviour
     {
         if (_agent.isOnNavMesh) _agent.ResetPath();
     }
-
     public void TickAnimator()
     {
         if (_animator == null) return;
