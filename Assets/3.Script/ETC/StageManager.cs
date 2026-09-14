@@ -22,7 +22,7 @@ public class StageManager : MonoBehaviour
     {
         hudManager = FindAnyObjectByType<HUDManager>();
         minimap = FindAnyObjectByType<MinimapManager>();
-        InitializeQueue();
+        //InitializeQueue();
     }
 
     private void InitializeQueue()
