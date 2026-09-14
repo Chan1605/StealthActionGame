@@ -20,9 +20,31 @@ public class EnemyMovement : MonoBehaviour
         if (_animator != null)
         {
             _animIDSpeed = Animator.StringToHash("Speed");
-            _animIDGrounded = Animator.StringToHash("Grounded");
-            _animator.SetBool(_animIDGrounded, true); // Jump/FreeFall 미사용, 계속 true 고정
+            _animIDGrounded = Animator.StringToHash("IsGrounded");
+
+            if (HasParameter(_animIDSpeed))
+            {
+                // Speed는 시야/이동에 필수라 없으면 경고만 남기고 넘어감
+            }
+            else
+            {
+                Debug.LogWarning($"{name}: Animator에 'Speed' 파라미터가 없습니다. 이동 애니메이션이 재생되지 않을 수 있습니다.");
+            }
+
+            if (HasParameter(_animIDGrounded))
+            {
+                _animator.SetBool(_animIDGrounded, true);
+            }
         }
+    }
+
+    private bool HasParameter(int hash)
+    {
+        foreach (AnimatorControllerParameter p in _animator.parameters)
+        {
+            if (p.nameHash == hash) return true;
+        }
+        return false;
     }
 
     public void SetPatrolSpeed(EnemyAIData data) => _agent.speed = data.patrolSpeed;
@@ -58,6 +80,7 @@ public class EnemyMovement : MonoBehaviour
     public void TickAnimator()
     {
         if (_animator == null) return;
+        if (!HasParameter(_animIDSpeed)) return;
         _animator.SetFloat(_animIDSpeed, _agent.velocity.magnitude);
     }
 }
