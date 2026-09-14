@@ -52,4 +52,5 @@ public class EnemyAIData : ScriptableObject
     public float patrolIdleMinDuration = 1.5f;
     public float patrolIdleMaxDuration = 3f;
     public float lookAroundAngle = 45f;
+    public float soundGlanceDuration = 1.5f;
 }

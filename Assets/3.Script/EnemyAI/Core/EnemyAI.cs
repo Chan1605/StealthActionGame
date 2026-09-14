@@ -12,7 +12,7 @@ public class EnemyAI : MonoBehaviour
     [Header("감지 대상")]
     [SerializeField] private MonoBehaviour targetObject; // IDetectable을 구현한 컴포넌트를 드래그
 
-    [Header("연출 (선택)")]
+    [Header("연출")]
     [SerializeField] private Animator animator;
     [SerializeField] private EnemyIndicator indicator;
     public EnemyIndicator Indicator => indicator;
@@ -20,6 +20,9 @@ public class EnemyAI : MonoBehaviour
     private EnemyMovement _movement;
     private EnemyPerception _perception;
     private EnemyStateMachine _fsm;
+    private IndicatorManager _indicatorManager;
+    private MinimapManager _mini;
+
 
     private void Awake()
     {
@@ -31,7 +34,14 @@ public class EnemyAI : MonoBehaviour
 
         _fsm = new EnemyStateMachine(this, _movement, _perception, data, waypoints);
         _fsm.DamageTarget = targetObject != null ? targetObject.GetComponent<IDamageable>() : null;
-
+        if (TryGetComponent(out TakedownVictim victim))
+        {
+            victim.OnFrozen += HandleFrozen;
+        }
+        _indicatorManager = FindAnyObjectByType<IndicatorManager>();
+        _indicatorManager?.RegisterEnemy(transform);
+        _mini = FindAnyObjectByType<MinimapManager>();
+        _mini?.RegisterEnemy(transform);
         if (_fsm.DamageTarget == null)
             Debug.LogWarning($"{name}: targetObject에서 IDamageable을 찾지 못했습니다. 발견 상태 공격이 비활성화됩니다.");
     }
@@ -44,6 +54,25 @@ public class EnemyAI : MonoBehaviour
     private void Update()
     {
         _fsm.Tick();
+    }
+
+    private void HandleFrozen(TakedownVictim victim)
+    {
+        indicator.Hide();
+        _indicatorManager?.UnregisterEnemy(transform);
+        _mini?.RegisterEnemy(transform);
+        enabled = false;
+    }
+
+    private void OnDestroy()
+    {
+        if (TryGetComponent(out TakedownVictim victim))
+        {
+            victim.OnFrozen -= HandleFrozen;
+        }
+
+        _indicatorManager?.UnregisterEnemy(transform);
+        _mini?.UnregisterEnemy(transform);
     }
 
 #if UNITY_EDITOR
