@@ -11,10 +11,12 @@ public class StageManager : MonoBehaviour
     private Queue<IInteractable> targetObjectQueue = new Queue<IInteractable>();
 
     private HUDManager hudManager;
+    private MinimapManager minimap;
 
     private void Start()
     {
         hudManager = FindAnyObjectByType<HUDManager>();
+        minimap = FindAnyObjectByType<MinimapManager>();
         InitializeQueue();
     }
 
@@ -26,6 +28,7 @@ public class StageManager : MonoBehaviour
             {
                 t.OnTargetCompleted += CompleateTarget;
                 targetObjectQueue.Enqueue(t);
+
             }
             else
             {
@@ -39,12 +42,14 @@ public class StageManager : MonoBehaviour
         {
             Debug.Log("StageManager : 다음 타겟 오브젝트가 없습니다.");
             hudManager.GetTargetMarker().SetMarker_Off();
+            minimap.SetObjectTarget(null);
 
             return;
         }
 
         firstTarget.EnableInteraction();
         hudManager.GetTargetMarker().SetMarker_On(firstTarget.ObjectTransform);
+        minimap.SetObjectTarget(firstTarget.ObjectTransform);
 
     }
 
@@ -74,11 +79,14 @@ public class StageManager : MonoBehaviour
         {
             Debug.Log("StageManager : 다음 타겟 오브젝트가 없습니다.");
             hudManager.GetTargetMarker().SetMarker_Off();
+            minimap.SetObjectTarget(null);
             return;
         }
 
         curTarget.EnableInteraction();
         hudManager.GetTargetMarker().SetMarker_On(curTarget.ObjectTransform);
+        minimap.SetObjectTarget(curTarget.ObjectTransform);
+
     }
 
 }
