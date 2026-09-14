@@ -75,4 +75,10 @@ public class ThrownObjectSound : MonoBehaviour
             enemy.RegisterSound(transform.position, soundIntensity, true, soundRadius);
         }
     }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = new Color(0.3f, 0.7f, 1f, 0.5f);
+        Gizmos.DrawWireSphere(transform.position, soundRadius);
+    }
 }

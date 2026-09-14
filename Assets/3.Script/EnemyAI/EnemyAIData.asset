@@ -21,8 +21,8 @@ MonoBehaviour:
   viewScorePerSecShort: 50
   viewScorePerSecMid: 25
   viewScorePerSecLong: 6
-  hearingRadius: 5
-  loudSoundRadius: 25
+  crouchViewWeight: 0.5
+  hearingRadius: 10
   soundMemoryLockDuration: 3
   weakSuspicionThreshold: 30
   strongSuspicionThreshold: 70
@@ -34,6 +34,9 @@ MonoBehaviour:
   stoppingDistance: 0.15
   chaseSpeed: 5
   chaseRepathInterval: 0.2
+  attackRange: 1.8
+  attackDamage: 10
+  attackInterval: 1
   investigateCheckDuration: 2.5
   soundInvestigateCheckDuration: 10
   spawnMoveSpeed: 2.5
@@ -42,3 +45,4 @@ MonoBehaviour:
   patrolIdleMinDuration: 1.5
   patrolIdleMaxDuration: 3
   lookAroundAngle: 45
+  soundGlanceDuration: 5

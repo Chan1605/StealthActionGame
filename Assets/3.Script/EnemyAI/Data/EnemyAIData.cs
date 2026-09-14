@@ -13,7 +13,7 @@ public class EnemyAIData : ScriptableObject
     public float viewScorePerSecShort = 30f;
     public float viewScorePerSecMid = 10f;
     public float viewScorePerSecLong = 3f;
-
+    public float crouchViewWeight = 0.5f;
 
     [Header("청각")]
     public float hearingRadius = 15f;
@@ -35,6 +35,10 @@ public class EnemyAIData : ScriptableObject
     [Header("추적 (발견 상태)")]
     public float chaseSpeed = 4f;
     public float chaseRepathInterval = 0.2f;
+    [Header("공격 (발견 상태)")]
+    public float attackRange = 1.8f;
+    public float attackDamage = 10f;
+    public float attackInterval = 1f;
     [Header("확인 행동")]
     public float investigateCheckDuration = 2.5f;
     public float soundInvestigateCheckDuration = 7f;
@@ -48,4 +52,5 @@ public class EnemyAIData : ScriptableObject
     public float patrolIdleMinDuration = 1.5f;
     public float patrolIdleMaxDuration = 3f;
     public float lookAroundAngle = 45f;
+    public float soundGlanceDuration = 1.5f;
 }
