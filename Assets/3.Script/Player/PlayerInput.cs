@@ -94,6 +94,7 @@ public class PlayerInput : MonoBehaviour
         actions.Player.Crouch.canceled += HandleCrouchCanceled;
         actions.Player.Vision.performed += HandleVisionPerformed;
         actions.Player.Vision.canceled += HandleVisionCanceled;
+        actions.Player.Menu.performed += HandleMenuPerformed;
     }
 
     private void OnDisable()
@@ -111,6 +112,7 @@ public class PlayerInput : MonoBehaviour
         _actions.Player.Crouch.canceled -= HandleCrouchCanceled;
         _actions.Player.Vision.performed -= HandleVisionPerformed;
         _actions.Player.Vision.canceled -= HandleVisionCanceled;
+        _actions.Player.Menu.performed -= HandleMenuPerformed;
 
         _actions.Player.Disable();
 
@@ -242,7 +244,7 @@ public class PlayerInput : MonoBehaviour
         Cursor.visible = !isLocked;
     }
 
-    public void ToggleMenu(InputAction.CallbackContext context)
+    public void HandleMenuPerformed(InputAction.CallbackContext context)
     {
         if (context.phase.Equals(InputActionPhase.Performed))
         {
