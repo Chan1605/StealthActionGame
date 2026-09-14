@@ -3,18 +3,22 @@ using UnityEngine;
 public class PlayerDetectable : MonoBehaviour, IDetectable
 {
     [SerializeField] private CharacterController controller;
+    [SerializeField] private PlayerController playerController;
     [SerializeField] private float walkSpeedThreshold = 0.1f;
     [SerializeField] private float runSpeedThreshold = 4f;
     [SerializeField] private float walkSoundScore = 20f;
     [SerializeField] private float runSoundScore = 40f;
+
+    [Header("임시 테스트용 (실제 은신 시스템 연결 전까지)")]
+    [SerializeField, Range(0f, 1f)] private float testStealthWeight = 1f;
 
     [Header("디버그 (읽기 전용)")]
     [SerializeField] private float debugSpeed;
     [SerializeField] private float debugSoundIntensity;
 
     public Vector3 Position => transform.position;
-    public bool IsStealthed => false;
-    public bool IsCrouching => false;
+    public bool IsCrouching => playerController != null && playerController.isCrouched;
+    public float StealthWeight => testStealthWeight;
 
     public float SoundIntensity
     {
@@ -36,8 +40,12 @@ public class PlayerDetectable : MonoBehaviour, IDetectable
 
     private void Awake()
     {
-        if (controller == null)
-            TryGetComponent(out controller);
+        if (controller == null) controller = GetComponent<CharacterController>();
+        if (playerController == null) playerController = GetComponent<PlayerController>();
 
+        if (controller == null)
+            Debug.LogError($"{name}: CharacterController를 찾지 못했습니다.");
+        if (playerController == null)
+            Debug.LogWarning($"{name}: PlayerController를 찾지 못했습니다. IsCrouching이 항상 false로 처리됩니다.");
     }
 }

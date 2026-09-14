@@ -21,8 +21,8 @@ MonoBehaviour:
   viewScorePerSecShort: 50
   viewScorePerSecMid: 25
   viewScorePerSecLong: 6
-  hearingRadius: 5
-  loudSoundRadius: 25
+  crouchViewWeight: 0.5
+  hearingRadius: 10
   soundMemoryLockDuration: 3
   weakSuspicionThreshold: 30
   strongSuspicionThreshold: 70

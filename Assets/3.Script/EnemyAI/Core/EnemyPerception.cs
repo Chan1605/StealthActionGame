@@ -38,20 +38,12 @@ public class EnemyPerception : MonoBehaviour
 
     private void TickVision(float deltaTime)
     {
-        if (_target.IsStealthed)
-        {
-            VisionScore = Mathf.Max(0f, VisionScore - _data.scoreDecayPerSec * deltaTime);
-            IsCurrentlySensing = false;
-            return;
-        }
-
         float distance = Vector3.Distance(eyeOrigin.position, _target.Position);
         Vector3 toTarget = _target.Position - eyeOrigin.position;
+        float instantAngle = Vector3.Angle(eyeOrigin.forward, toTarget);
 
-
-        float instantAngle = Vector3.Angle(eyeOrigin.forward, toTarget); // 근접 인식: 넓은 각도(정면+측면)까지만, 완전한 등 뒤는 제외
-
-        if (distance <= _data.instantDetectRange
+        if (_target.StealthWeight >= 1f
+            && distance <= _data.instantDetectRange
             && instantAngle <= _data.instantDetectAngle * 0.5f
             && HasLineOfSight(distance))
         {
@@ -61,17 +53,18 @@ public class EnemyPerception : MonoBehaviour
             return;
         }
 
-        float angle = instantAngle; // 위에서 이미 계산한 각도 재사용
-        bool canSee = angle <= _data.viewAngle * 0.5f && HasLineOfSight(distance);
+        bool canSee = instantAngle <= _data.viewAngle * 0.5f && HasLineOfSight(distance);
 
-        float rate = 0f;
+        float baseRate = 0f;
         if (canSee)
         {
-            if (distance <= _data.viewRangeShort) rate = _data.viewScorePerSecShort;
-            else if (distance <= _data.viewRangeMid) rate = _data.viewScorePerSecMid;
-            else if (distance <= _data.viewRangeLong) rate = _data.viewScorePerSecLong;
-            if (_target.IsCrouching) rate *= 0.5f;
+            if (distance <= _data.viewRangeShort) baseRate = _data.viewScorePerSecShort;
+            else if (distance <= _data.viewRangeMid) baseRate = _data.viewScorePerSecMid;
+            else if (distance <= _data.viewRangeLong) baseRate = _data.viewScorePerSecLong;
         }
+
+        float postureWeight = _target.IsCrouching ? _data.crouchViewWeight : 1f;
+        float rate = baseRate * postureWeight * Mathf.Clamp01(_target.StealthWeight);
 
         if (rate > 0f)
         {
@@ -92,7 +85,10 @@ public class EnemyPerception : MonoBehaviour
         _soundRegisteredThisFrame = false;
 
         if (_target != null)
-            RegisterSound(_target.Position, _target.SoundIntensity, false);
+        {
+            float intensity = _target.SoundIntensity * Mathf.Clamp01(_target.StealthWeight);
+            RegisterSound(_target.Position, intensity, false);
+        }
 
         if (!_soundRegisteredThisFrame)
             HearingScore = Mathf.Max(0f, HearingScore - _data.scoreDecayPerSec * deltaTime);
@@ -142,9 +138,9 @@ public class EnemyPerception : MonoBehaviour
         }
 
         float gain;
-        if (isInstant && attenuated >= _data.weakSuspicionThreshold)
+        if (isInstant && attenuated >= _data.strongSuspicionThreshold)
         {
-            gain = _data.maxScore; // 뚜렷하게 들린 돌발 소리는 무조건 확인하러 가도록 만점 처리
+            gain = _data.maxScore;
         }
         else
         {
