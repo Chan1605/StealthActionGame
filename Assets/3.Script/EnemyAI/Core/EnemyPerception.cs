@@ -138,9 +138,9 @@ public class EnemyPerception : MonoBehaviour
         }
 
         float gain;
-        if (isInstant && attenuated >= _data.weakSuspicionThreshold)
+        if (isInstant && attenuated >= _data.strongSuspicionThreshold)
         {
-            gain = _data.maxScore; // 뚜렷하게 들린 돌발 소리는 무조건 확인하러 가도록 만점 처리
+            gain = _data.maxScore;
         }
         else
         {
