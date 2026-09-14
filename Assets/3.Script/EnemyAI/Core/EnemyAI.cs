@@ -20,6 +20,9 @@ public class EnemyAI : MonoBehaviour
     private EnemyMovement _movement;
     private EnemyPerception _perception;
     private EnemyStateMachine _fsm;
+    private IndicatorManager _indicatorManager;
+    private MinimapManager _mini;
+
 
     private void Awake()
     {
@@ -35,7 +38,10 @@ public class EnemyAI : MonoBehaviour
         {
             victim.OnFrozen += HandleFrozen;
         }
-
+        _indicatorManager = FindAnyObjectByType<IndicatorManager>();
+        _indicatorManager?.RegisterEnemy(transform);
+        _mini = FindAnyObjectByType<MinimapManager>();
+        _mini?.RegisterEnemy(transform);
         if (_fsm.DamageTarget == null)
             Debug.LogWarning($"{name}: targetObject에서 IDamageable을 찾지 못했습니다. 발견 상태 공격이 비활성화됩니다.");
     }
@@ -53,6 +59,8 @@ public class EnemyAI : MonoBehaviour
     private void HandleFrozen(TakedownVictim victim)
     {
         indicator.Hide();
+        _indicatorManager?.UnregisterEnemy(transform);
+        _mini?.RegisterEnemy(transform);
         enabled = false;
     }
 
@@ -62,6 +70,9 @@ public class EnemyAI : MonoBehaviour
         {
             victim.OnFrozen -= HandleFrozen;
         }
+
+        _indicatorManager?.UnregisterEnemy(transform);
+        _mini?.UnregisterEnemy(transform);
     }
 
 #if UNITY_EDITOR
