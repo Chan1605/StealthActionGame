@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 43224788}
   - component: {fileID: 43224787}
   - component: {fileID: 43224794}
+  - component: {fileID: 43224795}
   m_Layer: 7
   m_Name: Door
   m_TagString: Untagged
@@ -268,7 +269,7 @@ Transform:
   m_GameObject: {fileID: 43224786}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 1.46}
+  m_LocalPosition: {x: 0.03, y: 1, z: 1.46}
   m_LocalScale: {x: 1, y: 2, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -288,6 +289,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GeneralObject
   isAct: 0
+--- !u!208 &43224795
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 43224786}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &195489952
 GameObject:
   m_ObjectHideFlags: 0
@@ -582,7 +599,7 @@ Transform:
   m_GameObject: {fileID: 558682076}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 0.5, z: 5}
+  m_LocalPosition: {x: 0.86, y: 0.5, z: 5}
   m_LocalScale: {x: 0.66, y: 1, z: 7}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -979,7 +996,7 @@ Transform:
   m_GameObject: {fileID: 688609358}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -4.02, y: 2, z: 8.71}
+  m_LocalPosition: {x: -4.02, y: 2, z: 8.94}
   m_LocalScale: {x: 0.66, y: 4, z: 7}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1847,6 +1864,7 @@ GameObject:
   - component: {fileID: 1383479958}
   - component: {fileID: 1383479957}
   - component: {fileID: 1383479956}
+  - component: {fileID: 1383479963}
   m_Layer: 7
   m_Name: Door (1)
   m_TagString: Untagged
@@ -1994,13 +2012,29 @@ Transform:
   m_GameObject: {fileID: 1383479955}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 8.67}
+  m_LocalPosition: {x: 0.028, y: 1, z: 8.67}
   m_LocalScale: {x: 1, y: 2, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 815785005}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!208 &1383479963
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1383479955}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &1408642990
 GameObject:
   m_ObjectHideFlags: 0
@@ -2106,7 +2140,7 @@ Transform:
   m_GameObject: {fileID: 1408642990}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -4.02, y: 1.5, z: 1.46}
+  m_LocalPosition: {x: -4.02, y: 1.5, z: 1.15}
   m_LocalScale: {x: 0.66, y: 3, z: 7}
   m_ConstrainProportionsScale: 0
   m_Children: []
