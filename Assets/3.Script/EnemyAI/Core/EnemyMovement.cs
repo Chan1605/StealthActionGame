@@ -9,6 +9,7 @@ public class EnemyMovement : MonoBehaviour
 
     private int _animIDSpeed;
     private int _animIDGrounded;
+    private int _animIDAttack;
 
     public void Initialize(EnemyAIData data, Animator animator)
     {
@@ -21,7 +22,7 @@ public class EnemyMovement : MonoBehaviour
         {
             _animIDSpeed = Animator.StringToHash("Speed");
             _animIDGrounded = Animator.StringToHash("IsGrounded");
-
+            _animIDAttack = Animator.StringToHash("Attack");
             if (HasParameter(_animIDSpeed))
             {
                 // Speed는 시야/이동에 필수라 없으면 경고만 남기고 넘어감
@@ -72,15 +73,21 @@ public class EnemyMovement : MonoBehaviour
         if (_agent.pathPending) return false;
         return _agent.remainingDistance <= _agent.stoppingDistance;
     }
+    public void PlayAttackAnimation()
+    {
+        if (_animator == null) return;
+        if (!HasParameter(_animIDAttack)) return;
+        _animator.SetTrigger(_animIDAttack);
+    }
 
     public void Stop()
     {
         if (_agent.isOnNavMesh) _agent.ResetPath();
     }
-    public void TickAnimator()
+    public void TickAnimator(bool suppress = false)
     {
         if (_animator == null) return;
         if (!HasParameter(_animIDSpeed)) return;
-        _animator.SetFloat(_animIDSpeed, _agent.velocity.magnitude);
+        _animator.SetFloat(_animIDSpeed, suppress ? 0f : _agent.velocity.magnitude);
     }
 }
