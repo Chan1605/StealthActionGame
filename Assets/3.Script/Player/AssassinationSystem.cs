@@ -9,7 +9,7 @@ public class AssassinationSystem : MonoBehaviour
 {
     [Header("Detect")]
     [SerializeField] private float range = 1.4f;
-    [SerializeField] private float backAngle = 70f;
+    [SerializeField] private float backAngle = 100f;
     [SerializeField] private LayerMask npcLayer;
 
     [Header("Snap")]
@@ -42,6 +42,10 @@ public class AssassinationSystem : MonoBehaviour
 
     public event Action<TakedownVictim> OnTakedownStarted;
     public event Action<TakedownVictim> OnTakedownComplete;
+    public event Action<TakedownVictim> OnTargetAcquired;
+    public event Action OnTargetLost;
+
+    private TakedownVictim _lastNotifiedVictim;
 
     private void Awake()
     {
@@ -71,8 +75,16 @@ public class AssassinationSystem : MonoBehaviour
     {
         if (!isBusy)
         {
-            return;
+            TakedownVictim current = FindVictim();
+            if (current != _lastNotifiedVictim)
+            {
+                _lastNotifiedVictim = current;
+                if (current != null) OnTargetAcquired?.Invoke(current);
+                else OnTargetLost?.Invoke();
+            }
         }
+
+        if (!isBusy) return;
 
         if (Time.time - _sequenceStartTime > clipLength + 2f)
         {
@@ -120,23 +132,7 @@ public class AssassinationSystem : MonoBehaviour
         foreach (Collider hit in hits)
         {
             TakedownVictim victim = hit.GetComponentInParent<TakedownVictim>();
-            if (victim == null || victim.isDown)
-            {
-                continue;
-            }
-
-            EnemyAI enemyAI = victim.GetComponent<EnemyAI>();
-            if (enemyAI != null && !enemyAI.CanBeAssassinated)
-            {
-                if (isDebugLog)
-                {
-                    Debug.Log($"[Assassination] '{victim.name}'은(는) 이미 발견 상태라 암살 대상에서 제외됩니다.", victim);
-                }
-                continue;
-            }
-
-            Vector3 toPlayer = (transform.position - victim.transform.position).normalized;
-            if (Vector3.Angle(victim.transform.forward, toPlayer) < 180f - backAngle)
+            if (victim == null || !CanTarget(victim))
             {
                 continue;
             }
@@ -150,6 +146,23 @@ public class AssassinationSystem : MonoBehaviour
         }
 
         return best;
+    }
+
+    public bool CanTarget(TakedownVictim victim)
+    {
+        if (victim == null || victim.isDown) return false;
+
+        Vector3 toPlayer = (transform.position - victim.transform.position).normalized;
+        float angleFromBack = Vector3.Angle(-victim.transform.forward, toPlayer);
+        if (angleFromBack > backAngle * 0.5f) return false;
+
+        EnemyAI enemyAI = victim.GetComponent<EnemyAI>();
+        if (enemyAI != null && !enemyAI.CanBeAssassinated) return false;
+
+        float distance = Vector3.Distance(transform.position, victim.transform.position);
+        if (distance > range) return false;
+
+        return true;
     }
 
     private IEnumerator Execute_co(TakedownVictim victim)
