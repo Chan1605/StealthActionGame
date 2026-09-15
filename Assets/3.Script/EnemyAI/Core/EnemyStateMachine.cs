@@ -9,7 +9,8 @@ public class EnemyStateMachine
     public WaypointGroup Waypoints { get; }
 
     public int CurrentWaypointIndex { get; set; }
-
+    public bool SuppressMovementAnim { get; set; }
+    public bool IsAssassinable { get; set; } = true;
     private IEnemyState _current;
     public IDamageable DamageTarget { get; set; }
 
@@ -25,6 +26,7 @@ public class EnemyStateMachine
     public void ChangeState(IEnemyState next)
     {
         _current?.Exit(this);
+        IsAssassinable = true; // 상태 전환마다 기본값으로 리셋, 필요한 상태가 개별적으로 false 설정
         _current = next;
         _current.Enter(this);
     }
@@ -33,7 +35,7 @@ public class EnemyStateMachine
     {
         Perception.Tick(Time.deltaTime);
         _current?.Tick(this);
-        Movement.TickAnimator();
+        Movement.TickAnimator(SuppressMovementAnim);
     }
 
 #if UNITY_EDITOR

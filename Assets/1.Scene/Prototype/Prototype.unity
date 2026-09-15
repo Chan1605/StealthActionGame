@@ -24382,10 +24382,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerDetectable
   controller: {fileID: 4416926083488487347}
+  playerController: {fileID: 0}
   walkSpeedThreshold: 0.1
   runSpeedThreshold: 4
   walkSoundScore: 20
   runSoundScore: 40
+  testStealthWeight: 1
   debugSpeed: 0
   debugSoundIntensity: 0
 --- !u!114 &6982812147796449156

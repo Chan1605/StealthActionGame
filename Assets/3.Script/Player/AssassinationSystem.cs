@@ -125,6 +125,16 @@ public class AssassinationSystem : MonoBehaviour
                 continue;
             }
 
+            EnemyAI enemyAI = victim.GetComponent<EnemyAI>();
+            if (enemyAI != null && !enemyAI.CanBeAssassinated)
+            {
+                if (isDebugLog)
+                {
+                    Debug.Log($"[Assassination] '{victim.name}'은(는) 이미 발견 상태라 암살 대상에서 제외됩니다.", victim);
+                }
+                continue;
+            }
+
             Vector3 toPlayer = (transform.position - victim.transform.position).normalized;
             if (Vector3.Angle(victim.transform.forward, toPlayer) < 180f - backAngle)
             {
