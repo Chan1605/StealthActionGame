@@ -53,7 +53,7 @@ public class UI_ObjKeyPanal : MonoBehaviour
         Debug.Log($"target Æ®·£½ºÆû : {canvasGroup !=null}");
         Debug.Log($"target Æ®·£½ºÆû : {rectTransform !=null}");
 
-
+        canvasGroup.DOKill();
         canvasGroup.alpha = 0f;
         gameObject.SetActive(true);
 
@@ -62,6 +62,7 @@ public class UI_ObjKeyPanal : MonoBehaviour
 
     public void SetPanal_Off()
     {
+        canvasGroup.DOKill();
         canvasGroup.DOFade(0f, 0.5f).OnComplete(()=>
         gameObject.SetActive(false));
     }

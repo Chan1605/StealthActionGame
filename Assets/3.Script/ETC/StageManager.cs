@@ -13,16 +13,12 @@ public class StageManager : MonoBehaviour
     private HUDManager hudManager;
     private MinimapManager minimap;
 
-    private void Awake()
-    {
-        
-    }
 
     private void Start()
     {
         hudManager = FindAnyObjectByType<HUDManager>();
         minimap = FindAnyObjectByType<MinimapManager>();
-        //InitializeQueue();
+        InitializeQueue();
     }
 
     private void InitializeQueue()
@@ -47,7 +43,7 @@ public class StageManager : MonoBehaviour
         {
             Debug.Log("StageManager : 다음 타겟 오브젝트가 없습니다.");
             hudManager.GetTargetMarker().SetMarker_Off();
-            minimap?.SetObjectTarget(null);
+            minimap.SetObjectTarget(null);
 
             return;
         }
