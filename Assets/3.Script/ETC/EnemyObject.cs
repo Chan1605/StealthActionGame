@@ -4,17 +4,19 @@ using UnityEngine;
 public class EnemyObject : MonoBehaviour, IInteractable
 {
     public Transform ObjectTransform => transform;
-    [SerializeField] private Transform uiAnchor;
+
     public Action OnUse { get; set; }
     public Action OnLook { get; set; }
 
     public event Action OnTargetCompleted;
 
+    [SerializeField] private Transform uiAnchor;
+
     public bool IsPlayerLook { get; set; }
     public bool isAct;
 
-    private EnemyAI enemyAI;
     private TakedownVictim victim;
+    private AssassinationSystem _assassination;
     private UI_Outliner outLine;
     private UI_ObjKeyPanal keyPanal;
     private HUDManager hudManager;
@@ -23,19 +25,14 @@ public class EnemyObject : MonoBehaviour, IInteractable
     {
         get
         {
-            bool result = true;
-            if (enemyAI != null && !enemyAI.CanBeAssassinated) result = false;
-            if (victim != null && victim.isDown) result = false;
-
-            Debug.Log($"[EnemyObject] IsInteractable={result}, enemyAI={enemyAI != null}, CanBeAssassinated={enemyAI?.CanBeAssassinated}, victim={victim != null}, isDown={victim?.isDown}");
-            return result;
+            if (_assassination == null || victim == null) return false;
+            return _assassination.CanTarget(victim);
         }
     }
 
     private void Awake()
     {
         TryGetComponent(out outLine);
-        TryGetComponent(out enemyAI);
         TryGetComponent(out victim);
     }
 
@@ -43,33 +40,51 @@ public class EnemyObject : MonoBehaviour, IInteractable
     {
         hudManager = FindAnyObjectByType<HUDManager>();
         keyPanal = hudManager.GetKeyPanal();
+        _assassination = FindAnyObjectByType<AssassinationSystem>();
 
-        OnLook += Look;
-        KeyPanal_Off();
-    }
-
-    private void Update()
-    {
-        if (isAct && (!IsPlayerLook || !IsInteractable))
+        if (_assassination != null)
         {
-            KeyPanal_Off();
-            isAct = false;
+            _assassination.OnTargetAcquired += HandleTargetAcquired;
+            _assassination.OnTargetLost += HandleTargetLost;
+            _assassination.OnTakedownStarted += HandleTakedownStarted;
         }
+
+        KeyPanal_Off();
     }
 
     private void OnDestroy()
     {
-        OnLook -= Look;
+        if (_assassination != null)
+        {
+            _assassination.OnTargetAcquired -= HandleTargetAcquired;
+            _assassination.OnTargetLost -= HandleTargetLost;
+            _assassination.OnTakedownStarted -= HandleTakedownStarted;
+        }
     }
 
-    private void Look()
+    private void HandleTargetAcquired(TakedownVictim target)
     {
-        if (!IsInteractable) return;
-
+        if (target != victim) return;
         IsPlayerLook = true;
         isAct = true;
         outLine?.SetOutLine_On();
         keyPanal.SetPanal_On(uiAnchor != null ? uiAnchor : transform);
+    }
+
+    private void HandleTargetLost()
+    {
+        if (!isAct) return;
+        KeyPanal_Off();
+        isAct = false;
+        IsPlayerLook = false;
+    }
+
+    private void HandleTakedownStarted(TakedownVictim target)
+    {
+        if (target != victim) return;
+        KeyPanal_Off();
+        isAct = false;
+        IsPlayerLook = false;
     }
 
     private void KeyPanal_Off()
