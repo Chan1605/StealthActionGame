@@ -15,14 +15,16 @@ public class CarrySystem : MonoBehaviour
 
     [Header("Align")]
     [SerializeField] private bool isAlignEnabled = true;
-    [SerializeField] private float alignTime = 0.18f;
+    [SerializeField] private float alignTime = 0.3f;
 
-    /// <summary>
-    /// Holding Down 클립은 몸이 좌우 22cm, 앞 15cm 움직입니다.
-    /// 손이 닿는 지점이 루트 정중앙이 아니라서, 시체를 이 오프셋 위치에 두도록 정렬합니다.
-    /// 좌우 부호는 재생해보고 맞추세요.
-    /// </summary>
-    [SerializeField] private Vector3 reachOffset = new Vector3(-0.22f, 0f, 0.15f);
+    [Tooltip("시체 앞 이 거리에 섭니다. 여기서 무릎 꿇었을 때 손이 닿아야 합니다.")]
+    [SerializeField] private float alignDistance = 0.55f;
+
+    [Tooltip("현재 거리가 Align Distance와 이만큼 이내로 가까우면 위치는 안 움직이고 방향만 돌립니다.")]
+    [SerializeField] private float alignTolerance = 0.2f;
+
+    [Tooltip("정렬한 뒤 옆으로 살짝 비켜설 양. Holding Down 클립이 몸을 좌우로 22cm 옮기는 걸 상쇄합니다.")]
+    [SerializeField] private float alignLateral = 0f;
 
     [Header("Socket")]
     [SerializeField] private Transform carrySocket;
@@ -31,10 +33,21 @@ public class CarrySystem : MonoBehaviour
     [SerializeField] private string pickUpTrigger = "PickUpBody";
     [SerializeField] private string putDownTrigger = "PutDownBody";
     [SerializeField] private string carrySpeedParameter = "CarrySpeed";
-    [SerializeField] private float pickUpDuration = 1.27f;
-    [SerializeField] private float putDownDuration = 1.27f;
+    [Tooltip("Animator의 PickUpBody 상태 Speed를 0.7로 낮췄다면 1.27 / 0.7 = 1.81 을 넣으세요.")]
+    [SerializeField] private float pickUpDuration = 1.81f;
+    [SerializeField] private float putDownDuration = 1.81f;
 
-    [Tooltip("들기 클립의 몇 % 지점부터 시체를 품으로 끌어당길지. 0.55면 0.70초쯤 시작합니다.")]
+    [Header("Lift Trick")]
+    [Tooltip("켜면 시체를 잠깐 안 보이게 했다가 품에서 다시 나타나게 합니다. 바닥에서 떠오르는 어색함이 사라집니다.")]
+    [SerializeField] private bool isHiddenDuringLift = true;
+
+    [Tooltip("들기 클립의 몇 % 지점에서 시체를 감추고 품 자세로 즉시 옮길지.")]
+    [SerializeField] [Range(0f, 1f)] private float hideAtRatio = 0.85f;
+
+    [Tooltip("들기 클립이 끝나고 몇 초 뒤에 시체를 다시 보이게 할지. 일어서는 블렌드 중간이 자연스럽습니다.")]
+    [SerializeField] private float showDelay = 0.1f;
+
+    [Tooltip("Lift Trick을 끌 때만 씁니다. 들기 클립의 몇 % 지점부터 시체를 품으로 끌어당길지.")]
     [SerializeField] [Range(0f, 1f)] private float attachStartRatio = 0.55f;
 
     [Tooltip("내려놓기 클립의 몇 % 지점에서 시체를 놓을지.")]
@@ -73,6 +86,15 @@ public class CarrySystem : MonoBehaviour
         get
         {
             return heldBody != null;
+        }
+    }
+
+    /// <summary>CarriableBody가 에디터에서 자세를 잡을 때 찾아 씁니다.</summary>
+    public Transform socket
+    {
+        get
+        {
+            return carrySocket;
         }
     }
 
@@ -260,19 +282,35 @@ public class CarrySystem : MonoBehaviour
 
         if (hits.Length == 0)
         {
-            Log("주변에 시체가 없습니다. Body Mask에 시체 레이어가 들어 있는지 확인하세요.");
+            Log($"반경 {pickUpRange:F1}m 안에 Body Mask에 걸리는 콜라이더가 하나도 없습니다. 시체 레이어와 Body Mask를 확인하세요.");
             return null;
         }
 
         CarriableBody best = null;
         float bestDistance = float.MaxValue;
 
+        HashSet<CarriableBody> seen = new HashSet<CarriableBody>();
+        float halfAngle = pickUpAngle * 0.5f;
+
         foreach (Collider hit in hits)
         {
             CarriableBody body = hit.GetComponentInParent<CarriableBody>();
 
-            if (body == null || !body.canCarry)
+            if (body == null)
             {
+                continue;
+            }
+
+            if (!seen.Add(body))
+            {
+                continue;
+            }
+
+            string blockReason = body.carryBlockReason;
+
+            if (!string.IsNullOrEmpty(blockReason))
+            {
+                Log($"'{body.name}' 제외 - {blockReason}");
                 continue;
             }
 
@@ -283,11 +321,16 @@ public class CarrySystem : MonoBehaviour
 
             if (distance > pickUpRange)
             {
+                Log($"'{body.name}' 제외 - 수평거리 {distance:F2}m > Pick Up Range {pickUpRange:F2}m");
                 continue;
             }
 
-            if (distance > 0.01f && Vector3.Angle(transform.forward, flat) > pickUpAngle * 0.5f)
+            // 시체 바로 위에 서 있으면 방향 벡터가 불안정해집니다. 가까우면 각도 검사를 건너뜁니다.
+            float angle = distance > 0.2f ? Vector3.Angle(transform.forward, flat) : 0f;
+
+            if (angle > halfAngle)
             {
+                Log($"'{body.name}' 제외 - 정면에서 {angle:F0}° 벗어남 (허용 {halfAngle:F0}°)");
                 continue;
             }
 
@@ -298,12 +341,93 @@ public class CarrySystem : MonoBehaviour
             }
         }
 
-        if (best == null)
+        if (best == null && seen.Count == 0)
         {
-            Log("들 수 있는 시체가 앞쪽에 없습니다.");
+            Log($"콜라이더 {hits.Length}개를 찾았지만 전부 CarriableBody가 없습니다. 적의 Hips 본에 CarriableBody를 붙였는지 확인하세요. (예: '{hits[0].name}')");
         }
 
         return best;
+    }
+
+    [ContextMenu("Check Carry Setup")]
+    public void CheckSetup()
+    {
+        List<string> problems = new List<string>();
+
+        if (carrySocket == null)
+        {
+            problems.Add("Carry Socket이 비어 있습니다.");
+        }
+
+        if (bodyMask.value == 0)
+        {
+            problems.Add("Body Mask가 Nothing입니다.");
+        }
+
+        Animator animator = GetComponentInChildren<Animator>();
+
+        if (animator == null || animator.runtimeAnimatorController == null)
+        {
+            problems.Add("Animator 또는 Controller가 없습니다.");
+        }
+        else
+        {
+            foreach (string required in new[] { pickUpTrigger, putDownTrigger, carrySpeedParameter })
+            {
+                bool found = false;
+
+                foreach (AnimatorControllerParameter parameter in animator.parameters)
+                {
+                    if (parameter.name == required)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found)
+                {
+                    problems.Add($"Animator에 '{required}' 파라미터가 없습니다.");
+                }
+            }
+        }
+
+        CarriableBody[] bodies = FindObjectsByType<CarriableBody>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+
+        if (bodies.Length == 0)
+        {
+            problems.Add("씬에 CarriableBody가 하나도 없습니다. 적의 Hips 본에 붙이세요.");
+        }
+
+        foreach (CarriableBody body in bodies)
+        {
+            int layer = body.gameObject.layer;
+            bool isInMask = (bodyMask.value & (1 << layer)) != 0;
+            string layerName = LayerMask.LayerToName(layer);
+
+            if (!isInMask)
+            {
+                problems.Add($"'{body.name}'이(가) '{layerName}' 레이어인데 Body Mask에 없습니다.");
+            }
+
+            if (body.GetComponentInParent<TakedownVictim>() == null)
+            {
+                problems.Add($"'{body.name}'의 부모에 TakedownVictim이 없습니다.");
+            }
+
+            if (body.GetComponentsInChildren<Rigidbody>(true).Length < 5)
+            {
+                problems.Add($"'{body.name}' 아래 Rigidbody가 너무 적습니다. Hips 본이 맞는지 확인하세요.");
+            }
+        }
+
+        if (problems.Count == 0)
+        {
+            Debug.Log($"[CarrySystem] 세팅 이상 없습니다. (씬의 CarriableBody {bodies.Length}개)", this);
+            return;
+        }
+
+        Debug.LogWarning($"[CarrySystem] 확인이 필요한 항목 {problems.Count}개\n- {string.Join("\n- ", problems)}", this);
     }
 
     private IEnumerator PickUp_co(CarriableBody body)
@@ -323,7 +447,7 @@ public class CarrySystem : MonoBehaviour
             }
 
             float duration = Mathf.Max(0.05f, pickUpDuration);
-            float attachStart = duration * Mathf.Clamp01(attachStartRatio);
+            float attachStart = duration * Mathf.Clamp01(isHiddenDuringLift ? hideAtRatio : attachStartRatio);
             float elapsed = 0f;
             bool isAttached = false;
 
@@ -334,10 +458,21 @@ public class CarrySystem : MonoBehaviour
                 if (!isAttached && elapsed >= attachStart)
                 {
                     isAttached = true;
-                    body.BeginCarry(carrySocket);
+
+                    if (isHiddenDuringLift)
+                    {
+                        // 감추고 곧바로 품 자세로 옮깁니다. 보간하지 않으니 떠오르는 구간이 없습니다.
+                        body.SetVisible(false);
+                        body.BeginCarry(carrySocket);
+                        body.ApplyCarryBlend(1f);
+                    }
+                    else
+                    {
+                        body.BeginCarry(carrySocket);
+                    }
                 }
 
-                if (isAttached)
+                if (isAttached && !isHiddenDuringLift)
                 {
                     float span = Mathf.Max(0.01f, duration - attachStart);
                     body.ApplyCarryBlend((elapsed - attachStart) / span);
@@ -348,6 +483,11 @@ public class CarrySystem : MonoBehaviour
 
             if (!isAttached)
             {
+                if (isHiddenDuringLift)
+                {
+                    body.SetVisible(false);
+                }
+
                 body.BeginCarry(carrySocket);
             }
 
@@ -363,10 +503,26 @@ public class CarrySystem : MonoBehaviour
             }
 
             OnCarryStarted?.Invoke(body);
-            Log($"{body.victimRoot?.name} 운반 시작");
+            Log($"{(body.victimRoot != null ? body.victimRoot.name : body.name)} 운반 시작");
+
+            if (isHiddenDuringLift)
+            {
+                // 일어서는 블렌드가 도는 동안 잠깐 기다렸다가 품에서 나타나게 합니다.
+                if (showDelay > 0f)
+                {
+                    yield return new WaitForSeconds(showDelay);
+                }
+
+                body.SetVisible(true);
+            }
         }
         finally
         {
+            if (body != null)
+            {
+                body.SetVisible(true);
+            }
+
             isBusy = false;
         }
     }
@@ -386,12 +542,21 @@ public class CarrySystem : MonoBehaviour
 
             float duration = Mathf.Max(0.05f, putDownDuration);
             float detachAt = duration * Mathf.Clamp01(detachRatio);
+            float hideAt = Mathf.Max(0f, detachAt - Mathf.Max(0f, showDelay));
             float elapsed = 0f;
             bool isDetached = false;
+            bool isHidden = false;
 
             while (elapsed < duration)
             {
                 elapsed += Time.deltaTime;
+
+                // 품 → 바닥으로 순간이동하는 찰나만 가립니다. EndCarry가 다시 보이게 합니다.
+                if (isHiddenDuringLift && !isHidden && elapsed >= hideAt)
+                {
+                    isHidden = true;
+                    body.SetVisible(false);
+                }
 
                 if (!isDetached && elapsed >= detachAt)
                 {
@@ -471,9 +636,24 @@ public class CarrySystem : MonoBehaviour
             yield break;
         }
 
-        Quaternion targetRotation = Quaternion.LookRotation(flat.normalized);
+        float distance = flat.magnitude;
+        Vector3 direction = flat / distance;
 
-        Vector3 targetPosition = bodyPosition - targetRotation * reachOffset;
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+
+        Vector3 targetPosition = transform.position;
+
+        // 이미 적당한 거리면 몸을 앞으로 끌지 않습니다. 방향만 맞춥니다.
+        if (Mathf.Abs(distance - alignDistance) > alignTolerance)
+        {
+            targetPosition = bodyPosition - direction * alignDistance;
+        }
+
+        if (Mathf.Abs(alignLateral) > 0.001f)
+        {
+            targetPosition += targetRotation * Vector3.right * alignLateral;
+        }
+
         targetPosition.y = transform.position.y;
 
         Vector3 startPosition = transform.position;
@@ -541,7 +721,7 @@ public class CarrySystem : MonoBehaviour
         Gizmos.DrawLine(origin, origin + right * transform.forward * pickUpRange);
 
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position + transform.rotation * reachOffset, 0.08f);
+        Gizmos.DrawWireSphere(transform.position + transform.forward * alignDistance, 0.1f);
     }
 #endif
 }
