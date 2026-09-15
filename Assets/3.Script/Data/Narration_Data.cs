@@ -10,4 +10,6 @@ public struct Narration_Data
     public string subtitleText;
     public EventReference audioEvent;
     public float duration;
+
+    public bool isObjectSound;
 }
