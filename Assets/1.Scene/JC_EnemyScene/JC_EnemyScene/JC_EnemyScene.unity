@@ -41079,7 +41079,7 @@ MonoBehaviour:
   castDistance: 5
   interactable:
     serializedVersion: 2
-    m_Bits: 136
+    m_Bits: 128
 --- !u!114 &6982812147796449152
 MonoBehaviour:
   m_ObjectHideFlags: 0

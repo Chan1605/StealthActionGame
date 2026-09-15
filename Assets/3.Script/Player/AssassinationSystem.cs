@@ -316,10 +316,6 @@ public class AssassinationSystem : MonoBehaviour
             _movement.enabled = isEnabled;
         }
 
-        if (_cameraRig != null)
-        {
-            _cameraRig.enabled = isEnabled;
-        }
     }
 
     private void OnDrawGizmosSelected()
