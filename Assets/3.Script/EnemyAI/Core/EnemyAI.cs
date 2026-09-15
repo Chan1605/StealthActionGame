@@ -22,7 +22,7 @@ public class EnemyAI : MonoBehaviour
     private EnemyStateMachine _fsm;
     private IndicatorManager _indicatorManager;
     private MinimapManager _mini;
-
+    public bool CanBeAssassinated => _fsm == null || _fsm.IsAssassinable;
 
     private void Awake()
     {

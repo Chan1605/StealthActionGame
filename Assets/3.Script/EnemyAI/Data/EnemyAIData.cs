@@ -38,7 +38,8 @@ public class EnemyAIData : ScriptableObject
     [Header("공격 (발견 상태)")]
     public float attackRange = 1.8f;
     public float attackDamage = 10f;
-    public float attackInterval = 1f;
+    public float attackWindupTime = 0.4f;
+    public float attackRecoveryTime = 0.6f;
     [Header("확인 행동")]
     public float investigateCheckDuration = 2.5f;
     public float soundInvestigateCheckDuration = 7f;

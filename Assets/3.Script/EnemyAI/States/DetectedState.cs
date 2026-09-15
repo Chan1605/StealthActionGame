@@ -3,22 +3,28 @@ using UnityEngine;
 public class DetectedState : IEnemyState
 {
     private float _loseTimer;
-    private float _attackTimer;
     private ChaseCommand _chase;
+    private AttackCommand _attack;
 
     public void Enter(EnemyStateMachine fsm)
     {
+        fsm.IsAssassinable = false;
         fsm.Owner.Indicator.ShowDetected();
         fsm.Movement.SetStoppingDistance(fsm.Data.attackRange);
 
         _loseTimer = 0f;
-        _attackTimer = 0f;
         _chase = new ChaseCommand(fsm.Perception, fsm.Data.chaseRepathInterval);
         _chase.Start(fsm, null);
     }
 
     public void Tick(EnemyStateMachine fsm)
     {
+        if (_attack != null)
+        {
+            _attack.Tick();
+            return;
+        }
+
         _chase.Tick();
         TickAttack(fsm);
 
@@ -42,22 +48,20 @@ public class DetectedState : IEnemyState
         if (fsm.Perception.Target == null) return;
 
         float distance = Vector3.Distance(fsm.Owner.transform.position, fsm.Perception.Target.Position);
-        if (distance > fsm.Data.attackRange)
+        if (distance > fsm.Data.attackRange) return;
+
+        _attack = new AttackCommand();
+        _attack.Start(fsm, () =>
         {
-            _attackTimer = 0f;
-            return;
-        }
-
-        _attackTimer += Time.deltaTime;
-        if (_attackTimer < fsm.Data.attackInterval) return;
-
-        _attackTimer = 0f;
-        fsm.DamageTarget?.TakeDamage(fsm.Data.attackDamage);
+            fsm.SuppressMovementAnim = false;
+            _attack = null;
+        });
     }
 
     public void Exit(EnemyStateMachine fsm)
     {
         _chase.Cancel();
+        _attack?.Cancel();
         fsm.Movement.SetStoppingDistance(fsm.Data.stoppingDistance);
     }
 }
