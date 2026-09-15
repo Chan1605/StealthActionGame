@@ -257,6 +257,8 @@ GameObject:
   - component: {fileID: 376114915}
   - component: {fileID: 376114914}
   - component: {fileID: 376114913}
+  - component: {fileID: 376114919}
+  - component: {fileID: 376114920}
   m_Layer: 7
   m_Name: TargetObject (2)
   m_TagString: Untagged
@@ -382,6 +384,59 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &376114919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 376114912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edf6401fdbc3ad147a7ed5a1f6f267b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DoorAction
+  animationTrigger: 
+  actionDelay: 0.5
+  duration: 1.2
+  alignAnchor: {fileID: 0}
+  alignTime: 0.15
+  isRepeatable: 1
+  isUpperBodyOnly: 0
+  door: {fileID: 0}
+  hingePoint: {fileID: 0}
+  openAngle: 90
+  swingDuration: 0.9
+  closeTrigger: 
+  closeActionDelay: -1
+  closeDuration: -1
+  isSwingAwayFromUser: 0
+  isCloseAllowed: 1
+--- !u!114 &376114920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 376114912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8338a1efc3f31eb43979c37169625e4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SubtitleTrigger
+  lookSubtitles: []
+  endSubtitles:
+  - subtitleText: "\uC0C1\uD638\uC791\uC6A9 \uB05D\uB098\uBA74 \uB098\uC624\uB294
+      \uC790\uB9C9."
+    audioEvent:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    duration: 3
+    isObjectSound: 0
 --- !u!1 &546642854
 GameObject:
   m_ObjectHideFlags: 0
@@ -875,6 +930,108 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1277330260}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &972022214
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1189384023}
+    m_Modifications:
+    - target: {fileID: 607663919831719268, guid: 21f17d346a7478a458f7358a7b8e8452, type: 3}
+      propertyPath: m_Name
+      value: UI_SubtitleUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 6400494832509434666, guid: 21f17d346a7478a458f7358a7b8e8452, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6400494832509434666, guid: 21f17d346a7478a458f7358a7b8e8452, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6400494832509434666, guid: 21f17d346a7478a458f7358a7b8e8452, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6400494832509434666, guid: 21f17d346a7478a458f7358a7b8e8452, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6400494832509434666, guid: 21f17d346a7478a458f7358a7b8e8452, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6400494832509434666, guid: 21f17d346a7478a458f7358a7b8e8452, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6400494832509434666, guid: 21f17d346a7478a458f7358a7b8e8452, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6400494832509434666, guid: 21f17d346a7478a458f7358a7b8e8452, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6400494832509434666, guid: 21f17d346a7478a458f7358a7b8e8452, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6400494832509434666, guid: 21f17d346a7478a458f7358a7b8e8452, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6400494832509434666, guid: 21f17d346a7478a458f7358a7b8e8452, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -573.69543
+      objectReference: {fileID: 0}
+    - target: {fileID: 6400494832509434666, guid: 21f17d346a7478a458f7358a7b8e8452, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6400494832509434666, guid: 21f17d346a7478a458f7358a7b8e8452, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6400494832509434666, guid: 21f17d346a7478a458f7358a7b8e8452, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6400494832509434666, guid: 21f17d346a7478a458f7358a7b8e8452, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6400494832509434666, guid: 21f17d346a7478a458f7358a7b8e8452, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6400494832509434666, guid: 21f17d346a7478a458f7358a7b8e8452, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6400494832509434666, guid: 21f17d346a7478a458f7358a7b8e8452, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6400494832509434666, guid: 21f17d346a7478a458f7358a7b8e8452, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6400494832509434666, guid: 21f17d346a7478a458f7358a7b8e8452, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 21f17d346a7478a458f7358a7b8e8452, type: 3}
+--- !u!224 &972022215 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 6400494832509434666, guid: 21f17d346a7478a458f7358a7b8e8452, type: 3}
+  m_PrefabInstance: {fileID: 972022214}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1131137051
 GameObject:
   m_ObjectHideFlags: 0
@@ -1115,6 +1272,7 @@ RectTransform:
   - {fileID: 1465181450190183117}
   - {fileID: 5897480269161958820}
   - {fileID: 2422906932933545972}
+  - {fileID: 972022215}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1470,6 +1628,8 @@ GameObject:
   - component: {fileID: 1430786963}
   - component: {fileID: 1430786962}
   - component: {fileID: 1430786961}
+  - component: {fileID: 1430786967}
+  - component: {fileID: 1430786968}
   m_Layer: 7
   m_Name: TargetObject (1)
   m_TagString: Untagged
@@ -1595,6 +1755,59 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1430786967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1430786960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edf6401fdbc3ad147a7ed5a1f6f267b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DoorAction
+  animationTrigger: 
+  actionDelay: 0.5
+  duration: 1.2
+  alignAnchor: {fileID: 0}
+  alignTime: 0.15
+  isRepeatable: 1
+  isUpperBodyOnly: 0
+  door: {fileID: 0}
+  hingePoint: {fileID: 0}
+  openAngle: 90
+  swingDuration: 0.9
+  closeTrigger: 
+  closeActionDelay: -1
+  closeDuration: -1
+  isSwingAwayFromUser: 0
+  isCloseAllowed: 1
+--- !u!114 &1430786968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1430786960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8338a1efc3f31eb43979c37169625e4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SubtitleTrigger
+  lookSubtitles:
+  - subtitleText: "\uBCF4\uBA74 \uB098\uC624\uB294 \uC790\uB9C9. \uD55C \uBC88\uB9CC
+      \uB098\uC635\uB2C8\uB2E4."
+    audioEvent:
+      Guid:
+        Data1: 0
+        Data2: 0
+        Data3: 0
+        Data4: 0
+      Path: 
+    duration: 5
+    isObjectSound: 0
+  endSubtitles: []
 --- !u!1 &1449694167
 GameObject:
   m_ObjectHideFlags: 0
@@ -1841,6 +2054,7 @@ GameObject:
   - component: {fileID: 1715790762}
   - component: {fileID: 1715790761}
   - component: {fileID: 1715790760}
+  - component: {fileID: 1715790766}
   m_Layer: 7
   m_Name: TargetObject
   m_TagString: Untagged
@@ -1966,6 +2180,34 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1715790766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1715790759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edf6401fdbc3ad147a7ed5a1f6f267b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DoorAction
+  animationTrigger: 
+  actionDelay: 0.5
+  duration: 1.2
+  alignAnchor: {fileID: 0}
+  alignTime: 0.15
+  isRepeatable: 1
+  isUpperBodyOnly: 0
+  door: {fileID: 0}
+  hingePoint: {fileID: 0}
+  openAngle: 90
+  swingDuration: 0.9
+  closeTrigger: 
+  closeActionDelay: -1
+  closeDuration: -1
+  isSwingAwayFromUser: 0
+  isCloseAllowed: 1
 --- !u!1 &1790677454
 GameObject:
   m_ObjectHideFlags: 0
@@ -26576,6 +26818,11 @@ MonoBehaviour:
   ledgeProbeForward: 0.25
   minLedgeFlatDot: 0.7
   minLedgeDepth: 0.05
+  probeMargin: 0.2
+  isStandingRoomChecked: 1
+  standRoomRayHeight: 0.1
+  standRoomRayLength: 0.4
+  standRoomStepTolerance: 0.2
   reachHeight: 2.4
   minClimbHeight: -1
   climbTrigger: Climb
