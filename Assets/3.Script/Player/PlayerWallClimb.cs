@@ -13,7 +13,14 @@ public class PlayerWallClimb : MonoBehaviour
     [SerializeField] private float chestHeight = 1f;
     [SerializeField] private float ledgeProbeForward = 0.25f;
     [SerializeField] private float minLedgeFlatDot = 0.7f;
-    [SerializeField] private float minLedgeDepth = 0.4f;
+    [SerializeField] private float minLedgeDepth = 0.3f;
+    [SerializeField] private float probeMargin = 0.2f;
+
+    [Header("Standing Room")]
+    [SerializeField] private bool isStandingRoomChecked = true;
+    [SerializeField] private float standRoomRayHeight = 0.1f;
+    [SerializeField] private float standRoomRayLength = 0.4f;
+    [SerializeField] private float standRoomStepTolerance = 0.2f;
 
     [Header("Height Rule")]
     [SerializeField] private float reachHeight = 2.4f;
@@ -50,6 +57,9 @@ public class PlayerWallClimb : MonoBehaviour
 
     private Vector3 _wallPoint;
 
+    private readonly RaycastHit[] _ledgeHits = new RaycastHit[16];
+    private readonly List<RaycastHit> _sortedHits = new List<RaycastHit>(16);
+
     public bool isBusy { get; private set; }
 
     public event Action OnClimbStarted;
@@ -81,13 +91,16 @@ public class PlayerWallClimb : MonoBehaviour
         }
     }
 
-    private float maxProbeHeight
+    private float minClimbHeightValue
     {
         get
         {
-            float jump = _movement != null ? _movement.maxJumpHeight : 1.2f;
+            if (minClimbHeight >= 0f)
+            {
+                return minClimbHeight;
+            }
 
-            return reachHeight + jump + 1f;
+            return _movement != null ? _movement.maxJumpHeight : 1.2f;
         }
     }
 
@@ -118,23 +131,6 @@ public class PlayerWallClimb : MonoBehaviour
             return false;
         }
 
-        float height = ledgePoint.y - feetY;
-        float minHeight = minClimbHeight >= 0f
-            ? minClimbHeight
-            : (_movement != null ? _movement.maxJumpHeight : 1.2f);
-
-        if (height < minHeight)
-        {
-            Log($"벽이 낮아서 그냥 점프 ({height:F2}m < {minHeight:F2}m)");
-            return false;
-        }
-
-        if (height > reachHeight)
-        {
-            Log($"벽이 높아서 손이 안 닿음 ({height:F2}m > {reachHeight:F2}m). 점프 후 다시 눌러보세요.");
-            return false;
-        }
-
         StartCoroutine(Climb_co(ledgePoint, wallNormal));
 
         return true;
@@ -153,15 +149,13 @@ public class PlayerWallClimb : MonoBehaviour
             return false;
         }
 
-        wallNormal = wallHit.normal;
-
-        if (Mathf.Abs(Vector3.Dot(wallNormal, Vector3.up)) > 0.35f)
+        if (Mathf.Abs(Vector3.Dot(wallHit.normal, Vector3.up)) > 0.35f)
         {
             Log("벽이 수직이 아닙니다. (경사면)");
             return false;
         }
 
-        Vector3 flatNormal = wallNormal;
+        Vector3 flatNormal = wallHit.normal;
         flatNormal.y = 0f;
 
         if (flatNormal.sqrMagnitude < 0.0001f)
@@ -172,32 +166,107 @@ public class PlayerWallClimb : MonoBehaviour
         flatNormal.Normalize();
         wallNormal = flatNormal;
 
+        float minHeight = minClimbHeightValue;
+        float bottomY = feetY + minHeight;
+        float topY = feetY + reachHeight + probeMargin;
+
         Vector3 topOrigin = wallHit.point - flatNormal * ledgeProbeForward;
-        topOrigin.y = feetY + maxProbeHeight;
+        topOrigin.y = topY;
 
-        if (!Physics.Raycast(topOrigin, Vector3.down, out RaycastHit topHit, maxProbeHeight * 2f, wallMask, QueryTriggerInteraction.Ignore))
+        float scanLength = topY - bottomY;
+
+        if (scanLength <= 0f)
         {
-            Log("난간 윗면을 찾지 못했습니다.");
+            Log($"Reach Height({reachHeight:F2})가 Min Climb Height({minHeight:F2})보다 작습니다. 값을 확인하세요.");
             return false;
         }
 
-        if (Vector3.Dot(topHit.normal, Vector3.up) < minLedgeFlatDot)
+        int count = Physics.RaycastNonAlloc(topOrigin, Vector3.down, _ledgeHits, scanLength, wallMask, QueryTriggerInteraction.Ignore);
+
+        if (count <= 0)
         {
-            Log("난간 윗면이 평평하지 않습니다.");
+            Log($"손 닿는 높이({minHeight:F2}m ~ {reachHeight:F2}m)에 올라설 면이 없습니다.");
             return false;
         }
 
-        Vector3 depthOrigin = topHit.point - flatNormal * minLedgeDepth + Vector3.up * 0.1f;
+        _sortedHits.Clear();
 
-        if (!Physics.Raycast(depthOrigin, Vector3.down, out RaycastHit depthHit, 0.4f, wallMask, QueryTriggerInteraction.Ignore)
-            || Mathf.Abs(depthHit.point.y - topHit.point.y) > 0.2f)
+        for (int i = 0; i < count; i++)
         {
-            Log("올라설 자리가 좁습니다.");
+            _sortedHits.Add(_ledgeHits[i]);
+        }
+
+        _sortedHits.Sort((a, b) => a.distance.CompareTo(b.distance));
+
+        for (int i = 0; i < _sortedHits.Count; i++)
+        {
+            RaycastHit hit = _sortedHits[i];
+            float height = hit.point.y - feetY;
+
+            if (height > reachHeight)
+            {
+                continue;
+            }
+
+            if (height < minHeight)
+            {
+                break;
+            }
+
+            if (Vector3.Dot(hit.normal, Vector3.up) < minLedgeFlatDot)
+            {
+                Log($"{height:F2}m 지점은 윗면이 평평하지 않아 건너뜁니다.");
+                continue;
+            }
+
+            if (!HasStandingRoom(hit.point, flatNormal, out string reason))
+            {
+                Log($"{height:F2}m 지점은 올라설 자리가 좁아 건너뜁니다. ({reason})");
+                continue;
+            }
+
+            ledgePoint = hit.point;
+            _wallPoint = wallHit.point;
+
+            Log($"난간 찾음: 높이 {height:F2}m");
+
+            return true;
+        }
+
+        Log($"손 닿는 높이({minHeight:F2}m ~ {reachHeight:F2}m) 안에 올라설 난간이 없습니다. 더 높은 곳이면 점프 후 다시 눌러보세요.");
+
+        return false;
+    }
+
+    private bool HasStandingRoom(Vector3 ledgePoint, Vector3 flatNormal, out string reason)
+    {
+        reason = string.Empty;
+
+        if (!isStandingRoomChecked)
+        {
+            return true;
+        }
+
+        Vector3 depthOrigin = ledgePoint - flatNormal * minLedgeDepth + Vector3.up * standRoomRayHeight;
+
+        if (isDebugGizmo)
+        {
+            Debug.DrawRay(depthOrigin, Vector3.down * standRoomRayLength, Color.magenta, 3f);
+        }
+
+        if (!Physics.Raycast(depthOrigin, Vector3.down, out RaycastHit depthHit, standRoomRayLength, wallMask, QueryTriggerInteraction.Ignore))
+        {
+            reason = $"모서리에서 안쪽 {minLedgeDepth:F2}m 지점에 바닥이 없음 → Min Ledge Depth를 줄이세요";
             return false;
         }
 
-        ledgePoint = topHit.point;
-        _wallPoint = wallHit.point;
+        float step = depthHit.point.y - ledgePoint.y;
+
+        if (Mathf.Abs(step) > standRoomStepTolerance)
+        {
+            reason = $"안쪽 바닥이 {step:F2}m 어긋남(허용 {standRoomStepTolerance:F2}m, 맞은 것: {depthHit.collider.name}) → Stand Room Step Tolerance를 늘리세요";
+            return false;
+        }
 
         return true;
     }
@@ -309,12 +378,17 @@ public class PlayerWallClimb : MonoBehaviour
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
-        if (!isDebugGizmo || _controller == null)
+        if (!isDebugGizmo)
+        {
+            return;
+        }
+
+        if (_controller == null)
         {
             TryGetComponent(out _controller);
         }
 
-        if (!isDebugGizmo || _controller == null)
+        if (_controller == null)
         {
             return;
         }
@@ -326,9 +400,18 @@ public class PlayerWallClimb : MonoBehaviour
         Gizmos.DrawWireSphere(origin + transform.forward * checkDistance, checkRadius);
         Gizmos.DrawLine(origin, origin + transform.forward * checkDistance);
 
+        float minHeight = minClimbHeight >= 0f ? minClimbHeight : 1.2f;
+
+        Gizmos.color = Color.green;
+        Vector3 minPoint = new Vector3(transform.position.x, feetY + minHeight, transform.position.z);
+        Gizmos.DrawLine(minPoint, minPoint + transform.forward * checkDistance);
+
         Gizmos.color = Color.yellow;
         Vector3 reachPoint = new Vector3(transform.position.x, feetY + reachHeight, transform.position.z);
         Gizmos.DrawLine(reachPoint, reachPoint + transform.forward * checkDistance);
+
+        Gizmos.color = new Color(1f, 1f, 0f, 0.35f);
+        Gizmos.DrawLine(minPoint + transform.forward * checkDistance, reachPoint + transform.forward * checkDistance);
     }
 #endif
 }
