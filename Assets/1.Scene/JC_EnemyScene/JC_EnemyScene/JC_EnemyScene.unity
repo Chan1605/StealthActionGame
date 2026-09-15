@@ -42894,7 +42894,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AssassinationSystem
   range: 1.4
-  backAngle: 70
+  backAngle: 100
   npcLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -43007,7 +43007,7 @@ MonoBehaviour:
   runSpeedThreshold: 4
   walkSoundScore: 20
   runSoundScore: 40
-  testStealthWeight: 0
+  testStealthWeight: 1
   debugSpeed: 0
   debugSoundIntensity: 0
 --- !u!114 &6982812147796449156
