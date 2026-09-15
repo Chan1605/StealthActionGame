@@ -33,6 +33,9 @@ public class PlayerController : MonoBehaviour
     private PlayerInput _input;
     private PlayerCameraRig _cameraRig;
     private PlayerWallClimb _wallClimb;
+    private CarrySystem _carry;
+
+    private float _speedOverride = -1f;
 
     private Vector3 _planarVelocity;
     private Vector3 _lastMoveDirection;
@@ -60,6 +63,14 @@ public class PlayerController : MonoBehaviour
 
     public bool isCrouched { get; private set; }
 
+    private bool isCarrying
+    {
+        get
+        {
+            return _carry != null && _carry.isCarrying;
+        }
+    }
+
     public float maxJumpHeight
     {
         get
@@ -71,6 +82,23 @@ public class PlayerController : MonoBehaviour
     public void StopVertical()
     {
         _verticalVelocity = 0f;
+    }
+
+    /// <summary>운반 중처럼 이동 속도를 고정해야 할 때 사용합니다. 달리기/앉기 속도를 모두 무시합니다.</summary>
+    public void SetSpeedOverride(float speed)
+    {
+        _speedOverride = Mathf.Max(0f, speed);
+    }
+
+    public void ClearSpeedOverride()
+    {
+        _speedOverride = -1f;
+    }
+
+    /// <summary>천장 검사 없이 강제로 일어섭니다. 시체를 들어올릴 때처럼 애니메이션이 이미 일어선 경우에 씁니다.</summary>
+    public void ForceStand()
+    {
+        SetCrouched(false);
     }
 
     public float currentSpeed
@@ -115,6 +143,7 @@ public class PlayerController : MonoBehaviour
         _input = GetComponent<PlayerInput>();
         _cameraRig = GetComponent<PlayerCameraRig>();
         _wallClimb = GetComponent<PlayerWallClimb>();
+        _carry = GetComponent<CarrySystem>();
 
         _moveDirection = Vector2.up;
         _lastMoveDirection = transform.forward;
@@ -240,6 +269,11 @@ public class PlayerController : MonoBehaviour
 
     private float GetTargetSpeed()
     {
+        if (_speedOverride >= 0f)
+        {
+            return _speedOverride;
+        }
+
         if (isCrouched)
         {
             return crouchSpeed;
@@ -276,6 +310,11 @@ public class PlayerController : MonoBehaviour
 
     private void HandleJumpPressed()
     {
+        if (_carry != null && _carry.isBlockingOtherActions)
+        {
+            return;
+        }
+
         if (_wallClimb != null && _wallClimb.TryClimb())
         {
             return;
@@ -300,6 +339,11 @@ public class PlayerController : MonoBehaviour
 
     private void HandleCrouchChanged(bool isOn)
     {
+        if (isCarrying)
+        {
+            return;
+        }
+
         if (isOn)
         {
             SetCrouched(true);
