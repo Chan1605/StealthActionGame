@@ -33,7 +33,10 @@ public class TargetObject : MonoBehaviour, IInteractable
         hudManager = FindAnyObjectByType<HUDManager>();
         keyPanal = hudManager.GetKeyPanal();
 
-        KeyPanal_Off();
+        if (outLine != null)
+        {
+            outLine.SetOutLine_Off();
+        }
     }
     private void Update()
     {
@@ -89,6 +92,11 @@ public class TargetObject : MonoBehaviour, IInteractable
     {
         Debug.Log($"outline 할당 상태 : {outLine != null}");
         Debug.Log($"keyPanal 할당 상태 : {keyPanal != null}");
+
+        if(isAct)
+        {
+            return;
+        }
 
         IsPlayerLook = true;
         isAct = true;
