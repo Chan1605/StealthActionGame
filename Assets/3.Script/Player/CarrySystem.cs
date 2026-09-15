@@ -80,7 +80,7 @@ public class CarrySystem : MonoBehaviour
 
     public bool isBusy { get; private set; }
     public CarriableBody heldBody { get; private set; }
-
+    private CarriableBody _lastNotifiedBody;
     public bool isCarrying
     {
         get
@@ -109,6 +109,9 @@ public class CarrySystem : MonoBehaviour
 
     public event Action<CarriableBody> OnCarryStarted;
     public event Action<CarriableBody> OnCarryEnded;
+    public event Action<CarriableBody> OnCarryTargetAcquired;
+    public event Action OnCarryTargetLost;
+
 
     private void Awake()
     {
@@ -140,9 +143,40 @@ public class CarrySystem : MonoBehaviour
         _input.OnInteractPressed -= HandleInteractPressed;
     }
 
+    private void SetPlayerControlEnabled(bool isEnabled)
+    {
+        if (_movement != null)
+        {
+            _movement.enabled = isEnabled;
+        }
+    }
+
     private void Update()
     {
         UpdateCarrySpeedParameter();
+    }
+
+    private void LateUpdate()
+    {
+        if (isBusy || isCarrying)
+        {
+            if (_lastNotifiedBody != null)
+            {
+                _lastNotifiedBody = null;
+                OnCarryTargetLost?.Invoke();
+            }
+            return;
+        }
+
+        CarriableBody current = FindBody();
+        CarriableBody valid = (current != null && CanCarry(current)) ? current : null;
+
+        if (valid != _lastNotifiedBody)
+        {
+            _lastNotifiedBody = valid;
+            if (valid != null) OnCarryTargetAcquired?.Invoke(valid);
+            else OnCarryTargetLost?.Invoke();
+        }
     }
 
     private void UpdateCarrySpeedParameter()
@@ -216,6 +250,24 @@ public class CarrySystem : MonoBehaviour
         }
 
         StartCoroutine(PutDown_co());
+
+        return true;
+    }
+
+    public bool CanCarry(CarriableBody body)
+    {
+        if (body == null || isBusy || isCarrying) return false;
+        if (!IsFree()) return false;
+        if (isCrouchRequired && _movement != null && !_movement.isCrouched) return false;
+        if (!body.canCarry) return false;
+
+        Vector3 flat = body.transform.position - transform.position;
+        flat.y = 0f;
+        float distance = flat.magnitude;
+        if (distance > pickUpRange) return false;
+
+        float angle = distance > 0.2f ? Vector3.Angle(transform.forward, flat) : 0f;
+        if (angle > pickUpAngle * 0.5f) return false;
 
         return true;
     }
@@ -436,6 +488,8 @@ public class CarrySystem : MonoBehaviour
 
         try
         {
+            SetPlayerControlEnabled(false);
+            _controller.enabled = false;
             if (isAlignEnabled)
             {
                 yield return Align_co(body.transform.position);
@@ -518,6 +572,8 @@ public class CarrySystem : MonoBehaviour
         }
         finally
         {
+            SetPlayerControlEnabled(true);
+            _controller.enabled = true;
             if (body != null)
             {
                 body.SetVisible(true);
@@ -535,6 +591,7 @@ public class CarrySystem : MonoBehaviour
 
         try
         {
+            SetPlayerControlEnabled(false);
             if (_playerAnimator != null)
             {
                 _playerAnimator.PlayAction(putDownTrigger);
@@ -581,6 +638,7 @@ public class CarrySystem : MonoBehaviour
         }
         finally
         {
+            SetPlayerControlEnabled(true);
             if (heldBody != null)
             {
                 GetPutDownPose(out Vector3 position, out Quaternion rotation);
@@ -683,14 +741,15 @@ public class CarrySystem : MonoBehaviour
         }
 
         transform.SetPositionAndRotation(targetPosition, targetRotation);
+        // 컨트롤 복구는 여기서 하지 않습니다 — PickUp_co()의 finally가 전체 구간을 책임
+        //_controller.enabled = true;
 
-        _controller.enabled = true;
+        //if (_movement != null)
+        //{
+        //    _movement.StopVertical();
+        //    _movement.enabled = true;
+        //}
 
-        if (_movement != null)
-        {
-            _movement.StopVertical();
-            _movement.enabled = true;
-        }
     }
 
     private void Log(string message)
