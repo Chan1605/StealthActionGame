@@ -49,15 +49,40 @@ public class UI_ObjKeyPanal : MonoBehaviour
     {
         targetTransform = target;
 
-        Debug.Log($"target Æ®·£½ºÆû : {target !=null}");
-        Debug.Log($"target Æ®·£½ºÆû : {canvasGroup !=null}");
-        Debug.Log($"target Æ®·£½ºÆû : {rectTransform !=null}");
-
         canvasGroup.DOKill();
         canvasGroup.alpha = 0f;
         gameObject.SetActive(true);
 
         canvasGroup.DOFade(1f, 2f).SetEase(Ease.OutBack);
+    }
+
+    public void SetPanal_On(Transform target, Object_Data data)
+    {
+        targetTransform = target;
+
+        if ( data != null)
+        {
+            if (Key_t != null)
+            {
+                Key_t.text = $"[{data.ActionName}]";
+            }
+
+            if (Behaviour_t != null)
+            {
+                Behaviour_t.text = data.Behaviour;
+            }
+
+            if ( Caution_t != null)
+            {
+                Caution_t.text = data.Caution;
+            }
+        }
+
+        canvasGroup.DOKill();
+        canvasGroup.alpha = 0f;
+        gameObject.SetActive(true);
+
+        canvasGroup.DOFade(1f, 1f).SetEase(Ease.OutBack);
     }
 
     public void SetPanal_Off()
