@@ -4,6 +4,5 @@ using UnityEngine;
 
 public enum Enum_ActionName
 {
-    Push,
-    Pick
+    Interact
 }

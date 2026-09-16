@@ -1426,6 +1426,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TargetObject
   isAct: 0
+  objectData: {fileID: 0}
 --- !u!114 &376114914
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4907,6 +4908,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TargetObject
   isAct: 0
+  objectData: {fileID: 0}
 --- !u!114 &1430786962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5517,6 +5519,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TargetObject
   isAct: 0
+  objectData: {fileID: 11400000, guid: 717ba3cbfec16e54bab3c78aa3829a63, type: 2}
 --- !u!114 &1715790761
 MonoBehaviour:
   m_ObjectHideFlags: 0

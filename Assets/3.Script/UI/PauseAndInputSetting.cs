@@ -26,4 +26,21 @@ public class PauseAndInputSetting : MonoBehaviour
             playerInput.actions.LoadBindingOverridesFromJson(bindData);
         }
     }
+
+    public string GetActionKeyName(string actionName)
+    {
+        if(playerInput == null)
+        {
+            return "?";
+        }
+
+        InputAction action = playerInput.actions.FindAction(actionName);
+
+        if (action != null)
+        {
+            return action.GetBindingDisplayString(0);
+        }
+
+        return "?";
+    }
 }
