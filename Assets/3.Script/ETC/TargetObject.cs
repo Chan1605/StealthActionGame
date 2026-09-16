@@ -16,11 +16,11 @@ public class TargetObject : MonoBehaviour, IInteractable
 
     public bool isAct;
 
-    private Object_Data Data;
-
     private UI_Outliner outLine;
     private UI_ObjKeyPanal keyPanal;
     private HUDManager hudManager;
+
+    [SerializeField] private Object_Data objectData;
 
     private void Awake()
     {
@@ -62,7 +62,7 @@ public class TargetObject : MonoBehaviour, IInteractable
 
     private void Look()
     {
-        if(!IsInteractable)
+        if (!IsInteractable)
         {
             return;
         }
@@ -78,13 +78,12 @@ public class TargetObject : MonoBehaviour, IInteractable
             return;
         }
 
-        //스크립터블 오브젝트 참조
-        //오디오 재생
+        if (objectData != null && !objectData.SoundEvent.IsNull)
+        {
+            AudioManager.Instance.PlayOneShot(objectData.SoundEvent, transform.position);
+        }
 
-        //타겟 변경
         KeyPanal_Off();
-
-        //델리게이트 해제
         OnTargetCompleted?.Invoke();
 
     }
@@ -93,7 +92,7 @@ public class TargetObject : MonoBehaviour, IInteractable
         Debug.Log($"outline 할당 상태 : {outLine != null}");
         Debug.Log($"keyPanal 할당 상태 : {keyPanal != null}");
 
-        if(isAct)
+        if (isAct)
         {
             return;
         }
@@ -101,7 +100,15 @@ public class TargetObject : MonoBehaviour, IInteractable
         IsPlayerLook = true;
         isAct = true;
         outLine.SetOutLine_On();
-        keyPanal.SetPanal_On(transform);
+
+        if (objectData != null)
+        {
+            keyPanal.SetPanal_On(transform, objectData);
+        }
+        else
+        {
+            keyPanal.SetPanal_On(transform);
+        }
     }
     private void KeyPanal_Off()
     {

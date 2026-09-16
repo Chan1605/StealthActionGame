@@ -64,7 +64,10 @@ public class UI_ObjKeyPanal : MonoBehaviour
         {
             if (Key_t != null)
             {
-                Key_t.text = $"[{data.ActionName}]";
+                string actionString = data.ActionName.ToString();
+                string boundKey = GameManager.Instance.curPlayer.GetActionKeyName(actionString);
+
+                Key_t.text = $"{boundKey}";
             }
 
             if (Behaviour_t != null)
