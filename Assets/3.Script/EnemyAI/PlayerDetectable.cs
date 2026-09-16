@@ -18,12 +18,14 @@ public class PlayerDetectable : MonoBehaviour, IDetectable
 
     public Vector3 Position => transform.position;
     public bool IsCrouching => playerController != null && playerController.isCrouched;
-    public float StealthWeight => testStealthWeight;
+    public float StealthWeight => IsDeadOrRespawning ? 0f : testStealthWeight;
+    public bool IsDeadOrRespawning { get; set; }
 
     public float SoundIntensity
     {
         get
         {
+            if (IsDeadOrRespawning) return 0f;
             debugSpeed = new Vector3(controller.velocity.x, 0f, controller.velocity.z).magnitude;
 
             float intensity;
