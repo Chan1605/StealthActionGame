@@ -48,6 +48,7 @@ public class PlayerAnimator : MonoBehaviour
     private static readonly int IsGroundedId = Animator.StringToHash("IsGrounded");
     private static readonly int JumpId = Animator.StringToHash("Jump");
     private static readonly int AssassinateId = Animator.StringToHash("Assassinate");
+    private static readonly int IsDieId = Animator.StringToHash("IsDie");
 
     public event Action OnFootstepPlayed;
     public event Action OnLandImpact;
@@ -122,7 +123,17 @@ public class PlayerAnimator : MonoBehaviour
     {
         PlayAction(AssassinateId);
     }
+    public void PlayDie()
+    {
+        if (animator == null) return;
+        animator.SetBool(IsDieId, true);
+    }
 
+    public void ResetDie()
+    {
+        if (animator == null) return;
+        animator.SetBool(IsDieId, false);
+    }
     public void EndAssassinate()
     {
         EndAction(AssassinateId);

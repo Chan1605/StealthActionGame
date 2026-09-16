@@ -56,7 +56,8 @@ public class EnemyMovement : MonoBehaviour
 
     public void MoveTo(Vector3 destination)
     {
-        // NavMesh 밖 좌표 보정
+        if (!_agent.isActiveAndEnabled || !_agent.isOnNavMesh) return;
+
         if (NavMesh.SamplePosition(destination, out NavMeshHit hit, 2f, NavMesh.AllAreas))
             _agent.SetDestination(hit.position);
         else
@@ -70,6 +71,7 @@ public class EnemyMovement : MonoBehaviour
 
     public bool HasArrived()
     {
+        if (!_agent.isActiveAndEnabled || !_agent.isOnNavMesh) return true;
         if (_agent.pathPending) return false;
         return _agent.remainingDistance <= _agent.stoppingDistance;
     }
@@ -82,7 +84,7 @@ public class EnemyMovement : MonoBehaviour
 
     public void Stop()
     {
-        if (_agent.isOnNavMesh) _agent.ResetPath();
+        if (_agent.isActiveAndEnabled && _agent.isOnNavMesh) _agent.ResetPath();
     }
     public void TickAnimator(bool suppress = false)
     {

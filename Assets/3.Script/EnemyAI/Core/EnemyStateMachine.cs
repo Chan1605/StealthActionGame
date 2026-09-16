@@ -38,6 +38,12 @@ public class EnemyStateMachine
         Movement.TickAnimator(SuppressMovementAnim);
     }
 
+    public void ForceReturnToNormal()
+    {
+        Perception.ForceReset();
+        ChangeState(new NormalState());
+    }
+
 #if UNITY_EDITOR
     public string CurrentStateName => _current?.GetType().Name ?? "None";
 #endif
