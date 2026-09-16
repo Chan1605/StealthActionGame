@@ -147,6 +147,11 @@ public class PlayerInteractionRunner : MonoBehaviour
         }
     }
 
+    public bool HasReadyAction()
+    {
+        return FindAction() != null;
+    }
+
     private InteractionAction FindAction()
     {
         if (interactor == null || interactor.CurrentTarget == null)

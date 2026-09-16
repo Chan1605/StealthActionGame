@@ -205,6 +205,11 @@ public class CarrySystem : MonoBehaviour
 
         if (isCarrying)
         {
+            if (_runner != null && _runner.HasReadyAction())
+            {
+                return;
+            }
+
             TryPutDown();
             return;
         }
