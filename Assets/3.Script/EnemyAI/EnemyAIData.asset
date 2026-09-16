@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAIData
   viewAngle: 90
   viewRangeShort: 5
-  instantDetectRange: 1.5
+  instantDetectRange: 2
   instantDetectAngle: 270
   viewRangeMid: 8
   viewRangeLong: 12
@@ -36,7 +36,8 @@ MonoBehaviour:
   chaseRepathInterval: 0.2
   attackRange: 1.8
   attackDamage: 10
-  attackInterval: 1
+  attackWindupTime: 0.4
+  attackRecoveryTime: 0.6
   investigateCheckDuration: 2.5
   soundInvestigateCheckDuration: 10
   spawnMoveSpeed: 2.5

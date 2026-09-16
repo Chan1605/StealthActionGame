@@ -60,8 +60,10 @@ public class DetectedState : IEnemyState
 
     public void Exit(EnemyStateMachine fsm)
     {
-        _chase.Cancel();
         _attack?.Cancel();
+        _chase.Cancel();
+        fsm.SuppressMovementAnim = false;
+        fsm.Movement.SetAutoRotation(true);
         fsm.Movement.SetStoppingDistance(fsm.Data.stoppingDistance);
     }
 }

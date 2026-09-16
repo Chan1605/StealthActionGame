@@ -118,6 +118,14 @@ public class EnemyPerception : MonoBehaviour
         _soundLockTimer = 0f;
     }
 
+    public void ForceReset()
+    {
+        VisionScore = 0f;
+        HearingScore = 0f;
+        IsCurrentlySensing = false;
+        _soundLockTimer = 0f;
+    }
+
     public void RegisterSound(Vector3 sourcePosition, float sourceIntensity, bool isInstant, float radius = -1f)
     {
         if (sourceIntensity <= 0f) return;
