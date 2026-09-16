@@ -1255,6 +1255,7 @@ GameObject:
   - component: {fileID: 963519254127613501}
   - component: {fileID: 3651683734557819206}
   - component: {fileID: 3325307768144855384}
+  - component: {fileID: 6587901501893508396}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -1296,7 +1297,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: b3b75ff7056298845aea248a909d1ca8, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
@@ -1663,7 +1664,7 @@ MonoBehaviour:
   runSpeedThreshold: 4
   walkSoundScore: 20
   runSoundScore: 40
-  testStealthWeight: 1
+  testStealthWeight: 0
   debugSpeed: 0
   debugSoundIntensity: 0
 --- !u!114 &7605777532991227117
@@ -1787,8 +1788,21 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 1
-  isDebugLog: 1
+  isDebugLog: 0
   isDebugGizmo: 1
+--- !u!114 &6587901501893508396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5742646099022529022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 216b080ab26703c49831f573451f5c72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KeyInventory
+  debugHeldKeys: []
 --- !u!1 &5844849879543606322
 GameObject:
   m_ObjectHideFlags: 0

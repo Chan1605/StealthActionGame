@@ -69,7 +69,7 @@ public class GeneralObject : MonoBehaviour, IInteractable
         keyPanal.SetPanal_On(transform);
     }
 
-    private void KeyPanal_Off()
+    public void KeyPanal_Off()
     {
         outLine.SetOutLine_Off();
         keyPanal.SetPanal_Off();
