@@ -190,6 +190,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2080584877347797051}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &934412180080185821
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5487405048560439628}
+  m_Layer: 6
+  m_Name: CarrySocket
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5487405048560439628
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 934412180080185821}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.1, z: 0.35}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2080584877347797051}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1389497231387354307
 GameObject:
   m_ObjectHideFlags: 0
@@ -1219,9 +1250,11 @@ GameObject:
   - component: {fileID: 3987448780140744970}
   - component: {fileID: 2188803822055513601}
   - component: {fileID: 4426352943728395498}
+  - component: {fileID: 7605777532991227117}
   - component: {fileID: 8222328121503193416}
   - component: {fileID: 963519254127613501}
   - component: {fileID: 3651683734557819206}
+  - component: {fileID: 3325307768144855384}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -1247,6 +1280,7 @@ Transform:
   - {fileID: 2743338660450829931}
   - {fileID: 1064396270308968105}
   - {fileID: 7824831260485464755}
+  - {fileID: 5487405048560439628}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &7781515374551292209
@@ -1632,6 +1666,24 @@ MonoBehaviour:
   testStealthWeight: 1
   debugSpeed: 0
   debugSoundIntensity: 0
+--- !u!114 &7605777532991227117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5742646099022529022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c309ada2a3e117d4a8336965ce48bb30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DummyDamageable
+  maxHealth: 100
+  debugHealth: 100
+  healthUI: {fileID: 0}
+  regenDelay: 4
+  regenInterval: 1
+  regenAmount: 10
 --- !u!114 &8222328121503193416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1694,6 +1746,49 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &3325307768144855384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5742646099022529022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2209f5050047d7c46bc9cb0a7043445c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CarrySystem
+  bodyMask:
+    serializedVersion: 2
+    m_Bits: 512
+  pickUpRange: 1.8
+  pickUpAngle: 120
+  isCrouchRequired: 1
+  isAlignEnabled: 1
+  alignTime: 0.18
+  alignDistance: 0.55
+  alignTolerance: 0.2
+  alignLateral: 0
+  carrySocket: {fileID: 5487405048560439628}
+  pickUpTrigger: PickUpBody
+  putDownTrigger: PutDownBody
+  carrySpeedParameter: CarrySpeed
+  pickUpDuration: 1.81
+  putDownDuration: 1.27
+  isHiddenDuringLift: 1
+  hideAtRatio: 0.85
+  showDelay: 0.1
+  attachStartRatio: 0.55
+  detachRatio: 0.5
+  carrySpeed: 1.4
+  carrySpeedDamping: 0.12
+  putDownForward: 0.7
+  putDownProbeHeight: 1.2
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 1
+  isDebugLog: 1
+  isDebugGizmo: 1
 --- !u!1 &5844849879543606322
 GameObject:
   m_ObjectHideFlags: 0
