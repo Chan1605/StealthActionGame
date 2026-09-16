@@ -56,6 +56,11 @@ public class EnemyAI : MonoBehaviour
         _fsm.Tick();
     }
 
+    public void ForceForgetPlayer()
+    {
+        _fsm?.ForceReturnToNormal();
+    }
+
     private void HandleFrozen(TakedownVictim victim)
     {
         indicator.Hide();
