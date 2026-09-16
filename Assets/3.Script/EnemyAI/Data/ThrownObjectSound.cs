@@ -11,6 +11,7 @@ public class ThrownObjectSound : MonoBehaviour
     private bool _hasTriggered;
     private bool _armed = true;
     private HoldableItem _holdable;
+    private bool _hasBeenThrownAtLeastOnce;
 
     private void Awake()
     {
@@ -21,9 +22,13 @@ public class ThrownObjectSound : MonoBehaviour
     {
         if (_holdable != null)
         {
-            _armed = !_holdable.isHeld;
+            _armed = false;
             _holdable.OnHeld += HandleHeld;
             _holdable.OnReleased += HandleReleased;
+        }
+        else
+        {
+            _armed = true;
         }
     }
 
@@ -43,6 +48,14 @@ public class ThrownObjectSound : MonoBehaviour
 
     private void HandleReleased(HoldableItem item)
     {
+        bool wasThrown = item.itemBody != null && item.itemBody.linearVelocity.sqrMagnitude > 0.01f;
+
+        if (!wasThrown)
+        {
+            _armed = false; // 그냥 내려놓았으면 계속 무장 해제 상태 유지
+            return;
+        }
+        _hasBeenThrownAtLeastOnce = true;
         _hasTriggered = false;
         CancelInvoke(nameof(Arm));
         Invoke(nameof(Arm), armDelayAfterRelease);
@@ -65,6 +78,7 @@ public class ThrownObjectSound : MonoBehaviour
 
     private void TryRegister(GameObject other)
     {
+        if (!_hasBeenThrownAtLeastOnce && _holdable != null) return; // 한 번도 안 던져졌으면 씬 시작 낙하는 무시
         if (!_armed || _hasTriggered) return;
         if ((surfaceMask.value & (1 << other.layer)) == 0) return;
         _hasTriggered = true;
