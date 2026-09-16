@@ -24,7 +24,7 @@ public class PlayerInput : MonoBehaviour
     private bool isMenuOn;
     private HitMan _actions;
 
-    private HitMan actions
+    public HitMan actions
     {
         get
         {
