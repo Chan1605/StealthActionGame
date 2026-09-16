@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/*
 public class MenuManager : MonoBehaviour
 {
     [SerializeField] private InputAction keys;
@@ -62,5 +63,6 @@ public class MenuManager : MonoBehaviour
         save.LoadSettings();
     }
 }
+ */
 
 

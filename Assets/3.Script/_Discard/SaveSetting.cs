@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/*
 public class SaveSetting : MonoBehaviour
 {
     [SerializeField] private InputActionAsset actions;
@@ -23,3 +24,4 @@ public class SaveSetting : MonoBehaviour
         PlayerPrefs.DeleteAll();
     }
 }
+ */

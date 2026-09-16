@@ -16,19 +16,21 @@ public class SubtitleTrigger : MonoBehaviour
     private void Awake()
     {
         target = GetComponent<IInteractable>();
+    }
+    private void Start()
+    {
         subtitleUI = FindAnyObjectByType<UI_Subtitle>();
 
-        if(lookSubtitles.Count>0)
+        if (lookSubtitles != null && lookSubtitles.Count > 0)
         {
             target.OnLook += HandleLook;
         }
 
-        if(endSubtitles.Count>0)
+        if (endSubtitles != null && endSubtitles.Count > 0)
         {
             target.OnTargetCompleted += HandleComplete;
         }
     }
-
     private void HandleLook()
     {
         if (!hasPlayerLook && lookSubtitles.Count > 0)
