@@ -13,6 +13,12 @@ public class NormalState : IEnemyState
 
     public void Tick(EnemyStateMachine fsm)
     {
+        if (fsm.Perception.TryDetectCorpse(out Vector3 corpsePos, fsm.Data.corpseLayer, fsm.Data.corpseDetectRadius))
+        {
+            fsm.ChangeState(new AlertState(corpsePos));
+            return;
+        }
+
         if (fsm.Perception.MaxScore >= fsm.Data.weakSuspicionThreshold)
         {
             fsm.ChangeState(new WeakSuspicionState());

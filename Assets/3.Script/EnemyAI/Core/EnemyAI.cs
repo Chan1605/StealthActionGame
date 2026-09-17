@@ -54,6 +54,18 @@ public class EnemyAI : MonoBehaviour
     private void Start()
     {
         _fsm.ChangeState(new NormalState());
+        if (PrisonScheduleManager.Instance != null)
+        {
+            PrisonScheduleManager.Instance.OnScheduleChanged += HandleScheduleChanged;
+        }
+    }
+
+    private void HandleScheduleChanged(bool isFreeTime)
+    {
+        if (isFreeTime)
+        {
+            _fsm?.ForceReturnToNormal();
+        }
     }
 
     private void Update()
@@ -83,6 +95,10 @@ public class EnemyAI : MonoBehaviour
 
         _indicatorManager?.UnregisterEnemy(transform);
         _mini?.UnregisterEnemy(transform);
+        if (PrisonScheduleManager.Instance != null)
+        {
+            PrisonScheduleManager.Instance.OnScheduleChanged -= HandleScheduleChanged;
+        }
     }
     public void ReviveForCheckpoint()
     {
