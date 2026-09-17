@@ -2886,6 +2886,57 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!1 &911699044
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 911699045}
+  - component: {fileID: 911699046}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &911699045
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 911699044}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 870.80145, y: 0, z: 2675.6172}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &911699046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 911699044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70e4dfd58cb9add4e844730c10c56610, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AudioManager
+  playerFootstepPath:
+    Guid:
+      Data1: -690813480
+      Data2: 1242383706
+      Data3: -488312407
+      Data4: -84890507
+    Path: event:/SFX_FootStep
 --- !u!1 &911720571
 GameObject:
   m_ObjectHideFlags: 0
@@ -21086,6 +21137,7 @@ GameObject:
   - component: {fileID: 6982812147796449157}
   - component: {fileID: 6982812147796449158}
   - component: {fileID: 6982812147796449159}
+  - component: {fileID: 6982812147796449160}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -31166,6 +31218,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0a06f2aa163e3748b5e4ddf86c072ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PauseInput
+--- !u!114 &6982812147796449160
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4416926083488487353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f387a2b37f5f4ba468b2c5e33f9a739a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerFootstepSender
+  footTransform: {fileID: 0}
+  rayDistance: 1.5
+  floorLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  currentStance: 0
 --- !u!4 &6983258930497695648
 Transform:
   m_ObjectHideFlags: 0
@@ -41610,3 +41680,4 @@ SceneRoots:
   - {fileID: 1430786966}
   - {fileID: 376114918}
   - {fileID: 184335515}
+  - {fileID: 911699045}
