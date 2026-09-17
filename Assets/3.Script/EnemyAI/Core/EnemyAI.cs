@@ -19,6 +19,8 @@ public class EnemyAI : MonoBehaviour
     private Vector3 _spawnPosition;
     private Quaternion _spawnRotation;
     public EnemyIndicator Indicator => indicator;
+    [Header("자유시간 예외")]
+    [SerializeField] private bool isAlwaysAlert; // 방 지키는 교도관 등
 
     private EnemyMovement _movement;
     private EnemyPerception _perception;
@@ -36,7 +38,7 @@ public class EnemyAI : MonoBehaviour
 
         _perception = GetComponent<EnemyPerception>();
         _perception.Initialize(data, targetObject as IDetectable);
-
+        _perception.IsAlwaysAlert = isAlwaysAlert;
         _fsm = new EnemyStateMachine(this, _movement, _perception, data, waypoints);
         _fsm.DamageTarget = targetObject != null ? targetObject.GetComponent<IDamageable>() : null;
         if (TryGetComponent(out TakedownVictim victim))

@@ -3217,6 +3217,7 @@ MonoBehaviour:
   targetObject: {fileID: 0}
   animator: {fileID: 1343791139834695207}
   indicator: {fileID: 7796842676056074062}
+  isAlwaysAlert: 0
   debugCurrentState: 
   debugMaxScore: 0
 --- !u!114 &8422430324865087288
