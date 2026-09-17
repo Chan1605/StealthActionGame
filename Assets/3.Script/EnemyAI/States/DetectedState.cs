@@ -26,6 +26,10 @@ public class DetectedState : IEnemyState
         }
 
         _chase.Tick();
+        if (_chase.IsTargetUnreachable)
+        {
+            _loseTimer += fsm.Data.detectedLoseTime; // 강제로 포기 타이머를 즉시 만료시켜 바로 복귀 판정으로
+        }
         TickAttack(fsm);
 
         if (fsm.Perception.MaxScore >= fsm.Data.strongSuspicionThreshold)

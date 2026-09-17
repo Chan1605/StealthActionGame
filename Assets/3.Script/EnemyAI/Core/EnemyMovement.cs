@@ -69,6 +69,16 @@ public class EnemyMovement : MonoBehaviour
         _agent.Warp(position);
     }
 
+    public bool IsReachable(Vector3 destination)
+    {
+        if (!_agent.isActiveAndEnabled || !_agent.isOnNavMesh) return false;
+
+        NavMeshPath path = new NavMeshPath();
+        if (!_agent.CalculatePath(destination, path)) return false;
+
+        return path.status == NavMeshPathStatus.PathComplete;
+    }
+
     public bool HasArrived()
     {
         if (!_agent.isActiveAndEnabled || !_agent.isOnNavMesh) return true;
