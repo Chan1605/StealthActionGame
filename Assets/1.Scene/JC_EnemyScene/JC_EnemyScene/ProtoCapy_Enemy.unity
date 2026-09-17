@@ -198,6 +198,63 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1979693182}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &374765316
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 374765319}
+  - component: {fileID: 374765318}
+  - component: {fileID: 374765317}
+  m_Layer: 0
+  m_Name: PrisonScheduleManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &374765317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 374765316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ff0adb4ed4ccb44f840b90c49e9bf53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TestScheduleToggle
+--- !u!114 &374765318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 374765316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc4c4ef91ac7b284f9a64055815d3611, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PrisonScheduleManager
+--- !u!4 &374765319
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 374765316}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &379042470
 GameObject:
   m_ObjectHideFlags: 0
@@ -60942,6 +60999,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4426352943728395498, guid: e96f270bc67bbaa4b8ab37459396ad91, type: 3}
+      propertyPath: testStealthWeight
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5267562774954770171, guid: e96f270bc67bbaa4b8ab37459396ad91, type: 3}
       propertyPath: cam
       value: 
@@ -77176,3 +77237,4 @@ SceneRoots:
   - {fileID: 7194624762344860263}
   - {fileID: 6066725190703150855}
   - {fileID: 6419750706441216966}
+  - {fileID: 374765319}

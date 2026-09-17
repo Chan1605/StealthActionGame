@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -20,7 +21,7 @@ public class EnemyPerception : MonoBehaviour
     private float _soundMemoryIntensity;
     private float _soundLockTimer;
     private bool _soundRegisteredThisFrame;
-
+    private readonly HashSet<TakedownVictim> _alertedCorpses = new HashSet<TakedownVictim>();
     public void Initialize(EnemyAIData data, IDetectable target)
     {
         _data = data;
@@ -31,6 +32,14 @@ public class EnemyPerception : MonoBehaviour
     public void Tick(float deltaTime)
     {
         if (_target == null) return;
+
+        if (PrisonScheduleManager.Instance != null && PrisonScheduleManager.Instance.IsFreeTime)
+        {
+            VisionScore = Mathf.Max(0f, VisionScore - _data.scoreDecayPerSec * deltaTime);
+            HearingScore = Mathf.Max(0f, HearingScore - _data.scoreDecayPerSec * deltaTime);
+            IsCurrentlySensing = false;
+            return;
+        }
 
         TickVision(deltaTime);
         TickHearing(deltaTime);
@@ -118,12 +127,68 @@ public class EnemyPerception : MonoBehaviour
         _soundLockTimer = 0f;
     }
 
+    public void TryWitness(Vector3 eventPosition, float witnessRadius, float witnessAngle, LayerMask obstacleMask)
+    {
+        float distance = Vector3.Distance(eyeOrigin.position, eventPosition);
+        if (distance > witnessRadius) return;
+
+        Vector3 toEvent = eventPosition - eyeOrigin.position;
+        float angle = Vector3.Angle(eyeOrigin.forward, toEvent);
+        if (angle > witnessAngle * 0.5f) return;
+
+        if (!HasClearLineToPoint(eventPosition, distance, obstacleMask)) return;
+
+        VisionScore = _data.maxScore;
+        LastKnownPosition = eventPosition;
+    }
+
+    public bool TryDetectCorpse(out Vector3 corpsePosition, LayerMask corpseLayer, float radius)
+    {
+        corpsePosition = Vector3.zero;
+        Collider[] hits = Physics.OverlapSphere(eyeOrigin.position, radius, corpseLayer);
+        if (hits.Length == 0) return false;
+
+        float bestDist = float.MaxValue;
+        bool found = false;
+
+        foreach (Collider hit in hits)
+        {
+            TakedownVictim victim = hit.GetComponentInParent<TakedownVictim>();
+            if (victim == null || _alertedCorpses.Contains(victim)) continue;
+
+            Vector3 point = hit.transform.position;
+            float dist = Vector3.Distance(eyeOrigin.position, point);
+            if (dist >= bestDist) continue;
+            if (!HasClearLineToPoint(point, dist, obstacleMask)) continue;
+
+            bestDist = dist;
+            corpsePosition = point;
+            found = true;
+
+            _alertedCorpses.Add(victim);
+        }
+
+        return found;
+    }
+
+    private bool HasClearLineToPoint(Vector3 point, float distance, LayerMask mask)
+    {
+        Vector3 dir = (point - eyeOrigin.position).normalized;
+        RaycastHit[] hits = Physics.RaycastAll(eyeOrigin.position, dir, distance, mask);
+        foreach (var hit in hits)
+        {
+            if (Vector3.Distance(hit.point, point) > 0.5f) return false;
+        }
+        return true;
+    }
+
     public void ForceReset()
     {
         VisionScore = 0f;
         HearingScore = 0f;
         IsCurrentlySensing = false;
         _soundLockTimer = 0f;
+        _alertedCorpses.Clear();
     }
 
     public void RegisterSound(Vector3 sourcePosition, float sourceIntensity, bool isInstant, float radius = -1f)

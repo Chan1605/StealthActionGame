@@ -55,4 +55,12 @@ public class EnemyAIData : ScriptableObject
     public float patrolIdleMaxDuration = 3f;
     public float lookAroundAngle = 45f;
     public float soundGlanceDuration = 1.5f;
+    [Header("자유시간")]
+    public LayerMask corpseLayer;
+    public float corpseDetectRadius = 12f;
+    public float corpseAlertDuration = 8f;
+    [Header("목격")]
+    public float witnessRadius = 10f;
+    public float witnessAngle = 100f;
+    [SerializeField] private bool isAlwaysAlert; // 자유시간에도 예외적으로 감지하는 교도관용
 }
