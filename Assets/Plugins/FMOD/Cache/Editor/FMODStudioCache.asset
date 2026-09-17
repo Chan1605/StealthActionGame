@@ -15,7 +15,7 @@ MonoBehaviour:
   Path: FMODProject/StealthActionGame_Fmod/Build/Desktop/SFX.bank
   Name: SFX
   StudioPath: bank:/SFX
-  lastModified: 639252531356147531
+  lastModified: 639252537952927317
   FileSizes:
   - Name: Desktop
     Value: 180800
@@ -35,7 +35,7 @@ MonoBehaviour:
   Path: FMODProject/StealthActionGame_Fmod/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 639252531356132340
+  lastModified: 639252537952581038
   FileSizes:
   - Name: Desktop
     Value: 1144
@@ -55,7 +55,7 @@ MonoBehaviour:
   Path: FMODProject/StealthActionGame_Fmod/Build/Desktop/Enemy.bank
   Name: Enemy
   StudioPath: bank:/Enemy
-  lastModified: 639244691577575366
+  lastModified: 639244741475836746
   FileSizes:
   - Name: Desktop
     Value: 494
@@ -75,12 +75,32 @@ MonoBehaviour:
   Path: FMODProject/StealthActionGame_Fmod/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 639252423339646812
+  lastModified: 639244741475836746
   FileSizes:
   - Name: Desktop
     Value: 1036
   Exists: 1
---- !u!114 &-6728086936588118148
+--- !u!114 &-3590358436728350387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Ending.bank
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorBankRef
+  Path: FMODProject/StealthActionGame_Fmod/Build/Desktop/Ending.bank
+  Name: Ending
+  StudioPath: bank:/Ending
+  lastModified: 639244741475836746
+  FileSizes:
+  - Name: Desktop
+    Value: 494
+  Exists: 1
+--- !u!114 &-3488037927480083292
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -104,31 +124,11 @@ MonoBehaviour:
   Is3D: 1
   IsOneShot: 1
   Parameters:
-  - {fileID: 2187235546064470429}
-  - {fileID: -491509216936667527}
+  - {fileID: 6554920335831231412}
+  - {fileID: -314243731651763240}
   MinDistance: 1
   MaxDistance: 20
   Length: 0
---- !u!114 &-3590358436728350387
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
-  m_Name: bank:/Ending.bank
-  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorBankRef
-  Path: FMODProject/StealthActionGame_Fmod/Build/Desktop/Ending.bank
-  Name: Ending
-  StudioPath: bank:/Ending
-  lastModified: 639244625872069983
-  FileSizes:
-  - Name: Desktop
-    Value: 494
-  Exists: 1
 --- !u!114 &-970304279502095472
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -144,12 +144,12 @@ MonoBehaviour:
   Path: FMODProject/StealthActionGame_Fmod/Build/Desktop/Area_1.bank
   Name: Area_1
   StudioPath: bank:/Area/Area_1
-  lastModified: 639244691577656937
+  lastModified: 639244741475812188
   FileSizes:
   - Name: Desktop
     Value: 494
   Exists: 1
---- !u!114 &-491509216936667527
+--- !u!114 &-314243731651763240
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -196,13 +196,13 @@ MonoBehaviour:
   - {fileID: -8864047739792405592}
   - {fileID: 2037308013771676202}
   EditorEvents:
-  - {fileID: -6728086936588118148}
+  - {fileID: -3488037927480083292}
   EditorParameters: []
   MasterBanks:
   - {fileID: -7558842593032024359}
   StringsBanks:
   - {fileID: -8300424939153912469}
-  cacheTime: 639252531356147531
+  cacheTime: 639252537952927317
   cacheVersion: 131637
 --- !u!114 &2037308013771676202
 MonoBehaviour:
@@ -219,12 +219,32 @@ MonoBehaviour:
   Path: FMODProject/StealthActionGame_Fmod/Build/Desktop/Title.bank
   Name: Title
   StudioPath: bank:/Title
-  lastModified: 639244625872003811
+  lastModified: 639244741475836746
   FileSizes:
   - Name: Desktop
     Value: 494
   Exists: 1
---- !u!114 &2187235546064470429
+--- !u!114 &5867556944425675471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/BGM.bank
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorBankRef
+  Path: FMODProject/StealthActionGame_Fmod/Build/Desktop/BGM.bank
+  Name: BGM
+  StudioPath: bank:/BGM
+  lastModified: 639244741475812188
+  FileSizes:
+  - Name: Desktop
+    Value: 494
+  Exists: 1
+--- !u!114 &6554920335831231412
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -248,26 +268,6 @@ MonoBehaviour:
   IsGlobal: 0
   Labels: []
   Exists: 1
---- !u!114 &5867556944425675471
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
-  m_Name: bank:/BGM.bank
-  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorBankRef
-  Path: FMODProject/StealthActionGame_Fmod/Build/Desktop/BGM.bank
-  Name: BGM
-  StudioPath: bank:/BGM
-  lastModified: 639244691577505339
-  FileSizes:
-  - Name: Desktop
-    Value: 494
-  Exists: 1
 --- !u!114 &8354602645938095227
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -283,7 +283,7 @@ MonoBehaviour:
   Path: FMODProject/StealthActionGame_Fmod/Build/Desktop/Area_2.bank
   Name: Area_2
   StudioPath: bank:/Area/Area_2
-  lastModified: 639244691577722101
+  lastModified: 639244741475812188
   FileSizes:
   - Name: Desktop
     Value: 494
