@@ -16,7 +16,7 @@ public class KeyPickUpAction : InteractionAction
     {
         KeyInventory inventory = user.GetComponentInChildren<KeyInventory>();
         inventory?.AddKey(keyId);
-
+        Debug.Log($"[KeyPickUp] 저장 대상 KeyInventory 오브젝트명: {inventory?.gameObject.name}, InstanceID: {inventory?.GetInstanceID()}");
         if (TryGetComponent(out GeneralObject generalObject))
         {
             generalObject.KeyPanal_Off();
