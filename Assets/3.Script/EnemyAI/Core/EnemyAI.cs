@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Linq;
+using UnityEngine.AI;
 
 [RequireComponent(typeof(EnemyMovement))]
 [RequireComponent(typeof(EnemyPerception))]
@@ -15,6 +16,8 @@ public class EnemyAI : MonoBehaviour
     [Header("연출")]
     [SerializeField] private Animator animator;
     [SerializeField] private EnemyIndicator indicator;
+    private Vector3 _spawnPosition;
+    private Quaternion _spawnRotation;
     public EnemyIndicator Indicator => indicator;
 
     private EnemyMovement _movement;
@@ -26,6 +29,8 @@ public class EnemyAI : MonoBehaviour
 
     private void Awake()
     {
+        _spawnPosition = transform.position;
+        _spawnRotation = transform.rotation;
         _movement = GetComponent<EnemyMovement>();
         _movement.Initialize(data, animator);
 
@@ -78,6 +83,27 @@ public class EnemyAI : MonoBehaviour
 
         _indicatorManager?.UnregisterEnemy(transform);
         _mini?.UnregisterEnemy(transform);
+    }
+    public void ReviveForCheckpoint()
+    {
+        if (TryGetComponent(out TakedownVictim victim))
+        {
+            victim.Revive();
+        }
+
+        if (TryGetComponent(out NavMeshAgent agent))
+        {
+            agent.enabled = true;
+            agent.Warp(_spawnPosition);
+        }
+        transform.rotation = _spawnRotation;
+
+        indicator.Hide();
+        _indicatorManager?.RegisterEnemy(transform);
+
+        enabled = true;
+        _fsm.CurrentWaypointIndex = 0;
+        _fsm.ForceReturnToNormal();
     }
 
 #if UNITY_EDITOR

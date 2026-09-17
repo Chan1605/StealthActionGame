@@ -89,4 +89,13 @@ public class UI_PlayerHealth : MonoBehaviour
             }
         }
     }
+
+    public void ForceHideDangerVolume(float duration)
+    {
+        if (FinchVolume == null) return;
+        DOTween.Kill(FinchVolume);
+        DOTween.To(() => FinchVolume.weight, x => FinchVolume.weight = x, 0f, duration)
+            .SetTarget(FinchVolume);
+        isVolumeShowing = false;
+    }
 }

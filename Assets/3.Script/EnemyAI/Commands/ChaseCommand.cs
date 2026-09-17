@@ -7,6 +7,9 @@ public class ChaseCommand : ICommand
     private readonly float _repathInterval;
     private EnemyStateMachine _fsm;
     private float _timer;
+    private float _unreachableTimer;
+
+    public bool IsTargetUnreachable { get; private set; }
 
     public ChaseCommand(EnemyPerception perception, float repathInterval)
     {
@@ -19,6 +22,8 @@ public class ChaseCommand : ICommand
         _fsm = fsm;
         fsm.Movement.SetChaseSpeed(fsm.Data);
         _timer = 0f;
+        _unreachableTimer = 0f;
+        IsTargetUnreachable = false;
         MoveToTarget();
     }
 
@@ -33,7 +38,23 @@ public class ChaseCommand : ICommand
     private void MoveToTarget()
     {
         if (_perception.Target == null) return;
-        _fsm.Movement.MoveTo(_perception.Target.Position);
+
+        Vector3 targetPos = _perception.Target.Position;
+
+        if (_fsm.Movement.IsReachable(targetPos))
+        {
+            _unreachableTimer = 0f;
+            IsTargetUnreachable = false;
+            _fsm.Movement.MoveTo(targetPos);
+        }
+        else
+        {
+            _unreachableTimer += _repathInterval;
+            if (_unreachableTimer >= _fsm.Data.unreachableGiveUpTime)
+            {
+                IsTargetUnreachable = true;
+            }
+        }
     }
 
     public void Cancel() { }
