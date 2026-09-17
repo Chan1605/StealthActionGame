@@ -32,8 +32,6 @@ public class PlayerFootstepSender : MonoBehaviour
             soundPos = transform.position;
         }
 
-        AudioManager.Instance.PlayFootStep(soundPos, currentSurface, stance);
-        Debug.Log($"{stance} 인덱스로 들어감");
     }
 
     private float GetSurfaceType()

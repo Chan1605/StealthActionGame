@@ -15,7 +15,7 @@ MonoBehaviour:
   Path: FMODProject/StealthActionGame_Fmod/Build/Desktop/SFX.bank
   Name: SFX
   StudioPath: bank:/SFX
-  lastModified: 639252537952927317
+  lastModified: 639252549329212561
   FileSizes:
   - Name: Desktop
     Value: 180800
@@ -35,7 +35,7 @@ MonoBehaviour:
   Path: FMODProject/StealthActionGame_Fmod/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 639252537952581038
+  lastModified: 639252549329181654
   FileSizes:
   - Name: Desktop
     Value: 1144
@@ -55,7 +55,7 @@ MonoBehaviour:
   Path: FMODProject/StealthActionGame_Fmod/Build/Desktop/Enemy.bank
   Name: Enemy
   StudioPath: bank:/Enemy
-  lastModified: 639244741475836746
+  lastModified: 639244691577575366
   FileSizes:
   - Name: Desktop
     Value: 494
@@ -75,11 +75,40 @@ MonoBehaviour:
   Path: FMODProject/StealthActionGame_Fmod/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 639244741475836746
+  lastModified: 639252423339646812
   FileSizes:
   - Name: Desktop
     Value: 1036
   Exists: 1
+--- !u!114 &-6728086936588118148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX_FootStep
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/SFX_FootStep
+  Guid:
+    Data1: -690813480
+    Data2: 1242383706
+    Data3: -488312407
+    Data4: -84890507
+  Banks:
+  - {fileID: -8864047739792405592}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters:
+  - {fileID: 2187235546064470429}
+  - {fileID: -491509216936667527}
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &-3590358436728350387
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -95,7 +124,7 @@ MonoBehaviour:
   Path: FMODProject/StealthActionGame_Fmod/Build/Desktop/Ending.bank
   Name: Ending
   StudioPath: bank:/Ending
-  lastModified: 639244741475836746
+  lastModified: 639244625872069983
   FileSizes:
   - Name: Desktop
     Value: 494
@@ -144,10 +173,34 @@ MonoBehaviour:
   Path: FMODProject/StealthActionGame_Fmod/Build/Desktop/Area_1.bank
   Name: Area_1
   StudioPath: bank:/Area/Area_1
-  lastModified: 639244741475812188
+  lastModified: 639244691577656937
   FileSizes:
   - Name: Desktop
     Value: 494
+  Exists: 1
+--- !u!114 &-491509216936667527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/SFX_FootStep/Surface
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorParamRef
+  Name: Surface
+  StudioPath: 
+  Min: 0
+  Max: 3
+  Default: 0
+  ID:
+    data1: 2532433890
+    data2: 2929354243
+  Type: 1
+  IsGlobal: 0
+  Labels: []
   Exists: 1
 --- !u!114 &-314243731651763240
 MonoBehaviour:
@@ -196,13 +249,13 @@ MonoBehaviour:
   - {fileID: -8864047739792405592}
   - {fileID: 2037308013771676202}
   EditorEvents:
-  - {fileID: -3488037927480083292}
+  - {fileID: -6728086936588118148}
   EditorParameters: []
   MasterBanks:
   - {fileID: -7558842593032024359}
   StringsBanks:
   - {fileID: -8300424939153912469}
-  cacheTime: 639252537952927317
+  cacheTime: 639252549329212561
   cacheVersion: 131637
 --- !u!114 &2037308013771676202
 MonoBehaviour:
@@ -219,10 +272,34 @@ MonoBehaviour:
   Path: FMODProject/StealthActionGame_Fmod/Build/Desktop/Title.bank
   Name: Title
   StudioPath: bank:/Title
-  lastModified: 639244741475836746
+  lastModified: 639244625872003811
   FileSizes:
   - Name: Desktop
     Value: 494
+  Exists: 1
+--- !u!114 &2187235546064470429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/SFX_FootStep/Stance
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorParamRef
+  Name: Stance
+  StudioPath: 
+  Min: 0
+  Max: 2
+  Default: 0
+  ID:
+    data1: 1946621361
+    data2: 2956427552
+  Type: 1
+  IsGlobal: 0
+  Labels: []
   Exists: 1
 --- !u!114 &5867556944425675471
 MonoBehaviour:
@@ -239,7 +316,7 @@ MonoBehaviour:
   Path: FMODProject/StealthActionGame_Fmod/Build/Desktop/BGM.bank
   Name: BGM
   StudioPath: bank:/BGM
-  lastModified: 639244741475812188
+  lastModified: 639244691577505339
   FileSizes:
   - Name: Desktop
     Value: 494
@@ -283,7 +360,7 @@ MonoBehaviour:
   Path: FMODProject/StealthActionGame_Fmod/Build/Desktop/Area_2.bank
   Name: Area_2
   StudioPath: bank:/Area/Area_2
-  lastModified: 639244741475812188
+  lastModified: 639244691577722101
   FileSizes:
   - Name: Desktop
     Value: 494
