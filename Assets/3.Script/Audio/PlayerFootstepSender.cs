@@ -9,13 +9,17 @@ public class PlayerFootstepSender : MonoBehaviour
     [SerializeField] private float rayDistance = 1.5f;
     [SerializeField] private LayerMask floorLayer;
 
-    [Header("자세 데이터")]
-    //TODO
-    //플레이어 상태 (걷기 뛰기 앉기) 연결
-    public float currentStance = 0f;
-
-    public void Step()
+    private float lastStepTime = 0f;
+    private float stepCooldown = 0.1f;
+    public void OnFootstep(int stance)
     {
+        if (Time.time - lastStepTime < stepCooldown)
+        {
+            return;
+        }
+
+        lastStepTime = Time.time;
+
         float currentSurface = GetSurfaceType();
         Vector3 soundPos;
 
@@ -28,7 +32,8 @@ public class PlayerFootstepSender : MonoBehaviour
             soundPos = transform.position;
         }
 
-        AudioManager.Instance.PlayFootStep(soundPos, currentSurface, currentStance);
+        AudioManager.Instance.PlayFootStep(soundPos, currentSurface, stance);
+        Debug.Log($"{stance} 인덱스로 들어감");
     }
 
     private float GetSurfaceType()
