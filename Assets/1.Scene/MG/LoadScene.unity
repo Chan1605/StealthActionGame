@@ -235,7 +235,7 @@ GameObject:
   - component: {fileID: 263039361}
   - component: {fileID: 263039360}
   m_Layer: 5
-  m_Name: Text (Legacy)
+  m_Name: TooltipText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -293,8 +293,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "(\uC608\uC2DC \uD14D\uC2A4\uD2B8)\n\uBCF8 \uD504\uB85C\uC81D\uD2B8\uB294\n\uC870
-    \uAE40\uBC15\uCC9C\uAD6D\uC5D0\uC11C \n2\uC8FC\uB3D9\uC548 \uB9CC\uB4E0 \uD504\uB85C\uC81D\uD2B8\uC785\uB2C8\uB2E4."
+  m_Text: "\uBCF8 \uD504\uB85C\uC81D\uD2B8\uB294\n\uC870 \uAE40\uBC15\uCC9C\uAD6D\uC5D0\uC11C
+    \n2\uC8FC\uB3D9\uC548 \uB9CC\uB4E0 \uD504\uB85C\uC81D\uD2B8\uC785\uB2C8\uB2E4."
 --- !u!222 &263039361
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -332,8 +332,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27297f208fe374345b3c9efd0a7f2261, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneLoader
-  scene_name: 
-  loadtext: {fileID: 0}
+  next_scene: ProtoCapy_Enemy
+  percent_text: {fileID: 1927773908}
+  tip_text: {fileID: 263039360}
+  tips_data: {fileID: 11400000, guid: dde58a2cf25a3424da9004e5091d9340, type: 2}
+  tip_interval: 1
+  loading_dots_text: {fileID: 1724770473}
+  loading_base_text: Loading
+  max_dots: 7
+  dot_interval: 0.5
+  fade_canvas_group: {fileID: 9054217588902326631}
+  fade_duration: 0.5
 --- !u!4 &988550029
 Transform:
   m_ObjectHideFlags: 0
@@ -652,7 +661,7 @@ GameObject:
   - component: {fileID: 1724770474}
   - component: {fileID: 1724770473}
   m_Layer: 5
-  m_Name: Text (Legacy)
+  m_Name: DotsText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -674,7 +683,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 300, y: 0}
+  m_AnchoredPosition: {x: 350, y: 0}
   m_SizeDelta: {x: 300, y: 170}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &1724770473
@@ -704,13 +713,13 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 6
     m_MaxSize: 60
-    m_Alignment: 1
+    m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Loading
+  m_Text: "Loading\n. . . . . . . \n"
 --- !u!222 &1724770474
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -731,7 +740,7 @@ GameObject:
   - component: {fileID: 1927773909}
   - component: {fileID: 1927773908}
   m_Layer: 5
-  m_Name: Text (Legacy)
+  m_Name: PercentText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -753,8 +762,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 40, y: 0}
-  m_SizeDelta: {x: 300, y: 102}
+  m_AnchoredPosition: {x: 300, y: 0}
+  m_SizeDelta: {x: 200, y: 100}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1927773908
 MonoBehaviour:
@@ -769,7 +778,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.4811321, g: 0.4811321, b: 0.4811321, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -789,7 +798,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '. . . . . . . '
+  m_Text: 100%
 --- !u!222 &1927773909
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -11533,8 +11542,8 @@ SceneRoots:
   m_Roots:
   - {fileID: 1520392237}
   - {fileID: 988550029}
-  - {fileID: 2100896359}
   - {fileID: 208163047}
+  - {fileID: 2100896359}
   - {fileID: 1972903015}
   - {fileID: 1052817529}
   - {fileID: 3735858601568765223}
