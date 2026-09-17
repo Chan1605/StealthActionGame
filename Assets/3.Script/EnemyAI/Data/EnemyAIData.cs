@@ -35,6 +35,7 @@ public class EnemyAIData : ScriptableObject
     [Header("추적 (발견 상태)")]
     public float chaseSpeed = 4f;
     public float chaseRepathInterval = 0.2f;
+    public float unreachableGiveUpTime = 2.5f;
     [Header("공격 (발견 상태)")]
     public float attackRange = 1.8f;
     public float attackDamage = 10f;
