@@ -25,7 +25,10 @@ public class AssassinationSystem : MonoBehaviour
 
     [Header("Debug")]
     [SerializeField] private bool isDebugLog = true;
-
+    [Header("Witness")]
+    [SerializeField] private float _fsmWitnessRadius = 10f;
+    [SerializeField] private float _fsmWitnessAngle = 100f;
+    [SerializeField] private LayerMask witnessObstacleMask = ~0;
     private CharacterController _controller;
     private PlayerInput _input;
     private PlayerController _movement;
@@ -178,6 +181,7 @@ public class AssassinationSystem : MonoBehaviour
         try
         {
             OnTakedownStarted?.Invoke(victim);
+            WitnessCheck.NotifyNearbyEnemies(victim.transform.position, _fsmWitnessRadius, _fsmWitnessAngle, witnessObstacleMask);
 
             SetPlayerControlEnabled(false);
             victim.FreezeForTakedown();
