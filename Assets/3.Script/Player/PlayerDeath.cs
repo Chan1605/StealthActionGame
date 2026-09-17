@@ -1,15 +1,20 @@
 using System.Collections;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 public class PlayerDeath : MonoBehaviour
 {
     [Header("연출")]
     [SerializeField] private CanvasGroup fadeCanvasGroup;
-    [SerializeField] private float fadeOutDuration = 0.6f;
-    [SerializeField] private float fadeInDuration = 0.8f;
     [SerializeField] private float deathClipLength = 3f;
     [SerializeField] private float postDeathHold = 0.5f;
+
+    [Header("그레이스케일 (죽을 때 서서히 짙어짐)")]
+    [SerializeField] private Volume deathGrayscaleVolume;
+    [SerializeField] private float grayscaleFadeOutDuration = 5f;   // 죽을 때: 서서히 짙어짐
+    [SerializeField] private float grayscaleFadeInDuration = 0.6f;  // 부활 시: 빠르게 원복
 
     [Header("슬로우모션")]
     [SerializeField] private bool isSlowMoEnabled = true;
@@ -18,6 +23,13 @@ public class PlayerDeath : MonoBehaviour
 
     [Header("카메라")]
     [SerializeField] private float deathZoomDistance = 1.5f;
+
+    [Header("부활 암전 (짧은 블랙아웃)")]
+    [SerializeField] private float blackFlashOutDuration = 0.3f;
+    [SerializeField] private float blackFlashInDuration = 0.4f;
+
+    private ColorAdjustments _colorAdjustments;
+    [SerializeField] private UI_PlayerHealth healthUI;
 
     private CharacterController _controller;
     private PlayerController _movement;
@@ -38,14 +50,14 @@ public class PlayerDeath : MonoBehaviour
         _playerAnimator = GetComponent<PlayerAnimator>();
         _health = GetComponent<DummyDamageable>();
         _detectable = GetComponent<PlayerDetectable>();
+        if (healthUI == null) healthUI = FindAnyObjectByType<UI_PlayerHealth>();
 
         _spawnPosition = transform.position;
         _spawnRotation = transform.rotation;
 
-        if (fadeCanvasGroup != null)
+        if (deathGrayscaleVolume != null && deathGrayscaleVolume.profile.TryGet(out _colorAdjustments))
         {
-            fadeCanvasGroup.alpha = 0f;
-            fadeCanvasGroup.gameObject.SetActive(false);
+            deathGrayscaleVolume.weight = 0f;
         }
     }
 
@@ -67,10 +79,11 @@ public class PlayerDeath : MonoBehaviour
 
     private IEnumerator Die_co()
     {
-        if (_isDying) yield break; // 이미 죽는 중이면 절대 재진입 안 함
+        if (_isDying) yield break;
         _isDying = true;
         if (_detectable != null) _detectable.IsDeadOrRespawning = true;
         SetControlEnabled(false);
+        healthUI?.ForceHideDangerVolume(grayscaleFadeOutDuration);
         _controller.enabled = false;
 
         _playerAnimator?.PlayDie();
@@ -89,33 +102,45 @@ public class PlayerDeath : MonoBehaviour
             Time.timeScale = 1f;
         }
 
-        if (fadeCanvasGroup != null)
+        if (deathGrayscaleVolume != null)
         {
-            fadeCanvasGroup.gameObject.SetActive(true);
-            fadeCanvasGroup.alpha = 0f;
-            fadeCanvasGroup.DOFade(1f, fadeOutDuration);
+            DOTween.Kill(deathGrayscaleVolume);
+            deathGrayscaleVolume.weight = 0f;
+            DOTween.To(() => deathGrayscaleVolume.weight, x => deathGrayscaleVolume.weight = x, 1f, grayscaleFadeOutDuration)
+                .SetTarget(deathGrayscaleVolume);
         }
 
         float remaining = deathClipLength - (isSlowMoEnabled ? slowMoDuration : 0f);
         if (remaining > 0f) yield return new WaitForSeconds(remaining);
 
-        _playerAnimator?.ResetDie(); // 애니메이션이 실제로 끝나는 시점에 맞춰 즉시 리셋
-                                     // (화면은 이미 암전 상태라 시각적으로 티 안 남)
+        _playerAnimator?.ResetDie();
 
         yield return new WaitForSeconds(postDeathHold);
 
+        if (fadeCanvasGroup != null)
+        {
+            fadeCanvasGroup.gameObject.SetActive(true);
+            fadeCanvasGroup.alpha = 0f;
+            yield return fadeCanvasGroup.DOFade(1f, blackFlashOutDuration).WaitForCompletion();
+        }
+
         Respawn();
+        SetControlEnabled(true);
+        _isDying = false;
+
+        if (deathGrayscaleVolume != null)
+        {
+            DOTween.Kill(deathGrayscaleVolume);
+            DOTween.To(() => deathGrayscaleVolume.weight, x => deathGrayscaleVolume.weight = x, 0f, grayscaleFadeInDuration)
+                .SetTarget(deathGrayscaleVolume);
+        }
 
         if (fadeCanvasGroup != null)
         {
-            fadeCanvasGroup.DOFade(0f, fadeInDuration);
-            yield return new WaitForSeconds(fadeInDuration);
-            fadeCanvasGroup.gameObject.SetActive(false);
+            fadeCanvasGroup.DOFade(0f, blackFlashInDuration)
+                .OnComplete(() => fadeCanvasGroup.gameObject.SetActive(false));
         }
 
-        _playerAnimator?.ResetDie();
-        SetControlEnabled(true);
-        _isDying = false;
     }
 
     private void Respawn()
@@ -129,7 +154,7 @@ public class PlayerDeath : MonoBehaviour
             pos = checkpointPos;
             rot = checkpointRot;
         }
-
+        CheckpointManager.Instance?.ResetPendingSegment();
         _controller.enabled = false;
         transform.SetPositionAndRotation(pos, rot);
         _controller.enabled = true;
@@ -140,6 +165,8 @@ public class PlayerDeath : MonoBehaviour
 
         _health?.ResetHealth();
         if (_detectable != null) _detectable.IsDeadOrRespawning = false;
+
+
     }
 
     private void SetControlEnabled(bool isEnabled)

@@ -26,6 +26,7 @@ public class TakedownVictim : MonoBehaviour
 
     private Rigidbody[] _ragdollBodies;
     private Collider[] _ragdollColliders;
+    private int _originalLayer;
     private bool _isDeathTriggerReady;
 
     public bool isDown { get; private set; }
@@ -74,7 +75,7 @@ public class TakedownVictim : MonoBehaviour
         _ragdollBodies = GetComponentsInChildren<Rigidbody>();
         _ragdollColliders = GetComponentsInChildren<Collider>();
         SetRagdollActive(false);
-
+        _originalLayer = gameObject.layer;
         int parts = 0;
         foreach (Rigidbody body in _ragdollBodies)
         {
@@ -221,5 +222,31 @@ public class TakedownVictim : MonoBehaviour
 
             col.enabled = isOn;
         }
+    }
+
+    public void Revive()
+    {
+        if (!isDown) return;
+
+        isDown = false;
+        SetRagdollActive(false);
+
+        if (_mainCollider != null) _mainCollider.enabled = true;
+
+        if (_animator != null)
+        {
+            _animator.enabled = true;
+            _animator.Rebind();
+            _animator.Update(0f);
+        }
+
+        SetLayerRecursively(gameObject, _originalLayer);
+
+        foreach (MonoBehaviour ai in aiScripts)
+        {
+            if (ai != null) ai.enabled = true;
+        }
+
+        Debug.Log("체크포인트 리셋으로 되살아남");
     }
 }

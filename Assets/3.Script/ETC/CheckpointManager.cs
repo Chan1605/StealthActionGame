@@ -7,25 +7,30 @@ public class CheckpointManager : MonoBehaviour
     private Vector3 _position;
     private Quaternion _rotation;
     private bool _hasCheckpoint;
+    private EnemySegment _pendingSegment;
 
     private void Awake()
     {
         Instance = this;
     }
 
-    public void SetCheckpoint(Vector3 position, Quaternion rotation)
+    public void SetCheckpoint(Vector3 position, Quaternion rotation, EnemySegment pendingSegment)
     {
         _position = position;
         _rotation = rotation;
         _hasCheckpoint = true;
-
+        _pendingSegment = pendingSegment;
     }
 
     public bool TryGetCheckpoint(out Vector3 position, out Quaternion rotation)
     {
         position = _position;
         rotation = _rotation;
-        Debug.Log($"[Checkpoint] Á¶È¸: hasCheckpoint={_hasCheckpoint}, position={_position}");
         return _hasCheckpoint;
+    }
+
+    public void ResetPendingSegment()
+    {
+        _pendingSegment?.ResetSegment();
     }
 }
