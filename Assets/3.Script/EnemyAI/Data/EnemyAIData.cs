@@ -27,6 +27,8 @@ public class EnemyAIData : ScriptableObject
     [Header("점수 감쇠")]
     public float scoreDecayPerSec = 5f;
     public float scoreDropOnFailedCheck = 40f;
+    public float hiddenDecayMultiplier = 4f;
+    public bool isHiddenRequiresCrouch = true;
 
     [Header("이동")]
     public float patrolSpeed = 2f;
@@ -62,5 +64,4 @@ public class EnemyAIData : ScriptableObject
     [Header("목격")]
     public float witnessRadius = 10f;
     public float witnessAngle = 100f;
-    [SerializeField] private bool isAlwaysAlert; // 자유시간에도 예외적으로 감지하는 교도관용
 }

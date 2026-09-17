@@ -21,7 +21,24 @@ public class EnemyPerception : MonoBehaviour
     private float _soundMemoryIntensity;
     private float _soundLockTimer;
     private bool _soundRegisteredThisFrame;
+    private bool _isTargetVisible;
     private readonly HashSet<TakedownVictim> _alertedCorpses = new HashSet<TakedownVictim>();
+    public bool IsAlwaysAlert { get; set; }
+    private float GetDecayPerSec()
+    {
+        if (_isTargetVisible)
+        {
+            return _data.scoreDecayPerSec;
+        }
+
+        if (_data.isHiddenRequiresCrouch && (_target == null || !_target.IsCrouching))
+        {
+            return _data.scoreDecayPerSec;
+        }
+
+        return _data.scoreDecayPerSec * Mathf.Max(1f, _data.hiddenDecayMultiplier);
+    }
+
     public void Initialize(EnemyAIData data, IDetectable target)
     {
         _data = data;
@@ -33,7 +50,7 @@ public class EnemyPerception : MonoBehaviour
     {
         if (_target == null) return;
 
-        if (PrisonScheduleManager.Instance != null && PrisonScheduleManager.Instance.IsFreeTime)
+        if (!IsAlwaysAlert && PrisonScheduleManager.Instance != null && PrisonScheduleManager.Instance.IsFreeTime)
         {
             VisionScore = Mathf.Max(0f, VisionScore - _data.scoreDecayPerSec * deltaTime);
             HearingScore = Mathf.Max(0f, HearingScore - _data.scoreDecayPerSec * deltaTime);
@@ -59,10 +76,12 @@ public class EnemyPerception : MonoBehaviour
             VisionScore = _data.maxScore;
             LastKnownPosition = _target.Position;
             IsCurrentlySensing = true;
+            _isTargetVisible = true;
             return;
         }
 
         bool canSee = instantAngle <= _data.viewAngle * 0.5f && HasLineOfSight(distance);
+        _isTargetVisible = canSee;
 
         float baseRate = 0f;
         if (canSee)
@@ -83,7 +102,7 @@ public class EnemyPerception : MonoBehaviour
         }
         else
         {
-            VisionScore = Mathf.Max(0f, VisionScore - _data.scoreDecayPerSec * deltaTime);
+            VisionScore = Mathf.Max(0f, VisionScore - GetDecayPerSec() * deltaTime);
             IsCurrentlySensing = false;
         }
     }
@@ -100,7 +119,7 @@ public class EnemyPerception : MonoBehaviour
         }
 
         if (!_soundRegisteredThisFrame)
-            HearingScore = Mathf.Max(0f, HearingScore - _data.scoreDecayPerSec * deltaTime);
+            HearingScore = Mathf.Max(0f, HearingScore - GetDecayPerSec() * deltaTime);
     }
 
     private bool HasLineOfSight(float distance)
@@ -111,7 +130,7 @@ public class EnemyPerception : MonoBehaviour
         foreach (var hit in hits)
         {
             if (Vector3.Distance(hit.point, _target.Position) > 0.5f)
-                return false; // Å¸°Ù ±ÙÃ³°¡ ¾Æ´Ñ ÁöÁ¡¿¡ ¸Â¾ÒÀ¸¸é ÁøÂ¥ Àå¾Ö¹°
+                return false; // Å¸ï¿½ï¿½ ï¿½ï¿½Ã³ï¿½ï¿½ ï¿½Æ´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Â¾ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Â¥ ï¿½ï¿½Ö¹ï¿½
         }
         return true;
     }
