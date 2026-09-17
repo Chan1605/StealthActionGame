@@ -153,6 +153,7 @@ public class AssassinationSystem : MonoBehaviour
 
     public bool CanTarget(TakedownVictim victim)
     {
+        if (PrisonScheduleManager.Instance != null && PrisonScheduleManager.Instance.IsFreeTime) return false;
         if (victim == null || victim.isDown) return false;
 
         Vector3 toPlayer = (transform.position - victim.transform.position).normalized;

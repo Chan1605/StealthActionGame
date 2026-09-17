@@ -1698,6 +1698,11 @@ MonoBehaviour:
   victimDelay: 0.13
   ragdollAfterVictimStart: 6
   isDebugLog: 1
+  _fsmWitnessRadius: 10
+  _fsmWitnessAngle: 100
+  witnessObstacleMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!114 &4426352943728395498
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1868,18 +1873,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerDeath
   fadeCanvasGroup: {fileID: 0}
-  fadeOutDuration: 0
-  fadeInDuration: 0
   deathClipLength: 2.5
   postDeathHold: 0.1
+  deathGrayscaleVolume: {fileID: 1504181799468246811}
+  grayscaleFadeOutDuration: 5
+  grayscaleFadeInDuration: 0.6
   isSlowMoEnabled: 0
   slowMoScale: 0
   slowMoDuration: 0
   deathZoomDistance: 1.5
   blackFlashOutDuration: 1
   blackFlashInDuration: 1
-  deathGrayscaleVolume: {fileID: 1504181799468246811}
-  grayscaleFadeDuration: 1
   healthUI: {fileID: 0}
 --- !u!54 &9033690598693858326
 Rigidbody:

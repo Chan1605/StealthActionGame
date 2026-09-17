@@ -22,6 +22,7 @@ public class EnemyPerception : MonoBehaviour
     private float _soundLockTimer;
     private bool _soundRegisteredThisFrame;
     private readonly HashSet<TakedownVictim> _alertedCorpses = new HashSet<TakedownVictim>();
+    public bool IsAlwaysAlert { get; set; }
     public void Initialize(EnemyAIData data, IDetectable target)
     {
         _data = data;
@@ -33,7 +34,7 @@ public class EnemyPerception : MonoBehaviour
     {
         if (_target == null) return;
 
-        if (PrisonScheduleManager.Instance != null && PrisonScheduleManager.Instance.IsFreeTime)
+        if (!IsAlwaysAlert && PrisonScheduleManager.Instance != null && PrisonScheduleManager.Instance.IsFreeTime)
         {
             VisionScore = Mathf.Max(0f, VisionScore - _data.scoreDecayPerSec * deltaTime);
             HearingScore = Mathf.Max(0f, HearingScore - _data.scoreDecayPerSec * deltaTime);
