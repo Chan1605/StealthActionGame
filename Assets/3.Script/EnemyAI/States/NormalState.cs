@@ -3,12 +3,14 @@ using UnityEngine;
 public class NormalState : IEnemyState
 {
     private ICommand _idleCommand;
+    private float _singlePointTimer;
 
     public void Enter(EnemyStateMachine fsm)
     {
         fsm.Owner.Indicator.Hide();
         fsm.Movement.SetPatrolSpeed(fsm.Data);
         MoveToCurrentWaypoint(fsm);
+        _singlePointTimer = Random.Range(0f, fsm.Data.singlePointIdleInterval);
     }
 
     public void Tick(EnemyStateMachine fsm)
@@ -25,7 +27,11 @@ public class NormalState : IEnemyState
             return;
         }
 
-        if (fsm.Waypoints.IsSinglePoint) return;
+        if (fsm.Waypoints.IsSinglePoint)
+        {
+            TickSinglePointIdle(fsm);
+            return;
+        }
 
         if (_idleCommand != null)
         {
@@ -68,5 +74,22 @@ public class NormalState : IEnemyState
     {
         if (fsm.Waypoints.Count == 0) return;
         fsm.Movement.MoveTo(fsm.Waypoints.GetPosition(fsm.CurrentWaypointIndex));
+    }
+
+    private void TickSinglePointIdle(EnemyStateMachine fsm)
+    {
+        if (_idleCommand != null)
+        {
+            _idleCommand.Tick();
+            return;
+        }
+
+        _singlePointTimer += Time.deltaTime;
+        if (_singlePointTimer < fsm.Data.singlePointIdleInterval) return;
+
+        _singlePointTimer = 0f;
+        float duration = Random.Range(fsm.Data.patrolIdleMinDuration, fsm.Data.patrolIdleMaxDuration);
+        _idleCommand = new LookAroundCommand(fsm.Owner.transform, fsm.Movement, duration, fsm.Data.lookAroundAngle);
+        _idleCommand.Start(fsm, () => _idleCommand = null);
     }
 }

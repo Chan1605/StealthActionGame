@@ -20,6 +20,8 @@ public class EnemyObject : MonoBehaviour, IInteractable
     private UI_Outliner outLine;
     private UI_ObjKeyPanal keyPanal;
     private HUDManager hudManager;
+    [SerializeField] private bool completeOnAssassinate = true;
+    private bool _isCompleted;
 
     public bool IsInteractable
     {
@@ -47,6 +49,7 @@ public class EnemyObject : MonoBehaviour, IInteractable
             _assassination.OnTargetAcquired += HandleTargetAcquired;
             _assassination.OnTargetLost += HandleTargetLost;
             _assassination.OnTakedownStarted += HandleTakedownStarted;
+            if (completeOnAssassinate) _assassination.OnTakedownStarted += HandleTargetCompleted;
         }
 
         KeyPanal_Off();
@@ -59,7 +62,16 @@ public class EnemyObject : MonoBehaviour, IInteractable
             _assassination.OnTargetAcquired -= HandleTargetAcquired;
             _assassination.OnTargetLost -= HandleTargetLost;
             _assassination.OnTakedownStarted -= HandleTakedownStarted;
+            if (completeOnAssassinate) _assassination.OnTakedownStarted -= HandleTargetCompleted;
         }
+    }
+
+    private void HandleTargetCompleted(TakedownVictim target)
+    {
+        if (target != victim) return;
+        if (_isCompleted) return;
+        _isCompleted = true;
+        OnTargetCompleted?.Invoke();
     }
 
     private void HandleTargetAcquired(TakedownVictim target)

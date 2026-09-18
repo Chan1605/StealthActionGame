@@ -156,6 +156,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: bottle2_1
       objectReference: {fileID: 0}
+    - target: {fileID: 8669472015096065875, guid: e67e442622351a24eae387e3be427689, type: 3}
+      propertyPath: soundIntensity
+      value: 90
+      objectReference: {fileID: 0}
     - target: {fileID: 8846589722857442460, guid: e67e442622351a24eae387e3be427689, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.01
@@ -217,6 +221,10 @@ PrefabInstance:
     - target: {fileID: 1192756013159047662, guid: e67e442622351a24eae387e3be427689, type: 3}
       propertyPath: m_Name
       value: bottle2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8669472015096065875, guid: e67e442622351a24eae387e3be427689, type: 3}
+      propertyPath: soundIntensity
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 8846589722857442460, guid: e67e442622351a24eae387e3be427689, type: 3}
       propertyPath: m_LocalPosition.x
@@ -320,6 +328,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: bottle1_1
       objectReference: {fileID: 0}
+    - target: {fileID: 6235931980840836524, guid: b2b153ba44cca6d43881a1467f000ecd, type: 3}
+      propertyPath: soundIntensity
+      value: 90
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1986483519700831671, guid: b2b153ba44cca6d43881a1467f000ecd, type: 3}
     - {fileID: 7007255549776336657, guid: b2b153ba44cca6d43881a1467f000ecd, type: 3}
@@ -348,6 +360,10 @@ PrefabInstance:
     - target: {fileID: 1192756013159047662, guid: e67e442622351a24eae387e3be427689, type: 3}
       propertyPath: m_Name
       value: bottle2_3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8669472015096065875, guid: e67e442622351a24eae387e3be427689, type: 3}
+      propertyPath: soundIntensity
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 8846589722857442460, guid: e67e442622351a24eae387e3be427689, type: 3}
       propertyPath: m_LocalPosition.x
@@ -483,6 +499,10 @@ PrefabInstance:
     - target: {fileID: 1192756013159047662, guid: e67e442622351a24eae387e3be427689, type: 3}
       propertyPath: m_Name
       value: bottle2_2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8669472015096065875, guid: e67e442622351a24eae387e3be427689, type: 3}
+      propertyPath: soundIntensity
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 8846589722857442460, guid: e67e442622351a24eae387e3be427689, type: 3}
       propertyPath: m_LocalPosition.x

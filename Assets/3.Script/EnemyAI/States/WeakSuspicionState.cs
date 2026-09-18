@@ -28,16 +28,17 @@ public class WeakSuspicionState : IEnemyState
             fsm.ChangeState(new AlertState(corpsePos));
             return;
         }
+
         if (fsm.Perception.MaxScore >= fsm.Data.strongSuspicionThreshold)
         {
-            fsm.ChangeState(new StrongSuspicionState());
+            HandleConfirmedSuspicion(fsm);
             return;
         }
 
         if (_lookCommand != null)
         {
             _lookCommand.Tick();
-            return; // 둘러보는 동안은 점수 하락에 의한 강등을 보류 (최소 반응 시간 보장)
+            return;
         }
 
         if (fsm.Perception.MaxScore < fsm.Data.weakSuspicionThreshold)
@@ -51,6 +52,31 @@ public class WeakSuspicionState : IEnemyState
             _resumedMovement = true;
             if (fsm.Waypoints.Count > 0)
                 fsm.Movement.MoveTo(fsm.Waypoints.GetPosition(fsm.CurrentWaypointIndex));
+        }
+    }
+
+    private void HandleConfirmedSuspicion(EnemyStateMachine fsm)
+    {
+        bool isZonedFreeTime = PrisonScheduleManager.Instance != null
+            && PrisonScheduleManager.Instance.IsFreeTime
+            && !fsm.Perception.IsAlwaysAlert;
+
+        if (!isZonedFreeTime)
+        {
+            fsm.ChangeState(new StrongSuspicionState());
+            return;
+        }
+
+        fsm.Perception.RegisterSuspiciousAction();
+
+        if (fsm.Perception.SuspiciousActionCount >= fsm.Data.suspiciousActionLimit)
+        {
+            fsm.ChangeState(new DetectedState()); // 2회째는 확인 절차 없이 곧바로 발견/공격
+        }
+        else
+        {
+            fsm.Owner.PlayWarningSound();
+            fsm.Perception.ReduceScoreSharply();
         }
     }
 
