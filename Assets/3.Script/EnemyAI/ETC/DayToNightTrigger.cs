@@ -22,12 +22,19 @@ public class DayToNightTrigger : MonoBehaviour
     [Header("조건 (택1: 키 또는 상호작용 오브젝트)")]
     [SerializeField] private InteractionAction[] requiredInteractions;
 
+    [Header("조건 (미션 매니저 전체 완료)")]
+    [SerializeField] private StageManager[] requiredMissions;
+    [Header("초기 안내")]
+    [SerializeField] private string initialGuidePrompt = "두 미션을 모두 완료하세요";
+    [SerializeField] private float initialGuideDuration = 3f;
+
     private KeyInventory _keyInventory;
     private bool _isTriggered;
 
     private void Start()
     {
         _keyInventory = FindAnyObjectByType<KeyInventory>();
+        StartCoroutine(ShowInitialGuide_co());
     }
 
     private void Update()
@@ -40,7 +47,7 @@ public class DayToNightTrigger : MonoBehaviour
             if (_keyInventory == null) return;
         }
 
-        if (HasAllRequiredKeys() && HasCompletedAllInteractions())
+        if (HasAllRequiredKeys() && HasCompletedAllInteractions() && HasCompletedAllMissions())
         {
             _isTriggered = true;
             StartCoroutine(TransitionToNight_co());
@@ -67,6 +74,19 @@ public class DayToNightTrigger : MonoBehaviour
         {
             if (action == null) continue;
             if (!action.isUsed) return false;
+        }
+
+        return true;
+    }
+
+    private bool HasCompletedAllMissions()
+    {
+        if (requiredMissions == null || requiredMissions.Length == 0) return true;
+
+        foreach (StageManager mission in requiredMissions)
+        {
+            if (mission == null) continue;
+            if (!mission.isMissionCompleted) return false;
         }
 
         return true;
@@ -99,5 +119,21 @@ public class DayToNightTrigger : MonoBehaviour
         {
             UnityEngine.SceneManagement.SceneManager.LoadScene(nightSceneName);
         }
+    }
+
+    private IEnumerator ShowInitialGuide_co()
+    {
+        UI_MissionObjective objectiveUI = FindAnyObjectByType<HUDManager>().GetObjective();
+        objectiveUI.Show(initialGuidePrompt);
+        yield return new WaitForSeconds(initialGuideDuration);
+
+        // 그 사이 이미 미션을 시작했다면 덮어쓰지 않음
+        bool anyMissionStarted = false;
+        foreach (StageManager mission in requiredMissions)
+        {
+            if (mission != null && mission.HasStarted) anyMissionStarted = true;
+        }
+
+        if (!anyMissionStarted) objectiveUI.Hide();
     }
 }
