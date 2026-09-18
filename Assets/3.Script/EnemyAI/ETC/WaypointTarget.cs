@@ -10,7 +10,10 @@ public class WaypointTarget : MonoBehaviour, IInteractable
 
     public bool IsPlayerLook { get; set; }
     public bool IsInteractable { get; private set; } = true;
+    private bool _isTracking = true; // StageManager°¡ ¼ø¹ø ¾Æ´Ò ¶§ ²û
 
+    public void EnableInteraction() { _isTracking = true; }
+    public void DisableInteraction() { _isTracking = false; }
     [SerializeField] private float completeRadius = 1.5f;
     private Transform _player;
     private bool _isCompleted;
@@ -23,7 +26,7 @@ public class WaypointTarget : MonoBehaviour, IInteractable
 
     private void Update()
     {
-        if (_isCompleted || _player == null) return;
+        if (_isCompleted || _player == null || !_isTracking) return;
 
         if (Vector3.Distance(_player.position, transform.position) <= completeRadius)
         {
@@ -31,7 +34,4 @@ public class WaypointTarget : MonoBehaviour, IInteractable
             OnTargetCompleted?.Invoke();
         }
     }
-
-    public void EnableInteraction() { }
-    public void DisableInteraction() { }
 }
