@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -22,6 +23,14 @@ public class GameManager : MonoBehaviour
 
     public PauseAndInputSetting curPlayer;
     public UI_MenuState menuState;
+
+    public string next_scene;
+
+    public void LoadWithLoadingScreen(string target_scene)
+    {
+        next_scene = target_scene;
+        SceneManager.LoadScene("LoadScene"); // 실제 로딩씬 이름
+    }
 
     public void HandleMenuInput()
     {
