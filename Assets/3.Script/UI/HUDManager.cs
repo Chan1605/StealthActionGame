@@ -1,19 +1,23 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class HUDManager : MonoBehaviour
 {
-
     [Header("UI 시스템")]
     [SerializeField] private UI_ObjKeyPanal KeyPanal_Prefab;
     [SerializeField] private UI_TargetMarker TargetMarker_Prefab;
     [SerializeField] private Canvas canvas;
 
+
     private UI_ObjKeyPanal KeyPanalUI;
-    private UI_TargetMarker TargetMarkerUI;
+    private readonly Dictionary<string, UI_TargetMarker> _markers = new Dictionary<string, UI_TargetMarker>();
 
+    [SerializeField] private UI_MissionObjective ObjectiveUI_Scene; // 씬에 미리 배치한 것을 직접 연결
 
+    public UI_MissionObjective GetObjective()
+    {
+        return ObjectiveUI_Scene;
+    }
     public UI_ObjKeyPanal GetKeyPanal()
     {
         if (KeyPanalUI == null)
@@ -24,13 +28,16 @@ public class HUDManager : MonoBehaviour
         return KeyPanalUI;
     }
 
-    public UI_TargetMarker GetTargetMarker()
+    public UI_TargetMarker GetTargetMarker(string missionId = "default")
     {
-        if (TargetMarkerUI == null)
+        if (!_markers.TryGetValue(missionId, out UI_TargetMarker marker) || marker == null)
         {
-            TargetMarkerUI = Instantiate(TargetMarker_Prefab, canvas.transform);
+            marker = Instantiate(TargetMarker_Prefab, canvas.transform);
+            _markers[missionId] = marker;
         }
 
-        return TargetMarkerUI;
+        return marker;
     }
+
+
 }
