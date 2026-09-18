@@ -3090,7 +3090,6 @@ GameObject:
   - component: {fileID: 3912050369507046508}
   - component: {fileID: 7943341364762945130}
   - component: {fileID: 6763033049323996474}
-  - component: {fileID: 6974115424669244546}
   m_Layer: 3
   m_Name: Surv_Enemy
   m_TagString: Untagged
@@ -3234,6 +3233,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyObject
   uiAnchor: {fileID: 6551070911630248256}
   isAct: 0
+  completeOnAssassinate: 1
 --- !u!114 &3912050369507046508
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3290,20 +3290,6 @@ MonoBehaviour:
   bodyLayerName: Body
   leftNeckGrab: {fileID: 0}
   rightNeckGrab: {fileID: 0}
---- !u!114 &6974115424669244546
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5051087311789102721}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 897c2de755c177a4fbd2d645bbe12fe2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::KeyDropOnDeath
-  keyPrefab: {fileID: 7854697079270803108, guid: 677318c9c90ab1e49a8c0f2a770728db, type: 3}
-  dropPoint: {fileID: 3058089770471694455}
 --- !u!1 &5135927407465773928
 GameObject:
   m_ObjectHideFlags: 0
@@ -3983,6 +3969,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CarryableObject
   uiAnchor: {fileID: 6551070911630248256}
   isAct: 0
+  completeOnCarry: 1
 --- !u!1 &5584746295566970962
 GameObject:
   m_ObjectHideFlags: 0
