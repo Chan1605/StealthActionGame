@@ -7,7 +7,6 @@ using DG.Tweening;
 
 public class SceneLoader : MonoBehaviour
 {
-    //private static string next_scene;
     [SerializeField] private string next_scene; //디버그용
     [SerializeField] private Text percent_text;
 
@@ -26,6 +25,10 @@ public class SceneLoader : MonoBehaviour
     [SerializeField] private CanvasGroup fade_canvas_group;
     [SerializeField] private float fade_duration = 0.5f;
 
+    [Header("디버그용")]
+    [Range(0f, 1f)]
+    [SerializeField] private float load_speed = 1f;
+
     private string[] tip_list;
     private Coroutine tip_co;
     private Coroutine dots_co;
@@ -34,12 +37,6 @@ public class SceneLoader : MonoBehaviour
     {
         tip_list = tips_data.Tip_List;
     }
-
-    //public static void LoadWithLoadingScreen(string target_scene)
-    //{
-    //    next_scene = target_scene;
-    //    SceneManager.LoadScene("LoadScene"); // 실제 로딩씬 이름
-    //}
 
     private void Start()
     {
@@ -73,7 +70,7 @@ public class SceneLoader : MonoBehaviour
         while (!load_op.isDone)
         {
             yield return null;
-            timer += Time.deltaTime;
+            timer += Time.deltaTime * load_speed;
             if (percentage >= 90)
             {
                 percentage = Mathf.Lerp(percentage, 100, timer);
