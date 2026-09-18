@@ -56,12 +56,13 @@ public class EnemyAIData : ScriptableObject
     public float patrolIdleMinDuration = 1.5f;
     public float patrolIdleMaxDuration = 3f;
     public float lookAroundAngle = 45f;
+    public float singlePointIdleInterval = 4f;
     public float soundGlanceDuration = 1.5f;
-    [Header("자유시간")]
+    [Header("시체 발견")]
     public LayerMask corpseLayer;
     public float corpseDetectRadius = 12f;
     public float corpseAlertDuration = 8f;
-    [Header("목격")]
-    public float witnessRadius = 10f;
-    public float witnessAngle = 100f;
+    [Header("구역 시스템 (죄수 허용 구역)")]
+    public int suspiciousActionLimit = 2;
+
 }

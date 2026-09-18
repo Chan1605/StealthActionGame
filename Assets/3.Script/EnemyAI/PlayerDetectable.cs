@@ -9,7 +9,7 @@ public class PlayerDetectable : MonoBehaviour, IDetectable
     [SerializeField] private float walkSoundScore = 20f;
     [SerializeField] private float runSoundScore = 40f;
 
-    [Header("임시 테스트용 (실제 은신 시스템 연결 전까지)")]
+    [Header("개발자모드")]
     [SerializeField, Range(0f, 1f)] private float testStealthWeight = 1f;
 
     [Header("디버그 (읽기 전용)")]
@@ -49,5 +49,11 @@ public class PlayerDetectable : MonoBehaviour, IDetectable
             Debug.LogError($"{name}: CharacterController를 찾지 못했습니다.");
         if (playerController == null)
             Debug.LogWarning($"{name}: PlayerController를 찾지 못했습니다. IsCrouching이 항상 false로 처리됩니다.");
+        KeyInventory inventory = GetComponent<KeyInventory>();
+        KeyInventory savedInventory = GameSession.Instance?.TakePendingKeys();
+        if (inventory != null && savedInventory != null)
+        {
+            GetComponent<KeyInventory>()?.RestoreFrom(savedInventory);
+        }
     }
 }

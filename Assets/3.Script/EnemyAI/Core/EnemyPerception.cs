@@ -24,6 +24,14 @@ public class EnemyPerception : MonoBehaviour
     private bool _isTargetVisible;
     private readonly HashSet<TakedownVictim> _alertedCorpses = new HashSet<TakedownVictim>();
     public bool IsAlwaysAlert { get; set; }
+
+    private int _suspiciousActionCount;
+    public int SuspiciousActionCount => _suspiciousActionCount;
+
+    public void RegisterSuspiciousAction()
+    {
+        _suspiciousActionCount++;
+    }
     private float GetDecayPerSec()
     {
         if (_isTargetVisible)
@@ -130,7 +138,7 @@ public class EnemyPerception : MonoBehaviour
         foreach (var hit in hits)
         {
             if (Vector3.Distance(hit.point, _target.Position) > 0.5f)
-                return false; // Ÿ�� ��ó�� �ƴ� ������ �¾����� ��¥ ��ֹ�
+                return false;
         }
         return true;
     }
@@ -208,6 +216,7 @@ public class EnemyPerception : MonoBehaviour
         IsCurrentlySensing = false;
         _soundLockTimer = 0f;
         _alertedCorpses.Clear();
+        _suspiciousActionCount = 0;
     }
 
     public void RegisterSound(Vector3 sourcePosition, float sourceIntensity, bool isInstant, float radius = -1f)
