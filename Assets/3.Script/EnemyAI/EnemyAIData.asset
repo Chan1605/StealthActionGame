@@ -56,3 +56,4 @@ MonoBehaviour:
     m_Bits: 512
   corpseDetectRadius: 12
   corpseAlertDuration: 8
+  suspiciousActionLimit: 2
