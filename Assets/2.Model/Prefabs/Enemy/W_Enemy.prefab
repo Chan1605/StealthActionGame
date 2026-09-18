@@ -357,6 +357,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CarryableObject
   uiAnchor: {fileID: 0}
   isAct: 0
+  completeOnCarry: 1
 --- !u!1 &181018269037539689
 GameObject:
   m_ObjectHideFlags: 0
@@ -3240,6 +3241,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyObject
   uiAnchor: {fileID: 1479604313016640767}
   isAct: 0
+  completeOnAssassinate: 1
 --- !u!1 &2409265713705429991
 GameObject:
   m_ObjectHideFlags: 0
