@@ -18,10 +18,9 @@ public class StageManager : MonoBehaviour
     {
         hudManager = FindAnyObjectByType<HUDManager>();
         minimap = FindAnyObjectByType<MinimapManager>();
-        InitializeQueue();
     }
 
-    private void InitializeQueue()
+    public void InitializeQueue()
     {
         for(int i = 0; i <targetObjectList.Count; i++)
         {

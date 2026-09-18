@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class ThrownObjectSound : MonoBehaviour
 {
-    [SerializeField] private float soundIntensity = 70f;
+    [SerializeField] private float soundIntensity = 90f;
     [SerializeField] private float soundRadius = 25f;
     [SerializeField] private LayerMask surfaceMask = ~0;
     [SerializeField] private float armDelayAfterRelease = 0.15f;

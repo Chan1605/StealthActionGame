@@ -23,7 +23,8 @@ public class GeneralObject : MonoBehaviour, IInteractable
     private UI_ObjKeyPanal keyPanal;
 
     private HUDManager hudManager;
-
+    [SerializeField] private bool completeOnUse = true;
+    private bool _isCompleted;
 
     private void Awake()
     {
@@ -36,6 +37,7 @@ public class GeneralObject : MonoBehaviour, IInteractable
         keyPanal = hudManager.GetKeyPanal();
 
         OnLook += Look;
+        if (completeOnUse) OnUse += HandleUsed;
         KeyPanal_Off();
     }
 
@@ -51,6 +53,7 @@ public class GeneralObject : MonoBehaviour, IInteractable
     private void OnDestroy()
     {
         OnLook -= Look;
+        if (completeOnUse) OnUse -= HandleUsed;
     }
 
     private void Look()
@@ -73,6 +76,12 @@ public class GeneralObject : MonoBehaviour, IInteractable
     {
         outLine.SetOutLine_Off();
         keyPanal.SetPanal_Off();
+    }
+    private void HandleUsed()
+    {
+        if (_isCompleted) return;
+        _isCompleted = true;
+        OnTargetCompleted?.Invoke();
     }
 
     public void Debug_InvokeAction()

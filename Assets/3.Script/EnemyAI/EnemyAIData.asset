@@ -49,12 +49,10 @@ MonoBehaviour:
   patrolIdleMinDuration: 1.5
   patrolIdleMaxDuration: 3
   lookAroundAngle: 45
+  singlePointIdleInterval: 4
   soundGlanceDuration: 5
   corpseLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   corpseDetectRadius: 12
   corpseAlertDuration: 8
-  witnessRadius: 10
-  witnessAngle: 100
-  isAlwaysAlert: 0

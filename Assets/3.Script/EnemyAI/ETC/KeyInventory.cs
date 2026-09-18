@@ -19,4 +19,13 @@ public class KeyInventory : MonoBehaviour
     {
         return _keys.Contains(keyId);
     }
+
+    public void RestoreFrom(KeyInventory other)
+    {
+        if (other == null) return;
+        foreach (string keyId in other.debugHeldKeys)
+        {
+            AddKey(keyId);
+        }
+    }
 }
