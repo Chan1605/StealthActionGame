@@ -19,6 +19,8 @@ public class CarryableObject : MonoBehaviour, IInteractable
     private UI_Outliner outLine;
     private UI_ObjKeyPanal keyPanal;
     private HUDManager hudManager;
+    [SerializeField] private bool completeOnCarry = true;
+    private bool _isCompleted;
 
     public bool IsInteractable
     {
@@ -45,6 +47,7 @@ public class CarryableObject : MonoBehaviour, IInteractable
         {
             _carrySystem.OnCarryTargetAcquired += HandleTargetAcquired;
             _carrySystem.OnCarryTargetLost += HandleTargetLost;
+            if (completeOnCarry) _carrySystem.OnCarryStarted += HandleTargetCompleted;
         }
 
         KeyPanal_Off();
@@ -56,7 +59,16 @@ public class CarryableObject : MonoBehaviour, IInteractable
         {
             _carrySystem.OnCarryTargetAcquired -= HandleTargetAcquired;
             _carrySystem.OnCarryTargetLost -= HandleTargetLost;
+            if (completeOnCarry) _carrySystem.OnCarryStarted -= HandleTargetCompleted;
         }
+    }
+
+    private void HandleTargetCompleted(CarriableBody target)
+    {
+        if (target != body) return;
+        if (_isCompleted) return;
+        _isCompleted = true;
+        OnTargetCompleted?.Invoke();
     }
 
     private void HandleTargetAcquired(CarriableBody target)

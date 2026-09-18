@@ -124,6 +124,12 @@ public class EnemyAI : MonoBehaviour
         _fsm.ForceReturnToNormal();
     }
 
+    public void PlayWarningSound()
+    {
+        // TODO: FMOD 이벤트 재생 연결
+        Debug.Log($"{name}: 경고 사운드");
+    }
+
 #if UNITY_EDITOR
     [Header("디버그 (읽기 전용)")]
     [SerializeField, TextArea] private string debugCurrentState;

@@ -239,7 +239,6 @@ GameObject:
   m_Component:
   - component: {fileID: 374765319}
   - component: {fileID: 374765318}
-  - component: {fileID: 374765317}
   m_Layer: 0
   m_Name: PrisonScheduleManager
   m_TagString: Untagged
@@ -247,18 +246,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &374765317
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 374765316}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ff0adb4ed4ccb44f840b90c49e9bf53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestScheduleToggle
 --- !u!114 &374765318
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -271,6 +258,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc4c4ef91ac7b284f9a64055815d3611, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PrisonScheduleManager
+  startAsFreeTime: 0
 --- !u!4 &374765319
 Transform:
   m_ObjectHideFlags: 0

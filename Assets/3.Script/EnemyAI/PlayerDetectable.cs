@@ -9,7 +9,7 @@ public class PlayerDetectable : MonoBehaviour, IDetectable
     [SerializeField] private float walkSoundScore = 20f;
     [SerializeField] private float runSoundScore = 40f;
 
-    [Header("임시 테스트용 (실제 은신 시스템 연결 전까지)")]
+    [Header("개발자모드")]
     [SerializeField, Range(0f, 1f)] private float testStealthWeight = 1f;
 
     [Header("디버그 (읽기 전용)")]
