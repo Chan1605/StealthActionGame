@@ -16,9 +16,19 @@ public class DoorAction : InteractionAction
     [SerializeField] private float closeActionDelay = -1f;
     [SerializeField] private float closeDuration = -1f;
 
+    [Header("Lock")]
+    [SerializeField] private bool isLockable = false;
+    [SerializeField] private string requiredKeyId;
+    [SerializeField] private bool isUnlockedDuringFreeTime = true;
+    [SerializeField] private bool isUnlockedPermanently = true;
+    [SerializeField] private bool isClosedWhenRelocked = true;
+
     [Header("Rule")]
     [SerializeField] private bool isSwingAwayFromUser = false;
     [SerializeField] private bool isCloseAllowed = true;
+
+    [Header("Debug")]
+    [SerializeField] private bool isDebugLog = true;
 
     private Vector3 _closedPosition;
     private Quaternion _closedRotation;
@@ -26,10 +36,41 @@ public class DoorAction : InteractionAction
     private Vector3 _probeOffset;
     private float _currentAngle;
     private Coroutine _swingRoutine;
+    private bool _isUnlocked;
 
     public bool isOpen { get; private set; }
 
+    public bool isLockedNow
+    {
+        get
+        {
+            if (!isLockable || _isUnlocked)
+            {
+                return false;
+            }
+
+            if (isUnlockedDuringFreeTime
+                && PrisonScheduleManager.Instance != null
+                && PrisonScheduleManager.Instance.IsFreeTime)
+            {
+                return false;
+            }
+
+            return true;
+        }
+    }
+
+    public string keyId
+    {
+        get
+        {
+            return requiredKeyId;
+        }
+    }
+
     public event Action<bool> OnDoorStateChanged;
+    public event Action<DoorAction> OnLockedAttempt;
+    public event Action<DoorAction> OnUnlocked;
 
     public override string animationTriggerName
     {
@@ -91,6 +132,50 @@ public class DoorAction : InteractionAction
         }
     }
 
+    private void Start()
+    {
+        if (PrisonScheduleManager.Instance != null)
+        {
+            PrisonScheduleManager.Instance.OnScheduleChanged += HandleScheduleChanged;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (PrisonScheduleManager.Instance != null)
+        {
+            PrisonScheduleManager.Instance.OnScheduleChanged -= HandleScheduleChanged;
+        }
+    }
+
+    private void HandleScheduleChanged(bool isFreeTime)
+    {
+        if (!isClosedWhenRelocked || !isLockedNow || !isOpen)
+        {
+            return;
+        }
+
+        Log("일과가 끝나 문이 닫히고 잠깁니다.");
+        SetOpen(false, null);
+    }
+
+    public bool HasRequiredKey(Transform user)
+    {
+        if (string.IsNullOrEmpty(requiredKeyId))
+        {
+            return false;
+        }
+
+        if (user == null)
+        {
+            return false;
+        }
+
+        KeyInventory inventory = user.GetComponentInChildren<KeyInventory>();
+
+        return inventory != null && inventory.HasKey(requiredKeyId);
+    }
+
     protected override bool CanExecute(Transform user)
     {
         if (isOpen && !isCloseAllowed)
@@ -103,6 +188,24 @@ public class DoorAction : InteractionAction
 
     protected override void OnExecute(Transform user)
     {
+        if (isLockedNow)
+        {
+            if (!HasRequiredKey(user))
+            {
+                Log($"잠겨 있습니다. '{requiredKeyId}' 열쇠가 필요합니다.");
+                OnLockedAttempt?.Invoke(this);
+                return;
+            }
+
+            if (isUnlockedPermanently)
+            {
+                _isUnlocked = true;
+            }
+
+            Log($"'{requiredKeyId}' 열쇠로 잠금을 풀었습니다.");
+            OnUnlocked?.Invoke(this);
+        }
+
         SetOpen(!isOpen, user);
     }
 
@@ -162,6 +265,14 @@ public class DoorAction : InteractionAction
         door.SetPositionAndRotation(_hingePosition + spin * (_closedPosition - _hingePosition), spin * _closedRotation);
     }
 
+    private void Log(string message)
+    {
+        if (isDebugLog)
+        {
+            Debug.Log($"[Door] {name} - {message}", this);
+        }
+    }
+
     private void OnDrawGizmosSelected()
     {
         Vector3 pivot = hingePoint != null ? hingePoint.position : (door != null ? door.position : transform.position);
@@ -169,5 +280,16 @@ public class DoorAction : InteractionAction
         Gizmos.color = new Color(0.1f, 0.8f, 0.4f, 0.9f);
         Gizmos.DrawSphere(pivot, 0.06f);
         Gizmos.DrawLine(pivot + Vector3.down * 1f, pivot + Vector3.up * 1f);
+
+        if (!isLockable)
+        {
+            return;
+        }
+
+        Gizmos.color = Application.isPlaying && !isLockedNow
+            ? new Color(0.2f, 1f, 0.2f, 0.9f)
+            : new Color(1f, 0.3f, 0.1f, 0.9f);
+
+        Gizmos.DrawWireCube(pivot + Vector3.up * 1.2f, Vector3.one * 0.18f);
     }
 }
