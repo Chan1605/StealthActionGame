@@ -1733,11 +1733,6 @@ MonoBehaviour:
   victimDelay: 0.13
   ragdollAfterVictimStart: 6
   isDebugLog: 1
-  _fsmWitnessRadius: 10
-  _fsmWitnessAngle: 100
-  witnessObstacleMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
 --- !u!114 &4426352943728395498
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1771,8 +1766,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c309ada2a3e117d4a8336965ce48bb30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DummyDamageable
-  maxHealth: 100
-  debugHealth: 100
+  maxHealth: 20
+  debugHealth: 20
   healthUI: {fileID: 0}
   regenDelay: 4
   regenInterval: 1
@@ -1912,7 +1907,7 @@ MonoBehaviour:
   postDeathHold: 0.1
   deathGrayscaleVolume: {fileID: 1504181799468246811}
   grayscaleFadeOutDuration: 5
-  grayscaleFadeInDuration: 0.6
+  grayscaleFadeInDuration: 5
   isSlowMoEnabled: 0
   slowMoScale: 0
   slowMoDuration: 0

@@ -19,6 +19,9 @@ public class DayToNightTrigger : MonoBehaviour
     [Header("씬")]
     [SerializeField] private string nightSceneName;
 
+    [Header("조건 (택1: 키 또는 상호작용 오브젝트)")]
+    [SerializeField] private InteractionAction[] requiredInteractions;
+
     private KeyInventory _keyInventory;
     private bool _isTriggered;
 
@@ -37,7 +40,7 @@ public class DayToNightTrigger : MonoBehaviour
             if (_keyInventory == null) return;
         }
 
-        if (HasAllRequiredKeys())
+        if (HasAllRequiredKeys() && HasCompletedAllInteractions())
         {
             _isTriggered = true;
             StartCoroutine(TransitionToNight_co());
@@ -46,16 +49,27 @@ public class DayToNightTrigger : MonoBehaviour
 
     private bool HasAllRequiredKeys()
     {
-        if (requiredKeyIds == null || requiredKeyIds.Length == 0) return false;
+        if (requiredKeyIds == null || requiredKeyIds.Length == 0) return true; // 키 조건 자체가 없으면 통과
 
         int count = 0;
         foreach (string keyId in requiredKeyIds)
         {
-            bool has = _keyInventory.HasKey(keyId);
-            if (has) count++;
+            if (_keyInventory != null && _keyInventory.HasKey(keyId)) count++;
         }
 
         return count >= requiredKeyCount;
+    }
+    private bool HasCompletedAllInteractions()
+    {
+        if (requiredInteractions == null || requiredInteractions.Length == 0) return true;
+
+        foreach (InteractionAction action in requiredInteractions)
+        {
+            if (action == null) continue;
+            if (!action.isUsed) return false;
+        }
+
+        return true;
     }
 
     private IEnumerator TransitionToNight_co()
