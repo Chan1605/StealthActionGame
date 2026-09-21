@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Linq;
 using UnityEngine.AI;
-using FMODUnity;
 
 [RequireComponent(typeof(EnemyMovement))]
 [RequireComponent(typeof(EnemyPerception))]
@@ -17,8 +16,6 @@ public class EnemyAI : MonoBehaviour
     [Header("연출")]
     [SerializeField] private Animator animator;
     [SerializeField] private EnemyIndicator indicator;
-    [SerializeField] private EventReference SE_Warning;
-
     private Vector3 _spawnPosition;
     private Quaternion _spawnRotation;
     public EnemyIndicator Indicator => indicator;
@@ -131,11 +128,6 @@ public class EnemyAI : MonoBehaviour
     {
         // TODO: FMOD 이벤트 재생 연결
         Debug.Log($"{name}: 경고 사운드");
-        if (!SE_Warning.IsNull)
-        {
-            Debug.Log("경고 사운드 재생");
-            AudioManager.Instance.PlayOneShot(SE_Warning, transform.position);
-        }
     }
 
 #if UNITY_EDITOR
