@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Linq;
 using UnityEngine.AI;
+using FMODUnity;
 
 [RequireComponent(typeof(EnemyMovement))]
 [RequireComponent(typeof(EnemyPerception))]
@@ -16,6 +17,18 @@ public class EnemyAI : MonoBehaviour
     [Header("연출")]
     [SerializeField] private Animator animator;
     [SerializeField] private EnemyIndicator indicator;
+    [Header("사운드 (FMOD) - 비워두면 재생하지 않음")]
+    [SerializeField] private EventReference SE_Warning;
+    [SerializeField] private EventReference SE_AttackSwing;
+    [SerializeField] private EventReference SE_Assassinated;
+    [SerializeField] private EventReference SE_WeakSuspicion;
+    [SerializeField] private EventReference SE_StrongSuspicion;
+    [SerializeField] private EventReference SE_Detected;
+    [SerializeField] private EventReference SE_LostPlayer;
+    [SerializeField] private float weakVoiceCooldown = 3f;   // 약한 의심 목소리 최소 간격
+
+    private float _lastWeakVoiceTime = -999f;
+
     private Vector3 _spawnPosition;
     private Quaternion _spawnRotation;
     public EnemyIndicator Indicator => indicator;
@@ -82,6 +95,7 @@ public class EnemyAI : MonoBehaviour
 
     private void HandleFrozen(TakedownVictim victim)
     {
+        PlayAssassinatedSound();   // 추가
         indicator.Hide();
         _indicatorManager?.UnregisterEnemy(transform);
         _mini?.RegisterEnemy(transform);
@@ -128,7 +142,56 @@ public class EnemyAI : MonoBehaviour
     {
         // TODO: FMOD 이벤트 재생 연결
         Debug.Log($"{name}: 경고 사운드");
+        if (!SE_Warning.IsNull)
+        {
+            Debug.Log("경고 사운드 재생");
+            AudioManager.Instance?.PlayOneShot(SE_Warning, transform.position);
+        }
     }
+
+    // 공통 재생: 이벤트가 비어 있거나 AudioManager가 없으면 조용히 넘어간다.
+    private void PlaySound(EventReference sound)
+    {
+        if (sound.IsNull) return;
+        if (AudioManager.Instance == null) return;
+
+        AudioManager.Instance.PlayOneShot(sound, transform.position);
+    }
+
+    public void PlayAttackSwingSound()
+    {
+        PlaySound(SE_AttackSwing);
+    }
+
+    public void PlayAssassinatedSound()
+    {
+        PlaySound(SE_Assassinated);
+    }
+
+    public void PlayWeakSuspicionSound()
+    {
+        // 점수가 경계값 근처에서 왔다 갔다 하면 Normal <-> Weak가 반복돼서 소리가 연타될 수 있다.
+        if (Time.time - _lastWeakVoiceTime < weakVoiceCooldown) return;
+        _lastWeakVoiceTime = Time.time;
+
+        PlaySound(SE_WeakSuspicion);
+    }
+
+    public void PlayStrongSuspicionSound()
+    {
+        PlaySound(SE_StrongSuspicion);
+    }
+
+    public void PlayDetectedSound()
+    {
+        PlaySound(SE_Detected);
+    }
+
+    public void PlayLostPlayerSound()
+    {
+        PlaySound(SE_LostPlayer);
+    }
+
 
 #if UNITY_EDITOR
     [Header("디버그 (읽기 전용)")]
