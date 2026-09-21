@@ -15,7 +15,7 @@ MonoBehaviour:
   viewAngle: 90
   viewRangeShort: 5
   instantDetectRange: 1.7
-  instantDetectAngle: 270
+  instantDetectAngle: 240
   viewRangeMid: 8
   viewRangeLong: 12
   viewScorePerSecShort: 50
@@ -56,3 +56,4 @@ MonoBehaviour:
     m_Bits: 512
   corpseDetectRadius: 12
   corpseAlertDuration: 8
+  suspiciousActionLimit: 2
