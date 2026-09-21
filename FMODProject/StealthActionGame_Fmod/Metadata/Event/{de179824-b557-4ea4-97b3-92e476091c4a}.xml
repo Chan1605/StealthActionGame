@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="Event" id="{de179824-b557-4ea4-97b3-92e476091c4a}">
 		<property name="name">
-			<value>AMB_Night</value>
+			<value>AMB_Night_outside</value>
 		</property>
 		<property name="outputFormat">
 			<value>2</value>
@@ -59,11 +59,18 @@
 	<object class="EventAutomatableProperties" id="{e8f2c07f-4b31-469d-aed8-3390ddd4e56d}" />
 	<object class="MarkerTrack" id="{f4f94882-fb08-4b29-80b6-e3db403dc6e4}" />
 	<object class="GroupTrack" id="{3a14f526-7f5c-4853-9cf0-d414d24eeb56}">
+		<relationship name="modules">
+			<destination>{f4932493-8ad1-465a-b6c0-cf6de82fe9cb}</destination>
+		</relationship>
 		<relationship name="mixerGroup">
 			<destination>{b82afb67-7354-47fc-9293-43665a50eb48}</destination>
 		</relationship>
 	</object>
-	<object class="Timeline" id="{b27db73b-e0ba-4e70-b5bd-b4febcf9524f}" />
+	<object class="Timeline" id="{b27db73b-e0ba-4e70-b5bd-b4febcf9524f}">
+		<relationship name="modules">
+			<destination>{f4932493-8ad1-465a-b6c0-cf6de82fe9cb}</destination>
+		</relationship>
+	</object>
 	<object class="EventMixerMaster" id="{a53a0211-4966-4d9a-acc8-10ef5e0b7a2e}">
 		<relationship name="effectChain">
 			<destination>{5e11cb55-ce1b-4f65-a8bf-2aee4c4e5048}</destination>
@@ -81,6 +88,17 @@
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{a2a4023a-2135-4229-8f8e-a71ea68175f6}" />
+	<object class="SingleSound" id="{f4932493-8ad1-465a-b6c0-cf6de82fe9cb}">
+		<property name="length">
+			<value>180.072</value>
+		</property>
+		<property name="volume">
+			<value>-14</value>
+		</property>
+		<relationship name="audioFile">
+			<destination>{c89103aa-519a-4c43-89f8-845c63b92d43}</destination>
+		</relationship>
+	</object>
 	<object class="EventMixerGroup" id="{b82afb67-7354-47fc-9293-43665a50eb48}">
 		<property name="name">
 			<value>Audio 1</value>
