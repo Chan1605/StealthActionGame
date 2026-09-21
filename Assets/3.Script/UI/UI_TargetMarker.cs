@@ -32,18 +32,30 @@ public class UI_TargetMarker : MonoBehaviour
     {
         GameObject.FindWithTag("Player").TryGetComponent(out playerTransform);
     }
-    private void Update()
+    private void LateUpdate()
     {
         if (targetTransform == null || playerTransform == null)
         {
             return;
         }
 
-        Vector3 screenPos = cam.WorldToScreenPoint(targetTransform.position);
+        Vector3 targetPos = targetTransform.position + new Vector3(0, 1f, 0);
+        Vector3 screenPos = cam.WorldToScreenPoint(targetPos);
 
         if (screenPos.z > 0)
         {
-            rectTransform.position = screenPos;
+            if (canvasGroup.alpha == 0f)
+            {
+                canvasGroup.alpha = 1f;
+            }
+            rectTransform.position = new Vector3(screenPos.x, screenPos.y, 0f) ;
+        }
+        else
+        {
+            if (canvasGroup.alpha == 1f)
+            {
+                canvasGroup.alpha = 0f;
+            }
         }
 
         float distance = Vector3.Distance(playerTransform.position, targetTransform.position);
