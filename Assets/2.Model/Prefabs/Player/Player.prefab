@@ -1751,7 +1751,7 @@ MonoBehaviour:
   runSpeedThreshold: 4
   walkSoundScore: 20
   runSoundScore: 40
-  testStealthWeight: 0
+  testStealthWeight: 1
   debugSpeed: 0
   debugSoundIntensity: 0
 --- !u!114 &7605777532991227117
