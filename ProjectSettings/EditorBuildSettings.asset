@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/1.Scene/JC_EnemyScene/JC_EnemyScene/ProtoCapy_Enemy.unity
-    guid: 030752f027344004e9b540874e5d406e
+    path: Assets/1.Scene/JC_EnemyScene/JC_EnemyScene/DayScene_Capy.unity
+    guid: 52605cdfbdb47c6498256bf8b275de15
   - enabled: 1
     path: Assets/1.Scene/JC_EnemyScene/JC_EnemyScene/ProtoCapy_Enemynight.unity
     guid: b76977b0d42e3274aab64c9b38b19348

@@ -6918,6 +6918,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CarryableObject
   uiAnchor: {fileID: 0}
   isAct: 0
+  completeOnCarry: 1
 --- !u!1 &6020839482816843593
 GameObject:
   m_ObjectHideFlags: 0
@@ -7401,6 +7402,13 @@ MonoBehaviour:
   targetObject: {fileID: 0}
   animator: {fileID: 3590674764480242768}
   indicator: {fileID: 3029882243901537859}
+  SE_Warning:
+    Guid:
+      Data1: -1104907653
+      Data2: 1327907595
+      Data3: 1113759380
+      Data4: 1324988009
+    Path: event:/Enemy/Enemy_Voice_ Detect
   isAlwaysAlert: 1
   debugCurrentState: 
   debugMaxScore: 0
@@ -7474,6 +7482,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyObject
   uiAnchor: {fileID: 2437366819322321785}
   isAct: 0
+  completeOnAssassinate: 1
 --- !u!1 &6376970076351917884
 GameObject:
   m_ObjectHideFlags: 0
