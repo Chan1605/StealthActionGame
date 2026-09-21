@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class KeyDropOnDeath : MonoBehaviour, IInteractable, ICompletionState
+public class KeyDropOnDeath : MonoBehaviour, IInteractable
 {
     [SerializeField] private GameObject keyPrefab;
     [SerializeField] private Transform dropPoint;
@@ -15,13 +15,6 @@ public class KeyDropOnDeath : MonoBehaviour, IInteractable, ICompletionState
     public bool IsInteractable { get; private set; } = true;
 
     private TakedownVictim _victim;
-
-    // ICompletionState: 적이 쓰러졌다면(열쇠를 이미 떨궜다면) true
-    private bool _isCompleted;
-    public bool IsCompleted
-    {
-        get { return _isCompleted; }
-    }
 
     private void Awake()
     {
@@ -43,7 +36,6 @@ public class KeyDropOnDeath : MonoBehaviour, IInteractable, ICompletionState
         Vector3 spawnPos = dropPoint != null ? dropPoint.position : transform.position;
         Instantiate(keyPrefab, spawnPos, Quaternion.identity);
 
-        _isCompleted = true;   // 완료 기록 (미션 차례 전에 쓰러져도 남는다)
         OnTargetCompleted?.Invoke();
     }
 
