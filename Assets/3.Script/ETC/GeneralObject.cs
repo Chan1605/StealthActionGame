@@ -12,7 +12,6 @@ public class GeneralObject : MonoBehaviour, IInteractable
 
     public event Action OnTargetCompleted;
 
-
     public bool IsInteractable => true;
     public bool IsPlayerLook { get; set; }
     public bool isAct;
@@ -27,6 +26,29 @@ public class GeneralObject : MonoBehaviour, IInteractable
     private bool _isCompleted;
 
     private bool _isTracking;
+
+    // ICompletionState: 미션 차례 전에 사용됐더라도 "완료됨"으로 기록된다.
+    public bool IsCompleted
+    {
+        get { return _isCompleted; }
+    }
+    [SerializeField] private bool lockUntilMissionTurn = false; //미션 연동
+
+    public bool IsInteractable
+    {
+        get
+        {
+            // 잠금 옵션이 켜져 있고, 아직 미션 차례가 아니면 상호작용 불가
+            if (lockUntilMissionTurn && !_isTracking)
+            {
+                return false;
+            }
+
+            return true;
+        }
+    }
+
+    private string obj_name = "오브젝트";
 
     private void Awake()
     {
