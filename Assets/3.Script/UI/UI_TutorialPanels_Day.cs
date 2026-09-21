@@ -41,7 +41,7 @@ public class UI_TutorialPanels_Day : MonoBehaviour
         foreach (GameObject bottle in bottle_list)
         {
            bottle.TryGetComponent(out GeneralObject g);
-            g.OnThrowTutorial += ThrowTutorial;
+           // g.OnThrowTutorial += ThrowTutorial;
         }
     }
 
@@ -84,7 +84,7 @@ public class UI_TutorialPanels_Day : MonoBehaviour
         {
             if (bottle.TryGetComponent(out GeneralObject g))
             {
-                g.OnThrowTutorial -= ThrowTutorial;
+                //g.OnThrowTutorial -= ThrowTutorial;
             }
         }
     }
@@ -96,7 +96,7 @@ public class UI_TutorialPanels_Day : MonoBehaviour
         {
             if(bottle.TryGetComponent(out GeneralObject g))
             {
-                g.OnThrowTutorial -= ThrowTutorial;
+               // g.OnThrowTutorial -= ThrowTutorial;
             }
         }
     }

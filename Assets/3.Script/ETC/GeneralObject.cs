@@ -12,7 +12,6 @@ public class GeneralObject : MonoBehaviour, IInteractable
 
     public event Action OnTargetCompleted;
 
-    public bool IsInteractable => true;
     public bool IsPlayerLook { get; set; }
     public bool isAct;
 
