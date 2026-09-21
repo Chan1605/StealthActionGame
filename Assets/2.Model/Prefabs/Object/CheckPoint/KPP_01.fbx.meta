@@ -1,9 +1,34 @@
 fileFormatVersion: 2
-guid: 1b8751435e1e25541bde687c10a2223a
+guid: 8bf1f5268c7e6754b938c25882462aa8
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Color_Bitum
+    second: {fileID: 2100000, guid: faacffdc8438db443b99e57f62a54c23, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Color_Brick
+    second: {fileID: 2100000, guid: 97baf5f4cfec4a1409ee79af1cda1e03, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Color_board
+    second: {fileID: 2100000, guid: b9b8f7bedaf38ab43a6b76171003af3e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Color_board.002
+    second: {fileID: 2100000, guid: 410ac7286adc3944cbb93da47072354f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Color_board.003
+    second: {fileID: 2100000, guid: 417a8009732d73b418cae4c32385db8d, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

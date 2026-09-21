@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/1.Scene/MainScene/Night_Scene/NavMesh-NavMesh Surface.asset.meta
-guid: 220a9435f6d0299448b326dcb53fc78c
-========
-guid: b49619647a27e8c4780907ddcc243919
->>>>>>>> main:Assets/1.Scene/MainScene/DayScene/NavMesh-NavMesh Surface.asset.meta
+guid: a50cee6838a701b4b83e62c12bbf73ab
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 23800000

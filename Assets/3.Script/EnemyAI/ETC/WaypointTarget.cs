@@ -10,7 +10,7 @@ public class WaypointTarget : MonoBehaviour, IInteractable
 
     public bool IsPlayerLook { get; set; }
     public bool IsInteractable { get; private set; } = true;
-    private bool _isTracking = true; // StageManager°¡ ¼ø¹ø ¾Æ´Ò ¶§ ²û
+    private bool _isTracking; // StageManager°¡ ¼ø¹ø ¾Æ´Ò ¶§ ²û
 
     public void EnableInteraction() { _isTracking = true; }
     public void DisableInteraction() { _isTracking = false; }
