@@ -46,6 +46,7 @@ GameObject:
   - component: {fileID: 7181021772910426270}
   - component: {fileID: 7308198648671201387}
   - component: {fileID: 5892205662822114776}
+  - component: {fileID: 6702762925072157284}
   m_Layer: 7
   m_Name: Door
   m_TagString: Untagged
@@ -152,8 +153,14 @@ MonoBehaviour:
   closeTrigger: CloseDoor
   closeActionDelay: -1
   closeDuration: -1
+  isLockable: 0
+  requiredKeyId: 
+  isUnlockedDuringFreeTime: 1
+  isUnlockedPermanently: 1
+  isClosedWhenRelocked: 1
   isSwingAwayFromUser: 1
   isCloseAllowed: 1
+  isDebugLog: 1
 --- !u!65 &7181021772910426270
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -188,6 +195,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GeneralObject
   isAct: 0
+  completeOnUse: 1
 --- !u!114 &5892205662822114776
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -200,3 +208,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a652bb5b944bcfd428cd9636750d6283, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI_Outliner
+--- !u!208 &6702762925072157284
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6112861217278413380}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.77500004, y: 1.335, z: 0.142}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
