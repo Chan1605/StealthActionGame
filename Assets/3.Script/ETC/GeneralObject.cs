@@ -11,7 +11,7 @@ public class GeneralObject : MonoBehaviour, IInteractable
     public Action OnLook { get; set; }
 
     public event Action OnTargetCompleted;
-
+    public event Action OnThrowTutorial;
 
     public bool IsInteractable => true;
     public bool IsPlayerLook { get; set; }
@@ -27,6 +27,8 @@ public class GeneralObject : MonoBehaviour, IInteractable
     private bool _isCompleted;
 
     private bool _isTracking;
+
+    private string obj_name = "오브젝트";
 
     private void Awake()
     {
@@ -72,6 +74,14 @@ public class GeneralObject : MonoBehaviour, IInteractable
         isAct = true;
         outLine.SetOutLine_On();
         keyPanal.SetPanal_On(transform);
+
+        if (obj_name.Equals("오브젝트"))
+        {
+            if (gameObject.TryGetComponent(out HoldableItem holdable))
+            {
+                OnThrowTutorial?.Invoke();
+            }
+        }
     }
 
     public void KeyPanal_Off()
