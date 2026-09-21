@@ -26,6 +26,8 @@ public class GeneralObject : MonoBehaviour, IInteractable
     [SerializeField] private bool completeOnUse = true;
     private bool _isCompleted;
 
+    private bool _isTracking;
+
     private void Awake()
     {
         TryGetComponent(out outLine);
@@ -79,7 +81,7 @@ public class GeneralObject : MonoBehaviour, IInteractable
     }
     private void HandleUsed()
     {
-        if (_isCompleted) return;
+        if (_isCompleted || !_isTracking) return;
         _isCompleted = true;
         OnTargetCompleted?.Invoke();
     }
@@ -95,11 +97,12 @@ public class GeneralObject : MonoBehaviour, IInteractable
     }
     public void EnableInteraction()
     {
-        Debug.Log("오브젝트의 IInteractable 스크립트가 상시 개체용입니다. 리스트를 확인해주세요.");
+        _isTracking = true;
     }
 
     public void DisableInteraction()
     {
+        _isTracking = false;
         Debug.Log("오브젝트의 IInteractable 스크립트가 상시 개체용입니다. 리스트를 확인해주세요.");
     }
 
