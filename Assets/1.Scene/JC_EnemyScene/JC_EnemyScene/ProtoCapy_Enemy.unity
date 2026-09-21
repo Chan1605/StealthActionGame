@@ -124,6 +124,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 858197392214761729, guid: 04e108d837a62ac4f88aea7e028f7f64, type: 3}
   m_PrefabInstance: {fileID: 673693699710941521}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &31269989 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3842443183723190420, guid: 04e108d837a62ac4f88aea7e028f7f64, type: 3}
+  m_PrefabInstance: {fileID: 673693699710941521}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 31269986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d4f7bb45d122404284c2d77858a1cf5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AlarmTriggerAction
 --- !u!1 &139833821
 GameObject:
   m_ObjectHideFlags: 0
@@ -364,7 +375,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MissionStartTrigger
   missionId: MissionB
-  missionManager: {fileID: 239611281}
+  stageManager: {fileID: 239611281}
   entranceCollider: {fileID: 0}
 --- !u!1 &374765316
 GameObject:
@@ -1426,7 +1437,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MissionStartTrigger
   missionId: MissionA
-  missionManager: {fileID: 1236605713}
+  stageManager: {fileID: 1236605713}
   entranceCollider: {fileID: 0}
 --- !u!1 &1449694167
 GameObject:
@@ -1731,7 +1742,8 @@ MonoBehaviour:
   messageHoldDuration: 2.5
   fadeDuration: 2.12
   nightSceneName: ProtoCapy_Enemynight
-  requiredInteractions: []
+  requiredInteractions:
+  - {fileID: 31269989}
   requiredMissions:
   - {fileID: 1236605713}
   - {fileID: 239611281}
@@ -1959,7 +1971,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 787997b2332405647b34b1e00e7a013d, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 7b6d4b56d8e5b8a4c8d324bd94e6cfdd, type: 2}
   m_BuildHeightMesh: 0
 --- !u!4 &1941945853
 Transform:
@@ -43377,10 +43389,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2080584877347797051, guid: e96f270bc67bbaa4b8ab37459396ad91, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4426352943728395498, guid: e96f270bc67bbaa4b8ab37459396ad91, type: 3}
-      propertyPath: testStealthWeight
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5267562774954770171, guid: e96f270bc67bbaa4b8ab37459396ad91, type: 3}

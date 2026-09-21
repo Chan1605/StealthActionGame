@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GeneralObject : MonoBehaviour, IInteractable
+public class GeneralObject : MonoBehaviour, IInteractable, ICompletionState
 {
     public Transform ObjectTransform => transform;
 
@@ -13,7 +13,6 @@ public class GeneralObject : MonoBehaviour, IInteractable
     public event Action OnTargetCompleted;
 
 
-    public bool IsInteractable => true;
     public bool IsPlayerLook { get; set; }
     public bool isAct;
 
@@ -27,6 +26,28 @@ public class GeneralObject : MonoBehaviour, IInteractable
     private bool _isCompleted;
 
     private bool _isTracking;
+
+    // ICompletionState: 미션 차례 전에 사용됐더라도 "완료됨"으로 기록된다.
+    public bool IsCompleted
+    {
+        get { return _isCompleted; }
+    }
+    [SerializeField] private bool lockUntilMissionTurn = false; //미션 연동
+
+    public bool IsInteractable
+    {
+        get
+        {
+            // 잠금 옵션이 켜져 있고, 아직 미션 차례가 아니면 상호작용 불가
+            if (lockUntilMissionTurn && !_isTracking)
+            {
+                return false;
+            }
+
+            return true;
+        }
+    }
+
 
     private void Awake()
     {
@@ -81,9 +102,14 @@ public class GeneralObject : MonoBehaviour, IInteractable
     }
     private void HandleUsed()
     {
-        if (_isCompleted || !_isTracking) return;
-        _isCompleted = true;
-        OnTargetCompleted?.Invoke();
+        if (_isCompleted) return;
+
+        _isCompleted = true;   // 미션 차례 전에 써도 "했다"는 기록은 남긴다
+
+        if (_isTracking)       // 차례일 때만 StageManager에 알린다
+        {
+            OnTargetCompleted?.Invoke();
+        }
     }
 
     public void Debug_InvokeAction()
