@@ -593,10 +593,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5742646099022529022, guid: e96f270bc67bbaa4b8ab37459396ad91, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1254733744}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e96f270bc67bbaa4b8ab37459396ad91, type: 3}
 --- !u!1 &97656850
 GameObject:
@@ -680,8 +677,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 804533717}
   m_HandleRect: {fileID: 804533716}
   m_Direction: 2
-  m_Value: 0.9999998
-  m_Size: 0.56230026
+  m_Value: 1
+  m_Size: 0.5623003
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1843,19 +1840,19 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 448359868}
-  m_LocalRotation: {x: 0.010742333, y: -0.17363791, z: 0.001894164, w: 0.9847492}
-  m_LocalPosition: {x: 0, y: 0, z: 44.599884}
-  m_LocalScale: {x: 0.87, y: 0.87, z: 0.87}
-  m_ConstrainProportionsScale: 1
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2102972463}
   - {fileID: 259130524}
   m_Father: {fileID: 1189384023}
-  m_LocalEulerAnglesHint: {x: 1.25, y: -20, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00018310547, y: 0}
-  m_SizeDelta: {x: -0.0004119873, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &448359870
 MonoBehaviour:
@@ -2262,7 +2259,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &593732216
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4130,23 +4127,6 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!1 &1254733719 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5742646099022529022, guid: e96f270bc67bbaa4b8ab37459396ad91, type: 3}
-  m_PrefabInstance: {fileID: 79048498}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1254733744
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1254733719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0a06f2aa163e3748b5e4ddf86c072ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PauseAndInputSetting
 --- !u!1 &1266824780
 GameObject:
   m_ObjectHideFlags: 0

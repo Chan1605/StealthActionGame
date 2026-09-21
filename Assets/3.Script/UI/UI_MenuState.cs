@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using DG.Tweening;
 
 public class UI_MenuState : MonoBehaviour
 {

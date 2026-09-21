@@ -65,7 +65,6 @@ public class TakedownVictim : MonoBehaviour
 
     public event Action<TakedownVictim> OnFrozen;
     public event Action<TakedownVictim> OnDowned;
-    public event Action OnK;
 
     private void Awake()
     {
@@ -172,7 +171,6 @@ public class TakedownVictim : MonoBehaviour
         MoveToBodyLayer();
 
         OnDowned?.Invoke(this);
-        OnK?.Invoke();
     }
 
     private void MoveToBodyLayer()
