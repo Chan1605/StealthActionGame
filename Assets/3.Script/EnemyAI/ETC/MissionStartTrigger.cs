@@ -3,15 +3,11 @@ using UnityEngine;
 public class MissionStartTrigger : MonoBehaviour
 {
     [SerializeField] private string missionId = "Mission";
-    [SerializeField] private StageManager stageManager;
+    [SerializeField] private StageManager missionManager;
     [SerializeField] private Collider entranceCollider;
 
     private HUDManager _hudManager;
     private bool _isCompleted;
-    public bool IsCompleted
-    {
-        get { return _isCompleted; }
-    }
 
     private void Awake()
     {
@@ -24,12 +20,12 @@ public class MissionStartTrigger : MonoBehaviour
         _hudManager.GetTargetMarker(missionId).SetMarker_On(transform);
         MissionSelector.Instance?.Register(this);
 
-        stageManager.OnMissionCompleted += HandleMissionCompleted;
+        missionManager.OnMissionCompleted += HandleMissionCompleted;
     }
 
     private void OnDestroy()
     {
-        if (stageManager != null) stageManager.OnMissionCompleted -= HandleMissionCompleted;
+        if (missionManager != null) missionManager.OnMissionCompleted -= HandleMissionCompleted;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -38,19 +34,8 @@ public class MissionStartTrigger : MonoBehaviour
         if (!other.CompareTag("Player")) return;
         if (MissionSelector.Instance != null && !MissionSelector.Instance.CanStart(this)) return;
 
-        StartMission();
-    }
-
-    public void StartMission()
-    {
-        if (_isCompleted) return;
-
-        if (MissionSelector.Instance != null)
-        {
-            MissionSelector.Instance.SelectMission(this);
-        }
-
-        stageManager.InitializeQueue();
+        MissionSelector.Instance?.SelectMission(this);
+        missionManager.InitializeQueue();
     }
 
     private void HandleMissionCompleted()

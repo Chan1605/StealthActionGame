@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class EnemyObject : MonoBehaviour, IInteractable, ICompletionState
+public class EnemyObject : MonoBehaviour, IInteractable
 {
     public Transform ObjectTransform => transform;
 
@@ -22,12 +22,6 @@ public class EnemyObject : MonoBehaviour, IInteractable, ICompletionState
     private HUDManager hudManager;
     [SerializeField] private bool completeOnAssassinate = true;
     private bool _isCompleted;
-
-    // ICompletionState: 암살은 미션 차례와 상관없이 기록되므로, 이미 처치했다면 true
-    public bool IsCompleted
-    {
-        get { return _isCompleted; }
-    }
 
     public bool IsInteractable
     {

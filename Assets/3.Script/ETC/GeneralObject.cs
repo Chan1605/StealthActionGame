@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GeneralObject : MonoBehaviour, IInteractable, ICompletionState
+public class GeneralObject : MonoBehaviour, IInteractable
 {
     public Transform ObjectTransform => transform;
 
@@ -11,7 +11,6 @@ public class GeneralObject : MonoBehaviour, IInteractable, ICompletionState
     public Action OnLook { get; set; }
 
     public event Action OnTargetCompleted;
-
 
     public bool IsPlayerLook { get; set; }
     public bool isAct;
@@ -48,6 +47,7 @@ public class GeneralObject : MonoBehaviour, IInteractable, ICompletionState
         }
     }
 
+    private string obj_name = "오브젝트";
 
     private void Awake()
     {
@@ -102,14 +102,9 @@ public class GeneralObject : MonoBehaviour, IInteractable, ICompletionState
     }
     private void HandleUsed()
     {
-        if (_isCompleted) return;
-
-        _isCompleted = true;   // 미션 차례 전에 써도 "했다"는 기록은 남긴다
-
-        if (_isTracking)       // 차례일 때만 StageManager에 알린다
-        {
-            OnTargetCompleted?.Invoke();
-        }
+        if (_isCompleted || !_isTracking) return;
+        _isCompleted = true;
+        OnTargetCompleted?.Invoke();
     }
 
     public void Debug_InvokeAction()
