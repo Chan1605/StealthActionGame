@@ -130,11 +130,9 @@ public class EnemyAI : MonoBehaviour
     public void PlayWarningSound()
     {
         // TODO: FMOD 이벤트 재생 연결
-        Debug.Log($"{name}: 경고 사운드");
         if (!SE_Warning.IsNull)
         {
-            Debug.Log("경고 사운드 재생");
-            AudioManager.Instance.PlayOneShot(SE_Warning, transform.position);
+            AudioManager.Instance?.PlayOneShot(SE_Warning, transform.position);
         }
     }
 

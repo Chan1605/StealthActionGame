@@ -18,7 +18,7 @@ MonoBehaviour:
   instantDetectAngle: 240
   viewRangeMid: 8
   viewRangeLong: 12
-  viewScorePerSecShort: 50
+  viewScorePerSecShort: 100
   viewScorePerSecMid: 25
   viewScorePerSecLong: 6
   crouchViewWeight: 0.5
